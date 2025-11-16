@@ -1,0 +1,18 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  # This is now a cluster-wide singleton.
+  # 'default' or a similar name is recommended.
+  name: default-bgp-config
+spec:
+  bgpInstances:
+  - localAsn: 65512
+    neighbors:
+    - peerAsn: 65510
+      peerAddress: "172.16.72.10/32"
+      peerPort: 179
+      ebgpMultihopTtl: 1
+      timers:
+        connectRetryTimeSeconds: 120
+        holdTimeSeconds: 90
+        keepAliveTimeSeconds: 30

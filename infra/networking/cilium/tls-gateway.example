@@ -1,0 +1,21 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: my-tls-gateway
+  namespace: default
+spec:
+  gatewayClassName: cilium # This tells Cilium to manage this Gateway
+  listeners:
+  - name: https-listener
+    protocol: HTTPS
+    port: 443
+    # This tells the Gateway to use the certificate
+    # stored in a secret named 'my-tls-secret'.
+    # cert-manager would create this secret for you.
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: my-tls-secret
+    hostname: "myapp.yourdomain.com"
