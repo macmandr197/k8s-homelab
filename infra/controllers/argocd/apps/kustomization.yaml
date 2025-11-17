@@ -4,5 +4,5 @@ resources:
   - projects.yaml
   # Critical applications with specific sync waves to prevent race conditions
   - cilium-app.yaml # Wave 0 - Networking foundation
-  - cs-proxmox-app.yaml # Wave 1 - Storage foundation
+  - csi-proxmox-app.yaml # Wave 1 - Storage foundation
   - infrastructure-appset.yaml #wave 2
