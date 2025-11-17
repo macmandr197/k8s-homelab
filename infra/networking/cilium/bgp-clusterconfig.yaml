@@ -14,10 +14,6 @@ spec:
           peerASN: 65510
           peerAddress: 172.16.8.1
           peerPort: 179
-          timers:
-            connectRetryTimeSeconds: 120
-            holdTimeSeconds: 90
-            keepAliveTimeSeconds: 30
           peerConfigRef:
             name: "cilium-peer-config"
 ---
@@ -48,7 +44,7 @@ spec:
           - LoadBalancerIP
       selector:
         matchExpressions:
-          - {key: cilium-lb-disabled, operator: NotIn, values: ['true']}
+          - {key: cilium-lb-no-advertise, operator: NotIn, values: ['true']}
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumLoadBalancerIPPool

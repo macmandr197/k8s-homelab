@@ -4,7 +4,9 @@ router id 172.16.72.10
 
 peer remote-as 65512
 
-required credentials needed to apply
+all services will be advertised via BGP unless explicitly labeled with: cilium-lb-no-advertise=true
+
+required credentials needed to apply for terraform
 
 Backblaze key for S2 backend
 Promox API key for API functions
