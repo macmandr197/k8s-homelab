@@ -1,0 +1,15 @@
+replicaCount: 1
+existingConfigSecret: proxmox-csi-cluster-config
+
+# Define the storage classes
+storageClass:
+  - name: proxmox-data-xfs
+    # Define the storage class as default
+    annotations:
+      storageclass.kubernetes.io/is-default-class: "true"
+    storage: labber-data
+    reclaimPolicy: Delete
+    fstype: xfs
+    volumeBindingMode: Immediate #Wait until a pod is scheduled on a node before creating PVC.
+    allowVolumeExpansion: true
+    cache: 'writeback'

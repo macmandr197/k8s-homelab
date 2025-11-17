@@ -1,0 +1,66 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: infrastructure
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/macmandr197/k8s-homelab.git
+      revision: main
+      directories:
+      - path: infra/controllers/*
+      #- path: infra/database/*/*
+      - path: infra/networking/*
+        exclude: true #Exclude all networking to avoid duplicates
+      - path: infra/networking/cloudflared
+      - path: infra/networking/coredns
+      - path: infra/networking/gateway
+      - path: infra/storage/*
+        exclude: true #Exclude all storage to avoid duplicates
+      - path: infra/storage/csi-driver-nfs
+      - path: infra/storage/csi-driver-proxmox
+      - path: infra/storage/local-storage
+      - path: infra/crds
+  template:
+    metadata:
+      name: '{{path.basename}}'
+      annotations:
+        argocd.argoproj.io/sync-wave: "2"
+      labels:
+        app.kubernetes.io/part-of: infrastructure
+    spec:
+      project: infrastructure
+      revisionHistoryLimit: 3
+      source:
+        repoURL: https://github.com/macmandr197/k8s-homelab.git
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+          allowEmpty: false
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true
+        - RespectIgnoreDifferences=true
+        - ApplyOutOfSyncOnly=true
+        - Replace=false
+        - IgnoreMissingTemplate=true
+      ignoreDifferences:
+      - group: gateway.networking.k8s.io
+        kind: HTTPRoute
+        jsonPointers:
+        - /spec/rules/0/backendRefs/0/group
+        - /spec/rules/0/backendRefs/0/kind
+        - /spec/rules/0/backendRefs/0/weight
+      retry:
+        limit: 5
+        backoff:
+          duration: 5s
+          factor: 2
+          maxDuration: 3m

@@ -1,0 +1,17 @@
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: cilium-lb-pool
+  namespace: kube-system
+spec:
+  blocks:
+    - cidr: "172.16.18.0/27"
+      # This provides IPs from 192.168.10.32 to 192.168.10.63
+      # Reserve specific IPs for known services:
+      # - 192.168.10.49: Gateway External
+      # - 192.168.10.50: Gateway Internal
+      # - Remaining 30 IPs for other LoadBalancer services
+  allowFirstLastIPs: "No"
+  serviceSelector:
+    matchLabels: {}
