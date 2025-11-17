@@ -9,7 +9,7 @@ spec:
   - localAsn: 65512
     neighbors:
     - peerAsn: 65510
-      peerAddress: "172.16.72.10/32"
+      peerAddress: "172.16.8.1/32"
       peerPort: 179
       ebgpMultihopTtl: 1
       timers:
