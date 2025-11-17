@@ -13,7 +13,6 @@ spec:
         - name: "peer-65510"
           peerASN: 65510
           peerAddress: 172.16.8.1
-          peerPort: 179
           peerConfigRef:
             name: "cilium-peer-config"
 ---
