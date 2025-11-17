@@ -1,18 +1,67 @@
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPClusterConfig
 metadata:
-  # This is now a cluster-wide singleton.
-  # 'default' or a similar name is recommended.
-  name: default-bgp-config
+  name: bgp-cluster-config
 spec:
+  nodeSelector:
+    matchLabels:
+      node-role.kubernetes.io/control-plane: "true"
   bgpInstances:
-  - localAsn: 65512
-    neighbors:
-    - peerAsn: 65510
-      peerAddress: "172.16.8.1/32"
-      peerPort: 179
-      ebgpMultihopTtl: 1
-      timers:
-        connectRetryTimeSeconds: 120
-        holdTimeSeconds: 90
-        keepAliveTimeSeconds: 30
+    - name: "instance-65512"
+      localASN: 65512
+      peers:
+        - name: "peer-65510"
+          peerASN: 65510
+          peerAddress: 172.16.8.1
+          peerPort: 179
+          ebgpMultihopTtl: 1
+          timers:
+            connectRetryTimeSeconds: 120
+            holdTimeSeconds: 90
+            keepAliveTimeSeconds: 30
+          peerConfigRef:
+            name: "cilium-peer-config"
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeerConfig
+metadata:
+  name: cilium-peer-config
+spec:
+  families:
+    - afi: ipv4
+      safi: unicast
+      advertisements:
+        matchLabels:
+          advertise: "bgp"
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPAdvertisement
+metadata:
+  name: bgp-advertisements
+  labels:
+    advertise: "bgp"
+spec:
+  advertisements:
+    - advertisementType: "PodCIDR"
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchExpressions:
+          - {key: cilium-lb-disabled, operator: NotIn, values: ['true']}
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: main-pool
+  namespace: kube-system
+spec:
+  blocks:
+    - cidr: "172.16.18.0/27"
+      # This provides IPs from 192.168.10.32 to 192.168.10.63
+      # Reserve specific IPs for known services:
+      # - 172.16.18.1: Gateway External
+      # - 172.16.18.30: Gateway Internal
+      # - Remaining 30 IPs for other LoadBalancer services
+  allowFirstLastIPs: "No"

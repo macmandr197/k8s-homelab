@@ -8,9 +8,7 @@ kind: Kustomization
 # These require Cilium CRDs to be installed first
 
 resources: 
- - ip-pool.yaml
  - bgp-clusterconfig.yaml
- - bgp-advertisement.yaml
 
 helmCharts:
 - name: cilium
