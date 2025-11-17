@@ -12,13 +12,21 @@ spec:
       - path: infra/controllers/*
       #- path: infra/database/*/*
       - path: infra/networking/*
-      #- path: infra/storage/*
-      #- path: infra/crds
+        exclude: true #Exclude all networking to avoid duplicates
+      - path: infra/networking/cloudflared
+      - path: infra/networking/coredns
+      - path: infra/networking/gateway
+      - path: infra/storage/*
+        exclude: true #Exclude all storage to avoid duplicates
+      - path: infra/storage/csi-driver-nfs
+      - path: infra/storage/csi-driver-proxmox
+      - path: infra/storage/local-storage
+      - path: infra/crds
   template:
     metadata:
       name: '{{path.basename}}'
       annotations:
-        argocd.argoproj.io/sync-wave: "1"
+        argocd.argoproj.io/sync-wave: "2"
       labels:
         app.kubernetes.io/part-of: infrastructure
     spec:
