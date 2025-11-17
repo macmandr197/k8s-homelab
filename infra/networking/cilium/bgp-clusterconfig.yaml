@@ -14,7 +14,6 @@ spec:
           peerASN: 65510
           peerAddress: 172.16.8.1
           peerPort: 179
-          ebgpMultihopTtl: 1
           timers:
             connectRetryTimeSeconds: 120
             holdTimeSeconds: 90
