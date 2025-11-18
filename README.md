@@ -169,6 +169,43 @@ This final step uses our "App of Apps" pattern to bootstrap the entire cluster. 
 ./bootstrap-argocd.sh
 ```
 
+### Cluster Maintenance
+
+#### Upgrading Nodes
+
+When a new version of Talos is released or system extensions in `iac/talos/talconfig.yaml` are changed, follow this process to upgrade your nodes. This method uses the direct `upgrade` command to ensure the new system image is correctly applied, which is more reliable than `apply-config` for image changes.
+
+**Important:** Always upgrade control plane nodes **one at a time**, waiting for each node to successfully reboot and rejoin the cluster before proceeding to the next. This prevents losing etcd quorum. Worker nodes can be upgraded in parallel after the control plane is healthy.
+
+1. **Update Configuration**:
+    Modify `iac/talos/talconfig.yaml` with the new `talosVersion` or changes to `systemExtensions`.
+
+2. **Ensure Environment is Set**:
+    Make sure your `TALOSCONFIG` variable is pointing to your generated cluster configuration file as described in the Quick Start.
+
+3. **Upgrade a Control Plane Node**:
+    Run the following commands from the root of the repository. Replace `<node-name>` and `<node-ip>` with the target node's details. Run this for each control plane node sequentially.
+
+    ```bash
+    # Example for the first control plane node
+    NODE_NAME="talos-cluster-control-00"
+    NODE_IP="172.16.8.11" # Replace with your node's IP
+    INSTALLER_URL=$(talhelper genurl installer -c iac/talos/talconfig.yaml -n "$NODE_NAME")
+    talosctl upgrade --nodes "$NODE_IP" --image "$INSTALLER_URL"
+    ```
+
+    Wait for the command to complete and verify the node is healthy with `talosctl health --nodes <node-ip>` before moving to the next control plane node.
+
+4. **Upgrade Worker Nodes**:
+    Once the control plane is fully upgraded and healthy, you can upgrade the worker nodes. These can be run in parallel from separate terminals.
+
+    ```bash
+    # Example for the GPU worker node
+    NODE_NAME="talos-cluster-gpu-worker-00"
+    NODE_IP="192.168.10.200" # Replace with your node's IP
+    INSTALLER_URL=$(talhelper genurl installer -c iac/talos/talconfig.yaml -n "$NODE_NAME")
+    talosctl upgrade --nodes "$NODE_IP" --image "$INSTALLER_URL"
+
 ### Credits
 
 Based on Mitch Ross' [🚀 Talos ArgoCD Proxmox Cluster](https://github.com/mitchross/talos-argocd-proxmox) homelab project. This project extends upon that with the inclusion of BGP networking for the Cilium CNI, Proxmox CSI Plugin and more.
