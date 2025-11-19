@@ -4,9 +4,9 @@ resources:
   - projects.yaml
   # Critical applications with specific sync waves to prevent race conditions
   # Wave 0: Foundation components (networking + secrets infrastructure)
-  - cilium-app.yaml            # Wave 0 - Networking foundation
-  - 1passwordconnect.yaml      # Wave 0 - Secret Backend (required by external secrets)
-  - external-secrets.yaml      # Wave 0 - External Secrets CRDs (required by proxmox storage driver)
-  - csi-proxmox-app.yaml       # Wave 1 - Storage foundation
+  - cilium-app.yaml              # Wave 0 - Networking foundation
+  - 1passwordconnect.yaml        # Wave 0 - Secret Backend (required by external secrets)
+  - external-secrets.yaml        # Wave 0 - External Secrets CRDs (required by proxmox storage driver)
+  - csi-driver-proxmox-app.yaml  # Wave 1 - Storage foundation
   # ApplicationSets
-  - infrastructure-appset.yaml # wave 2
+  - infrastructure-appset.yaml   # wave 2

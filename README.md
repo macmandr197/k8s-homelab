@@ -16,38 +16,18 @@ Backblaze key for S2 backend
 Promox API key for API functions
 Proxmox SSH user / private key for SSH operations
 
-## Boostrapping the cluster, after it has been built by Terraform
+## Preparation for First Time Cluster Deployment
 
-There are several core components to 'set up' before the rest of the cluster can be built and managed by ArgoCD. Here is a brief list, in order of importance
+These are steps required for applications deployed by Argo to succeed. Ie. populating secret data within 1Password.
 
-1. Networking - Cilium - Wave 0
-2. External Secrets / 1Password Connect - Wave 0
-3. Storage Provider - Proxmox CSI Plugin - Wave 1
-4. most everything else - Wave 2 and beyond
-
-### Networking
-
-#### Cilium
-
-A basic installation of Cilium is installed into the cluster using Talos' inline manifests feature. This allows the cluster to boot with basic support. However, there are still some extra steps required.
-
-This is a prerequisite for Cilium's Gateway API integration.
-
-```bash
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
-
-# Apply experimental features with server-side apply to account for CRD annotation length
-kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/experimental-install.yaml
-```
-
-#### Cloudflare
+### Cloudflare
 
 You'll need to create two secrets for Cloudflare integration:
 
 1. DNS API Token for cert-manager (DNS validation)
 2. Tunnel credentials for cloudflared (Tunnel connectivity)
 
-##### 1. DNS API Token
+#### 1. DNS API Token
 
 ```bash
 # REQUIRED BROWSER STEPS FIRST:
@@ -68,7 +48,7 @@ export DOMAIN="yourdomain.com"
 export TUNNEL_NAME="labber-k8s"  # Must match config.yaml
 ```
 
-##### 2. Cloudflare Tunnel 🌐
+#### 2. Cloudflare Tunnel 🌐
 
 ```bash
 # First-time setup only
@@ -104,6 +84,30 @@ rm -v tunnel-creds.json && echo "Credentials file removed"
 # Configure DNS
 TUNNEL_ID=$(cloudflared tunnel list | grep $TUNNEL_NAME | awk '{print $1}')
 cloudflared tunnel route dns $TUNNEL_ID "*.$DOMAIN"
+```
+
+## Boostrapping the cluster, after it has been built by Terraform
+
+There are several core components to 'set up' before the rest of the cluster can be built and managed by ArgoCD. Here is a brief list, in order of importance
+
+1. Networking - Cilium - Wave 0
+2. External Secrets / 1Password Connect - Wave 0
+3. Storage Provider - Proxmox CSI Plugin - Wave 1
+4. most everything else - Wave 2 and beyond
+
+### Networking
+
+#### Cilium
+
+A basic installation of Cilium is installed into the cluster using Talos' inline manifests feature. This allows the cluster to boot with basic support. However, there are still some extra steps required.
+
+This is a prerequisite for Cilium's Gateway API integration.
+
+```bash
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
+
+# Apply experimental features with server-side apply to account for CRD annotation length
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/experimental-install.yaml
 ```
 
 #### Certificate Management
