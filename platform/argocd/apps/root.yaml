@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/macmandr197/k8s-homelab.git
-    path: infra/controllers/argocd/apps
+    path: platform/argocd/apps
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
