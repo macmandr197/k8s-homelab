@@ -11,22 +11,22 @@ spec:
       repoURL: https://github.com/macmandr197/k8s-homelab.git
       revision: main
       directories:
-      # Controllers (argocd managed via Helm, cilium/external-secrets/1password have their own apps)
-      - path: infra/controllers/cert-manager
-      # Networking (Cilium has its own app)
-      - path: infra/networking/cloudflared
-      #- path: infra/networking/coredns
-      #- path: infra/networking/gateway
-      # Storage (Proxmox-CSI-Plugin has it's own app)
-      - path: infra/storage/csi-driver-nfs
-      - path: infra/storage/local-storage
-      # CRDs
+      - path: infra/controllers/*
+      - path: infra/networking/*
+      - path: infra/storage/*
+      - path: infra/database/*/*
       - path: infra/crds
+
+      # EXCLUDES: These are managed by standalone Apps for Sync Wave control (Wave 0/1)
+      # or are the ArgoCD controller itself.
+      - path: infra/controllers/argocd
+      - path: infra/controllers/1passwordconnect
+      - path: infra/controllers/external-secrets
+      - path: infra/networking/cilium
+      - path: infra/storage/csi-driver-proxmox
   template:
     metadata:
       name: '{{path.basename}}'
-      annotations:
-        argocd.argoproj.io/sync-wave: "2"
       labels:
         app.kubernetes.io/part-of: infrastructure
     spec:
@@ -58,9 +58,13 @@ spec:
         - /spec/rules/0/backendRefs/0/group
         - /spec/rules/0/backendRefs/0/kind
         - /spec/rules/0/backendRefs/0/weight
+      - group: gateway.networking.k8s.io
+        kind: Gateway
+        jsonPointers:
+        - /status
       retry:
-        limit: 5
         backoff:
           duration: 5s
           factor: 2
           maxDuration: 3m
+        limit: 5
