@@ -20,10 +20,10 @@ Proxmox SSH user / private key for SSH operations
 
 There are several core components to 'set up' before the rest of the cluster can be built and managed by ArgoCD. Here is a brief list, in order of importance
 
-1. Networking - Cilium
-2. External Secrets / 1Password Connect
-3. Storage Provider - Proxmox CSI Plugin
-4. most everything else
+1. Networking - Cilium - Wave 0
+2. External Secrets / 1Password Connect - Wave 0
+3. Storage Provider - Proxmox CSI Plugin - Wave 1
+4. most everything else - Wave 2 and beyond
 
 ### Networking
 
@@ -64,7 +64,7 @@ You'll need to create two secrets for Cloudflare integration:
 export CLOUDFLARE_API_TOKEN="your-api-token-here"
 export CLOUDFLARE_EMAIL="your-cloudflare-email"
 export DOMAIN="yourdomain.com"
-export TUNNEL_NAME="labber-cluster"  # Must match config.yaml
+export TUNNEL_NAME="labber-k8s"  # Must match config.yaml
 ```
 
 ##### 2. Cloudflare Tunnel 🌐
@@ -87,7 +87,7 @@ cloudflared tunnel create $TUNNEL_NAME
 cloudflared tunnel token --cred-file tunnel-creds.json $TUNNEL_NAME
 
 export DOMAIN="yourdomain.com"
-export TUNNEL_NAME="labber-cluster"  # This should match the name in your config.yaml
+export TUNNEL_NAME="labber-k8s"  # This should match the name in your config.yaml
 
 # Create namespace for cloudflared
 kubectl create namespace cloudflared
@@ -136,8 +136,11 @@ This cluster uses [1Password Connect](https://developer.1password.com/docs/conne
 3. **Create Kubernetes Secrets**:
 
     ```bash
+    # Athenticate with 1Password
+    eval $(op signin)
+
     export OP_CREDENTIALS=$(op read op://k8s-secrets/1passwordconnect/1password-credentials.json | base64 | tr -d '\n')
-    export OP_CONNECT_TOKEN=$(op read 'op://k8s-secrets/1password-operator-token/credential')
+    export OP_CONNECT_TOKEN=$(op read 'op://k8s-secrets/1password-operator-token/password')
 
     kubectl create secret generic 1password-credentials \
       --namespace 1passwordconnect \
@@ -158,8 +161,8 @@ This cluster uses [1Password Connect](https://developer.1password.com/docs/conne
 
 for using the proxmox csi plugin, https://github.com/sergelogvinov/proxmox-csi-plugin/blob/main/docs/install.md
 label all nodes with region (proxmox cluster name), and zone (node name)
-kubectl label nodes region1-node-1 topology.kubernetes.io/region=homebound
-kubectl label nodes region1-node-1 topology.kubernetes.io/zone=proxmox
+kubectl label nodes --all topology.kubernetes.io/region=homebound
+kubectl label nodes --all topology.kubernetes.io/zone=proxmox
 
 ### Final Bootstrapping
 
