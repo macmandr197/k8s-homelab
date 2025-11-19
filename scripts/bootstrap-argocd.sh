@@ -13,7 +13,7 @@ echo "🚀 Bootstrapping ArgoCD with sync waves..."
 # Step 1: Create namespace
 echo ""
 echo "📦 Creating argocd namespace..."
-kubectl apply -f "$ROOT_DIR/infra/controllers/argocd/ns.yaml"
+kubectl apply -f "$ROOT_DIR/platform/argocd/ns.yaml"
 
 # Step 2: Install ArgoCD using Helm
 echo ""
@@ -22,7 +22,7 @@ helm upgrade --install argocd argo-cd \
   --repo https://argoproj.github.io/argo-helm \
   --version 9.1.3 \
   --namespace argocd \
-  --values "$ROOT_DIR/infra/controllers/argocd/values.yaml" \
+  --values "$ROOT_DIR/platform/argocd/values.yaml" \
   --wait \
   --timeout 10m
 
@@ -37,16 +37,16 @@ echo "⏳ Waiting for ArgoCD server to be available..."
 kubectl wait --for=condition=Available deployment/argocd-server -n argocd --timeout=300s
 
 # Step 5: Apply HTTPRoute (if it exists)
-if [ -f "$ROOT_DIR/infra/controllers/argocd/http-route.yaml" ]; then
+if [ -f "$ROOT_DIR/platform/argocd/http-route.yaml" ]; then
   echo ""
   echo "🌐 Applying HTTPRoute..."
-  kubectl apply -f "$ROOT_DIR/infra/controllers/argocd/http-route.yaml"
+  kubectl apply -f "$ROOT_DIR/platform/argocd/http-route.yaml"
 fi
 
 # Step 6: Apply root application to start GitOps self-management
 echo ""
 echo "🔄 Deploying root application (enables self-management)..."
-kubectl apply -f "$ROOT_DIR/infra/controllers/argocd/root.yaml"
+kubectl apply -f "$ROOT_DIR/platform/argocd/apps/root.yaml"
 
 echo ""
 echo "✅ ArgoCD bootstrap complete!"
