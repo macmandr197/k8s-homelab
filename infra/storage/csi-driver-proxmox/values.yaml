@@ -1,5 +1,5 @@
 replicaCount: 1
-existingConfigSecret: csi-proxmox-proxmox-csi-plugin
+existingConfigSecret: proxmox-csi-cluster-config
 
 # Define the storage classes
 storageClass:
