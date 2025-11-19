@@ -35,8 +35,9 @@ This is a prerequisite for Cilium's Gateway API integration.
 
 ```bash
 kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/experimental-install.yaml
-kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/
+
+# Apply experimental features with server-side apply to account for CRD annotation length
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/experimental-install.yaml
 ```
 
 #### Cloudflare
@@ -95,7 +96,7 @@ kubectl create namespace cloudflared
 # Create Kubernetes secret
 kubectl create secret generic tunnel-credentials \
   --namespace=cloudflared \
-  --from-file=credentials.json=tunnel-creds.json
+  --from-file=credentials.json=tunnel-credentials.json
 
 # SECURITY: Destroy local credentials ( Optional )
 rm -v tunnel-creds.json && echo "Credentials file removed"
@@ -110,12 +111,14 @@ cloudflared tunnel route dns $TUNNEL_ID "*.$DOMAIN"
 ```bash
 # Create cert-manager secrets
 kubectl create namespace cert-manager
+
 kubectl create secret generic cloudflare-api-token -n cert-manager \
   --from-literal=api-token=$CLOUDFLARE_API_TOKEN \
   --from-literal=email=$CLOUDFLARE_EMAIL
 
 # Verify secrets
 kubectl get secret cloudflare-api-token -n cert-manager -o jsonpath='{.data.email}' | base64 -d
+
 kubectl get secret cloudflare-api-token -n cert-manager -o jsonpath='{.data.api-token}' | base64 -d
 ```
 
@@ -160,9 +163,15 @@ This cluster uses [1Password Connect](https://developer.1password.com/docs/conne
 #### Proxmox CSI Plugin
 
 for using the proxmox csi plugin, https://github.com/sergelogvinov/proxmox-csi-plugin/blob/main/docs/install.md
+
 label all nodes with region (proxmox cluster name), and zone (node name)
+
+```bash
+
 kubectl label nodes --all topology.kubernetes.io/region=homebound
 kubectl label nodes --all topology.kubernetes.io/zone=proxmox
+```
+
 
 ### Final Bootstrapping
 
