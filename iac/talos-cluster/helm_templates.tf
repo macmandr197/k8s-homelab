@@ -36,6 +36,14 @@ data "helm_template" "cilium_template" {
       value = "true"
     },
     {
+      name  = "gatewayAPI.enableAlpn"
+      value = "true"
+    },
+    {
+      name  = "gatewayAPI.enableAppProtocol"
+      value = "true"
+    },
+    {
       name  = "k8sServicePort"
       value = "7445"
     }
