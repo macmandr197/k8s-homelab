@@ -4,6 +4,7 @@ resources:
   - projects.yaml
   # Critical applications with specific sync waves to prevent race conditions
   # Wave 0: Foundation components (networking + secrets infrastructure)
+  - argocd-control-plane.yaml
   - cilium-app.yaml              # Wave 0 - Networking foundation
   - 1passwordconnect.yaml        # Wave 0 - Secret Backend (required by external secrets)
   - external-secrets.yaml        # Wave 0 - External Secrets CRDs (required by proxmox storage driver)

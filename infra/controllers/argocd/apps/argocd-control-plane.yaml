@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-control-plane
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    # Wave 0 ensures this syncs early
+    argocd.argoproj.io/sync-wave: "0"
+  labels:
+    app.kubernetes.io/part-of: infrastructure
+spec:
+  project: infrastructure
+  source:
+    repoURL: https://github.com/macmandr197/k8s-homelab.git
+    targetRevision: main
+    path: infra/controllers/argocd
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      # SAFETY: Keep prune false for the app managing the controller itself
+      # to prevent accidental self-destruction during config errors.
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    retry:
+    limit: 10
+    backoff:
+      duration: 15s
+      factor: 2
+      maxDuration: 5m
