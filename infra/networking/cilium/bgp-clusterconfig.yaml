@@ -15,15 +15,15 @@ spec:
           peerAddress: 172.16.8.1
           peerConfigRef:
             name: "cilium-peer-config"
-          timers:
-            holdTimeSeconds: 9
-            keepAliveTimeSeconds: 3
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPPeerConfig
 metadata:
   name: cilium-peer-config
 spec:
+  timers:
+    holdTimeSeconds: 9
+    keepAliveTimeSeconds: 3
   families:
     - afi: ipv4
       safi: unicast
