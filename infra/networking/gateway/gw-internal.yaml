@@ -5,11 +5,10 @@ metadata:
   namespace: gateway
   annotations:
     cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
-    io.cilium/lb-ipam-ips: "172.16.18.2"
 spec:
-  #addresses:
-  #- type: IPAddress
-  #  value: 172.16.18.2
+  addresses:
+  - type: IPAddress
+    value: 172.16.18.2
   gatewayClassName: cilium
   listeners:
     - name: http
