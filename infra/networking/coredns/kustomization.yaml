@@ -3,11 +3,9 @@ kind: Kustomization
 
 namespace: kube-system
 
-# helmCharts:
-#   - name: coredns
-#     repo: https://coredns.github.io/helm
-#     version: 1.19.0
-#     releaseName: coredns
-#     includeCRDs: true
-#     namespace: kube-system
-#     valuesFile: values.yaml
+patches:
+  - path: corefile-patch.yaml
+    target:
+      kind: ConfigMap
+      name: coredns
+      namespace: kube-system
