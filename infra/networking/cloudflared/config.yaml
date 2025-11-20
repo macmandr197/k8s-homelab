@@ -31,7 +31,7 @@ ingress:
     service: https://cilium-gateway-gateway-external.gateway.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
-      originServerName: "*.labber.mcmn.io"
+      #originServerName: "*.labber.mcmn.io"
       logHeaders: true
       headers:
         - name: CF-Connecting-IP
