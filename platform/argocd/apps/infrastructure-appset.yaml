@@ -20,13 +20,13 @@ spec:
       # EXCLUDES: These are managed by standalone Apps for Sync Wave control (Wave 0/1)
       # or are the ArgoCD controller itself.
       - path: infra/controllers/1passwordconnect
-      exclude: true
+        exclude: true
       - path: infra/controllers/external-secrets
-      exclude: true
+        exclude: true
       - path: infra/networking/cilium
-      exclude: true
+        exclude: true
       - path: infra/storage/csi-driver-proxmox
-      exclude: true
+        exclude: true
   template:
     metadata:
       name: '{{path.basename}}'
