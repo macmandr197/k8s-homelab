@@ -8,7 +8,7 @@ metadata:
 spec:
   addresses:
   - type: IPAddress
-    value: 172.16.18.1
+    value: 172.16.18.2
   gatewayClassName: cilium
   listeners:
     - name: http
