@@ -5,7 +5,7 @@ metadata:
 spec:
   nodeSelector:
     matchLabels:
-      node-role.kubernetes.io/control-plane: "true"
+      kubernetes.io/os: linux
   bgpInstances:
     - name: "instance-65512"
       localASN: 65512
@@ -36,7 +36,6 @@ metadata:
     advertise: "bgp"
 spec:
   advertisements:
-    - advertisementType: "PodCIDR"
     - advertisementType: "Service"
       service:
         addresses:
