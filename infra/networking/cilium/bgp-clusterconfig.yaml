@@ -15,6 +15,9 @@ spec:
           peerAddress: 172.16.8.1
           peerConfigRef:
             name: "cilium-peer-config"
+          timers:
+            holdTimeSeconds: 9
+            keepAliveTimeSeconds: 3
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPPeerConfig
@@ -52,7 +55,7 @@ metadata:
 spec:
   blocks:
     - cidr: "172.16.18.0/27"
-      # This provides IPs from 192.168.10.32 to 192.168.10.63
+      # This provides IPs from 172.16.18.1 to 172.16.18.30
       # Reserve specific IPs for known services:
       # - 172.16.18.1: Gateway External
       # - 172.16.18.30: Gateway Internal
