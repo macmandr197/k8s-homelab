@@ -9,6 +9,7 @@ kind: Kustomization
 
 resources: 
  - bgp-clusterconfig.yaml
+ - test-service.yaml
 
 helmCharts:
 - name: cilium
