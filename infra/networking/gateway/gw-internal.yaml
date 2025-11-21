@@ -5,6 +5,8 @@ metadata:
   namespace: gateway
   annotations:
     cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+  labels:
+    bgp: advertise #to match the BGP Advertise selector
 spec:
   addresses:
   - type: IPAddress
