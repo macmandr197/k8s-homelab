@@ -4,9 +4,8 @@ metadata:
   name: bgp-cluster-config
 spec:
   nodeSelector:
-    matchExpressions:
-    - key: node-role.kubernetes.io/control-plane
-      operator: DoesNotExist
+    matchLabels:
+      node-role.kubernetes.io/control-plane: ""
   bgpInstances:
     - name: "instance-65512"
       localASN: 65512
@@ -46,7 +45,7 @@ spec:
           - LoadBalancerIP
       selector:
         matchLabels:
-          bgp: advertise
+          bgp.cilium.io/advertise-service: default
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumLoadBalancerIPPool
