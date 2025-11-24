@@ -1,0 +1,20 @@
+# whoami/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami
+  namespace: bgp-whoami
+  labels:
+    bgp.cilium.io/ip-pool: default
+    bgp.cilium.io/advertise-service: default
+  annotations:
+    io.cilium/lb-ipam-ips: "172.16.18.4"
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  selector:
+    app: whoami
+  ports:
+    - name: web
+      port: 80
+      targetPort: http

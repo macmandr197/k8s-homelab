@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: whoami
+  namespace: bgp-whoami
+  labels:
+    app: whoami
+spec:
+  containers:
+    - name: whoami
+      image: ghcr.io/traefik/whoami:latest
+      ports:
+        - name: http
+          containerPort: 80
