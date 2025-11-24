@@ -39,7 +39,7 @@ cgroup:
 
 # Routing Configuration
 routingMode: native
-autoDirectNodeRoutes: true
+autoDirectNodeRoutes: false
 ipv4NativeRoutingCIDR: 10.244.0.0/16
 
 # IPAM Configuration
