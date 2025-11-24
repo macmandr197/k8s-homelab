@@ -61,6 +61,6 @@ spec:
       # - 172.16.18.30: Gateway Internal
       # - Remaining 30 IPs for other LoadBalancer services
   allowFirstLastIPs: "No"
-  selector:
+  serviceSelector:
     matchLabels:
       bgp.cilium.io/ip-pool: default
