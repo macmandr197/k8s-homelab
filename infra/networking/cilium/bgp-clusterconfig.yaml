@@ -24,22 +24,24 @@ spec:
   timers:
     holdTimeSeconds: 9
     keepAliveTimeSeconds: 3
+  gracefulRestart:
+    enabled: true
   families:
     - afi: ipv4
       safi: unicast
       advertisements:
         matchLabels:
-          advertise: "bgp"
+          bgp.cilium.io/advertise: loadbalancer-services
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPAdvertisement
 metadata:
   name: bgp-advertisements
   labels:
-    advertise: "bgp"
+    bgp.cilium.io/advertise: loadbalancer-services
 spec:
   advertisements:
-    - advertisementType: "Service"
+    - advertisementType: Service
       service:
         addresses:
           - LoadBalancerIP
