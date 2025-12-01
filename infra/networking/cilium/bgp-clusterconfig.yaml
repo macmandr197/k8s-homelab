@@ -46,8 +46,7 @@ spec:
         addresses:
           - LoadBalancerIP
       selector:
-        matchLabels:
-          bgp.cilium.io/advertise-service: default
+        matchLabels: {}
     - advertisementType: PodCIDR
 ---
 apiVersion: cilium.io/v2alpha1
