@@ -4,7 +4,6 @@ resources:
 - ns.yaml
 - gw-external.yaml
 - gw-internal.yaml
-- slice.yaml
 
 #- gw-tcp-postgres.yaml
 generatorOptions:
