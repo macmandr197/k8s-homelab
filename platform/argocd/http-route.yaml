@@ -5,10 +5,11 @@ metadata:
   namespace: argocd
 spec:
   parentRefs:
-    - group: gateway.networking.k8s.io
-      kind: Gateway
-      name: gateway-internal
+    - name: gateway-internal
       namespace: gateway
+    - name: gateway-external
+      namespace: gateway
+
   hostnames:
     - "argocd.labber.mcmn.io"
   rules:
