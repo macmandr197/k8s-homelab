@@ -59,7 +59,7 @@ spec:
     - cidr: "172.16.18.0/27"
       # This provides IPs from 172.16.18.1 to 172.16.18.30
       # Reserve specific IPs for known services:
-      # - 172.16.18.1: Gateway External
+      # - 172.16.18.2: Gateway External
       # - 172.16.18.30: Gateway Internal
       # - Remaining 30 IPs for other LoadBalancer services
   allowFirstLastIPs: "No"
