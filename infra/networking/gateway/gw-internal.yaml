@@ -7,7 +7,6 @@ metadata:
     cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
   labels:
     bgp.cilium.io/advertise-service: default #to match the BGP Advertise selector
-    bgp.cilium.io/ip-pool: default
 spec:
   addresses:
   - type: IPAddress
