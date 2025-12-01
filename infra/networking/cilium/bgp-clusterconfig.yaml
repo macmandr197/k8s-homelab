@@ -31,15 +31,14 @@ spec:
       safi: unicast
       advertisements:
         matchLabels:
-          bgp.cilium.io/advertise: loadbalancer-services
-          bgp.cilium.io/advertise: pod-cidr
+          bgp.cilium.io/advertise: main-routes
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPAdvertisement
 metadata:
   name: bgp-advertisements
   labels:
-    bgp.cilium.io/advertise: loadbalancer-services
+    bgp.cilium.io/advertise: main-routes
 spec:
   advertisements:
     - advertisementType: Service
@@ -49,16 +48,9 @@ spec:
       selector:
         matchLabels:
           bgp.cilium.io/advertise-service: default
----
-apiVersion: cilium.io/v2alpha1
-kind: CiliumBGPAdvertisement
-metadata:
-  name: bgp-advertisements-pod-cidr
-  labels:
-    bgp.cilium.io/advertise: pod-cidr
-spec:
-  advertisements:
     - advertisementType: PodCIDR
+      selector:
+        matchLabels: {}
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumLoadBalancerIPPool

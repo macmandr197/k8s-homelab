@@ -176,6 +176,17 @@ kubectl label nodes --all topology.kubernetes.io/region=homebound
 kubectl label nodes --all topology.kubernetes.io/zone=proxmox
 ```
 
+### CoreDNS
+
+For now, until I can figure out why, you need to patch the cluster's CoreDNS config map before bootstrapping Argo.
+
+Apply the following config:
+
+```bash
+kubectl -n kube-system get configmap coredns -o yaml | \             
+  sed 's/\/etc\/resolv.conf/1.1.1.1 8.8.8.8/g' | \
+  kubectl apply -f -
+```
 
 ### Final Bootstrapping
 
