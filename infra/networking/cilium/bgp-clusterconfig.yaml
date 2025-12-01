@@ -49,8 +49,6 @@ spec:
         matchLabels:
           bgp.cilium.io/advertise-service: default
     - advertisementType: PodCIDR
-      selector:
-        matchLabels: {}
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumLoadBalancerIPPool
