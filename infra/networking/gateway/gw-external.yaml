@@ -18,18 +18,3 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-    - name: https
-      protocol: HTTPS
-      port: 443
-      hostname: "*.labber.mcmn.io"
-      tls:
-        certificateRefs:
-          - name: cert-labber-mcmn
-            kind: Secret
-            group: "" # required
-        # No QUIC/HTTP3 - Cloudflare Tunnel uses HTTP/2, not QUIC
-        options:
-          gateway.networking.k8s.io/alpn-protocols: "h2,http/1.1"
-      allowedRoutes:
-        namespaces:
-          from: All
