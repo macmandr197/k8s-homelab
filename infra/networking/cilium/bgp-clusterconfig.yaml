@@ -46,7 +46,17 @@ spec:
         addresses:
           - LoadBalancerIP
       selector:
-        matchLabels: {}
+        matchExpressions:
+          - key: io.kubernetes.service.namespace
+            operator: In
+            values:
+              - gateway
+          - key: io.kubernetes.service.name
+            operator: In
+            values:
+              - cilium-gateway-gateway-internal
+              - cilium-gateway-gateway-external
+          
     - advertisementType: PodCIDR
 ---
 apiVersion: cilium.io/v2alpha1
