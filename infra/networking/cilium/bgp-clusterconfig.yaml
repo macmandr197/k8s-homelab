@@ -52,6 +52,8 @@ spec:
             values:
               - gateway-internal
               - gateway-external
+              - web
+              - websecure
           
     - advertisementType: PodCIDR
 ---
