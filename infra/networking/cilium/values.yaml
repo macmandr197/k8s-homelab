@@ -78,7 +78,7 @@ gatewayAPI:
   enabled: true
   # CRITICAL FIX: Use Local externalTrafficPolicy to preserve source IP
   # and enable proper connection tracking. This fixes intermittent connectivity.
-  externalTrafficPolicy: Cluster
+  externalTrafficPolicy: Local
   # Enable session affinity for consistent routing
   sessionAffinity: true
   sessionAffinityTimeoutSeconds: 10800  # 3 hours
