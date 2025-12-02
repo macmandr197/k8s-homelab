@@ -46,8 +46,12 @@ spec:
         addresses:
           - LoadBalancerIP
       selector:
-        matchLabels:
-          bgp.cilium.io/advertise: main-routes
+        matchExpressions:
+          - key: io.cilium.gateway/owning-gateway
+            operator: In
+            values:
+              - gateway-internal
+              - gateway-external
           
     - advertisementType: PodCIDR
 ---

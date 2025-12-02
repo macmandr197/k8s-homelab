@@ -3,8 +3,6 @@ kind: Gateway
 metadata:
   name: gateway-internal
   namespace: gateway
-  labels:
-    bgp.cilium.io/advertise: main-routes
   annotations:
     cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
     io.cilium/lb-ipam-ips: "172.16.18.2"
