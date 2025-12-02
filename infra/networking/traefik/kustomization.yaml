@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources: 
+  - ns.yaml
+
+
+helmCharts:
+- name: traefik
+  repo: https://traefik.github.io/charts
+  version: 37.4.0
+  releaseName: traefik
+  includeCRDs: true
+  namespace: traefik
+  valuesFile: values.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true

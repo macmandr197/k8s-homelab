@@ -8,6 +8,7 @@ resources:
   - cilium-app.yaml              # Wave 0 - Networking foundation
   - 1passwordconnect.yaml        # Wave 0 - Secret Backend (required by external secrets)
   - external-secrets.yaml        # Wave 0 - External Secrets CRDs (required by proxmox storage driver)
+  - traefik.yaml
   - csi-driver-proxmox-app.yaml  # Wave 1 - Storage foundation
   # ApplicationSets
   - infrastructure-appset.yaml   # wave 2
