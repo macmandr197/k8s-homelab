@@ -45,15 +45,7 @@ spec:
       service:
         addresses:
           - LoadBalancerIP
-      selector:
-        matchExpressions:
-          - key: io.cilium.gateway/owning-gateway
-            operator: In
-            values:
-              - gateway-internal
-              - gateway-external
-              - web
-              - websecure
+      selector: {}
           
     - advertisementType: PodCIDR
 ---
