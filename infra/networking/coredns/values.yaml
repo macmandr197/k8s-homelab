@@ -14,12 +14,6 @@ resources:
     cpu: 100m
     memory: 128Mi
 
-service:
-  name: kube-dns  # This is important for K3s compatibility
-  type: ClusterIP
-  namespace: kube-system
-  clusterIP: "10.43.0.10"  # K3s default DNS IP
-
 serviceAccount:
   create: true
   namespace: kube-system
@@ -34,6 +28,8 @@ servers:
     plugins:
       - name: errors
       - name: health
+        configBlock: | -
+          lameduck 5s
       - name: ready
       - name: kubernetes
         parameters: cluster.local in-addr.arpa ip6.arpa
@@ -46,19 +42,12 @@ servers:
         configBlock: |-
           fallthrough
       - name: forward
-        parameters: . 8.8.8.8 8.8.4.4 1.1.1.1
+        parameters: . 1.1.1.1 8.8.8.8
         configBlock: |-
           prefer_udp
+          policy sequential
       - name: cache
         parameters: 30
       - name: loop
       - name: reload
       - name: loadbalance
-
-deployment:
-  name: coredns
-  annotations: {}
-  selector: {}
-
-customLabels:
-  app: coredns
