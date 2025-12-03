@@ -30,8 +30,6 @@ ingressRoute:
       - websecure
     middlewares:
       - name: dashboard-auth
-    tls:
-      secretName: traefik-internal-cert-tls
 
 # Creates a BasiAuth Middleware and Secret for the Dashboard Security
 extraObjects:
@@ -85,6 +83,17 @@ gateway:
         - kind: Secret
           name: cert-labber-mcmn  # the Secret we created before the installation
           group: ""
+
+    dashboard:
+      port: 443
+      hostname: "traefik.internal.mcmn.io"
+      protocol: HTTPS
+      mode: Terminate
+      certificateRefs:
+        - kind: Secret
+          name: traefik-internal-cert-tls
+      namespacePolicy:
+        from: All
 
 # Enable Observability
 logs:
