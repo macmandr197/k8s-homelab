@@ -28,7 +28,7 @@ ingress:
         - name: Accept-Language
         - name: User-Agent
   - hostname: "*.labber.mcmn.io"
-    service: https://cilium-gateway-gateway-external.gateway.svc.cluster.local:443
+    service: https://traefik-gateway.gateway.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
       #originServerName: "*.labber.mcmn.io"
@@ -57,7 +57,7 @@ ingress:
         - name: CF-Challenge
         - name: CF-Bot-Management-Tag
   - hostname: labber.mcmn.io
-    service: https://cilium-gateway-gateway-external.gateway.svc.cluster.local:443
+    service: https://traefik-gateway.gateway.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
       originServerName: labber.mcmn.io
