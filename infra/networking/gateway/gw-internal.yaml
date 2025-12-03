@@ -4,7 +4,7 @@ metadata:
   name: gateway-internal
   namespace: gateway
   annotations:
-    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+    cert-manager.io/cluster-issuer: mcmn-me-cloudflare-cluster-issuer
     io.cilium/lb-ipam-ips: "172.16.18.2"
 spec:
   addresses:
@@ -15,14 +15,14 @@ spec:
     - name: http
       protocol: HTTP
       port: 80
-      hostname: "*.labber.mcmn.io"
+      hostname: "*.mcmn.me"
       allowedRoutes:
         namespaces:
           from: All
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "*.labber.mcmn.io"
+      hostname: "*.mcmn.me"
       tls:
         mode: Terminate
         certificateRefs:

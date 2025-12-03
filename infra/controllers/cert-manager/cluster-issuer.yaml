@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: cloudflare-cluster-issuer
+  name: mcmn-me-cloudflare-cluster-issuer
   annotations:
     argocd.argoproj.io/sync-wave: "5" # Deploy well after cert-manager deployments are ready
     argocd.argoproj.io/sync-options: Validate=true
@@ -17,5 +17,5 @@ spec:
       - dns01:
           cloudflare:
             apiTokenSecretRef:
-              name: cloudflare-api-token
+              name: mcmn-me-cloudflare-api-token
               key: api-token

@@ -9,7 +9,7 @@ spec:
       namespace: gateway
       sectionName: websecure # <--- MUST match the HTTPS listener name
   hostnames:
-    - "argocd.labber.mcmn.io"
+    - "argocd.mcmn.me"
   rules:
     - matches:
         - path:

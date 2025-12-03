@@ -12,7 +12,7 @@ configs:
     server.insecure: "true"
   cm:
     # URL for the UI to use
-    url: "https://argocd.labber.mcmn.io"
+    url: "https://argocd.mcmn.me"
     # Enable Helm support in Kustomize builds
     kustomize.buildOptions: "--enable-helm"
     # Ignore Gateway API HTTPRoute parentRefs normalization

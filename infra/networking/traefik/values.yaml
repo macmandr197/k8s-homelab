@@ -19,7 +19,7 @@ api:
 ingressRoute:
   dashboard:
     enabled: true
-    matchRule: Host(`traefik.labber.mcmn.io`)
+    matchRule: Host(`traefik.mcmn.me`)
     entryPoints:
       - websecure
     middlewares:
@@ -57,26 +57,26 @@ providers:
 ## Gateway Listeners
 gateway:
   annotations:
-    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+    cert-manager.io/cluster-issuer: mcmn-me-cloudflare-cluster-issuer
   listeners:
     web:           # HTTP listener that matches entryPoint `web`
       port: 80
-      hostname: "*.labber.mcmn.io"
+      hostname: "*.mcmn.me"
       protocol: HTTP
       namespacePolicy:
         from: All
 
     websecure:         # HTTPS listener that matches entryPoint `websecure`
       port: 443
-      hostname: "*.labber.mcmn.io"
+      hostname: "*.mcmn.me"
       protocol: HTTPS  # TLS terminates inside Traefik
       namespacePolicy:
         from: All
       mode: Terminate
       certificateRefs:    
         - kind: Secret
-          name: cert-labber-mcmn
-          group: ""
+          name: cert-mcmn-me
+          group: "" #necessary
 
 # Enable Observability
 logs:

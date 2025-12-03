@@ -26,7 +26,7 @@ data "talos_machine_configuration" "machineconfig_cp" {
           disabled = true
         }
         apiServer = {
-          certSANs = ["labber.mcmn.io"]
+          certSANs = ["labber.mcmn.me"]
         }
         inlineManifests = [
           {

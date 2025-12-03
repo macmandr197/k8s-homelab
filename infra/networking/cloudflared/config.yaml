@@ -7,7 +7,7 @@ no-autoupdate: true
 loglevel: debug # Increased log level for more details
 transport-loglevel: debug
 ingress:
-  - hostname: hello.labber.mcmn.io
+  - hostname: hello.mcmn.me
     service: hello_world
     originRequest:
       # Add header logging with log-headers flag
@@ -27,7 +27,7 @@ ingress:
         - name: X-Forwarded-For
         - name: Accept-Language
         - name: User-Agent
-  - hostname: "*.labber.mcmn.io"
+  - hostname: "*.mcmn.me"
     service: https://traefik-gateway.gateway.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
@@ -56,11 +56,11 @@ ingress:
         - name: CF-Bot-Score
         - name: CF-Challenge
         - name: CF-Bot-Management-Tag
-  - hostname: labber.mcmn.io
+  - hostname: mcmn.me
     service: https://traefik-gateway.gateway.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
-      originServerName: labber.mcmn.io
+      originServerName: mcmn.me
       logHeaders: true
       headers:
         - name: CF-Connecting-IP

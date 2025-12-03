@@ -4,7 +4,7 @@ metadata:
   name: gateway-external
   namespace: gateway
   annotations:
-    cert-manager.io/cluster-issuer: cloudflare-cluster-issuer
+    cert-manager.io/cluster-issuer: mcmn-me-cloudflare-cluster-issuer
     io.cilium/lb-ipam-ips: "172.16.18.30"
 spec:
   addresses:
@@ -15,17 +15,17 @@ spec:
     - name: http
       protocol: HTTP
       port: 80
-      hostname: "*.labber.mcmn.io"
+      hostname: "*.mcmn.me"
       allowedRoutes:
         namespaces:
           from: All
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "*.labber.mcmn.io"
+      hostname: "*.mcmn.me"
       tls:
         certificateRefs:
-          - name: cert-labber-mcmn
+          - name: cert-mcmn-me
             kind: Secret
             group: "" # required
         # No QUIC/HTTP3 - Cloudflare Tunnel uses HTTP/2, not QUIC
