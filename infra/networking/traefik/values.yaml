@@ -92,6 +92,7 @@ gateway:
       certificateRefs:
         - kind: Secret
           name: traefik-internal-cert-tls
+          group: ""
       namespacePolicy:
         from: All
 
