@@ -25,7 +25,7 @@ api:
 ingressRoute:
   dashboard:
     enabled: true
-    matchRule: Host(`traefik.internal.mcmn.io`)
+    matchRule: Host(`traefik.labber.mcmn.io`)
     entryPoints:
       - websecure
     middlewares:
@@ -83,18 +83,6 @@ gateway:
         - kind: Secret
           name: cert-labber-mcmn  # the Secret we created before the installation
           group: ""
-
-    dashboard:
-      port: 443
-      hostname: "traefik.internal.mcmn.io"
-      protocol: HTTPS
-      mode: Terminate
-      certificateRefs:
-        - kind: Secret
-          name: traefik-internal-cert-tls
-          group: ""
-      namespacePolicy:
-        from: All
 
 # Enable Observability
 logs:
