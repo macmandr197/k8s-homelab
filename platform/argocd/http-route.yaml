@@ -5,10 +5,8 @@ metadata:
   namespace: argocd
 spec:
   parentRefs:
-    - name: gateway-internal
-      namespace: gateway
-    - name: gateway-external
-      namespace: gateway
+    - name: traefik-gateway
+      namespace: traefik
 
   hostnames:
     - "argocd.labber.mcmn.io"
