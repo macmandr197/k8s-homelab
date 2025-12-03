@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources: 
   - ns.yaml
-  - certificate.yaml
   - external-secret.yaml
 
 
