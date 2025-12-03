@@ -24,12 +24,14 @@ api:
 
 ingressRoute:
   dashboard:
-    enabled: false
-    #matchRule: Host(`traefik.labber.mcmn.io`)
-    #entryPoints:
-    #  - websecure
-    #middlewares:
-    #  - name: dashboard-auth
+    enabled: true
+    matchRule: Host(`traefik.internal.mcmn.io`)
+    entryPoints:
+      - websecure
+    middlewares:
+      - name: dashboard-auth
+    tls:
+      secretName: traefik-internal-cert-tls
 
 # Creates a BasiAuth Middleware and Secret for the Dashboard Security
 extraObjects:

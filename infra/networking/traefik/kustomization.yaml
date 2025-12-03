@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources: 
   - ns.yaml
-  - HTTPRoute.yaml
+  - certificate.yaml
   - external-secret.yaml
 
 
