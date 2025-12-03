@@ -17,12 +17,6 @@ ports:
     port: 443
     nodePort: 30001
 
-  traefik:
-    port: 9000
-    expose:
-      default: true      # Critical: Adds this port to the K8s Service
-    protocol: TCP
-
 # Enables the dashboard in Secure Mode
 api:
   dashboard: true

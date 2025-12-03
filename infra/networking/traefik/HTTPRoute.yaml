@@ -23,4 +23,4 @@ spec:
             name: dashboard-auth
       backendRefs:
         - name: traefik
-          port: 9000
+          port: 8080
