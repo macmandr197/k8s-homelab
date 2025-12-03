@@ -5,12 +5,6 @@ ports:
   web:
     port: 80
     nodePort: 30000
-    # Instructs this entry point to redirect all traffic to the 'websecure' entry point
-    #redirections:
-    #  entryPoint:
-    #    to: websecure
-    #    scheme: https
-    #    permanent: true
 
   # Defines the HTTPS entry point named 'websecure'
   websecure:
@@ -81,7 +75,7 @@ gateway:
       mode: Terminate
       certificateRefs:    
         - kind: Secret
-          name: cert-labber-mcmn  # the Secret we created before the installation
+          name: cert-labber-mcmn
           group: ""
 
 # Enable Observability
