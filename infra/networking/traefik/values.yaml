@@ -19,7 +19,8 @@ ports:
 
   traefik:
     port: 9000
-    expose: true      # Critical: Adds this port to the K8s Service
+    expose:
+      default: true      # Critical: Adds this port to the K8s Service
     protocol: TCP
 
 # Enables the dashboard in Secure Mode
