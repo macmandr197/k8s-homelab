@@ -28,7 +28,7 @@ ingress:
         - name: Accept-Language
         - name: User-Agent
   - hostname: "*.mcmn.me"
-    service: https://traefik-gateway.traefik.svc.cluster.local:443
+    service: https://traefik.traefik.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
       #originServerName: "*.labber.mcmn.io"
@@ -57,7 +57,7 @@ ingress:
         - name: CF-Challenge
         - name: CF-Bot-Management-Tag
   - hostname: mcmn.me
-    service: https://traefik-gateway.traefik.svc.cluster.local:443
+    service: https://traefik.traefik.svc.cluster.local:443
     originRequest:
       noTLSVerify: true
       originServerName: mcmn.me
