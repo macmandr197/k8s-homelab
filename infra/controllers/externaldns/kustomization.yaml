@@ -5,7 +5,7 @@ namespace: external-dns
 
 resources:
   - ns.yaml
-  - cloudflare-external-secret.yaml
+  - external-secret.yaml
 
 helmCharts:
   - name: external-dns
