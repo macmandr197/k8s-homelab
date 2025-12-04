@@ -70,7 +70,7 @@ env:
   - name: CF_API_TOKEN
     valueFrom:
       secretKeyRef:
-        name: cloudflare-api-token
+        name: mcmn-me-cloudflare-api-token
         key: api-token
 
 # Sync interval - how often to check for changes
