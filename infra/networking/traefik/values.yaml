@@ -56,9 +56,6 @@ providers:
 
 ## Gateway Listeners
 gateway:
-  labels:
-    external-dns: "true"
-    external-dns-gateway: traefik-gateway
   annotations:
     cert-manager.io/cluster-issuer: mcmn-me-cloudflare-cluster-issuer
   listeners:

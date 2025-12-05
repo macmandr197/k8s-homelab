@@ -14,7 +14,7 @@ cloudflare:
 sources:
   - gateway-httproute # Watch HTTPRoute resources
 
-# Domain filter - only manage vanillax.me domain
+# Domain filter - only manage mcmn.mee domain
 domainFilters:
   - mcmn.me
 
@@ -30,7 +30,6 @@ txtPrefix: "external-dns-" # Prefix for TXT records
 # Only process HTTPRoutes with external-dns=true label
 extraArgs:
   - --label-filter=external-dns=true
-  - --gateway-label-filter=external-dns-gateway=traefik-gateway
   - --cloudflare-proxied  # Enable Cloudflare proxy for all records
 
 # Logging
