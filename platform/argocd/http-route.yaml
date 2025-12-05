@@ -6,7 +6,7 @@ metadata:
   labels:
     external-dns: "true"  # Enable ExternalDNS for this route
   annotations:
-    external-dns.alpha.kubernetes.io/target: "mcmn.me"
+    external-dns.alpha.kubernetes.io/target: "37ab5ca6-9491-4bc3-9505-75be85d6e554.cfargotunnel.com"
 spec:
   parentRefs:
     - name: traefik-gateway
