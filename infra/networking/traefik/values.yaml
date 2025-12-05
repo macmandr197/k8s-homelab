@@ -10,6 +10,10 @@ ports:
   websecure:
     port: 443
     nodePort: 30001
+    forwardedHeaders:
+      trustedIPs: 
+        - "10.244.0.0/16" 
+#for when traffic is routed through CF tunnel. web->tunnel->gateway->pod. source IP may appear as though it is coming from a pod's IP instead of a web IP.
 
 # Enables the dashboard in Secure Mode
 api:

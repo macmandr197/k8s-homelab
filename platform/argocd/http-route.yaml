@@ -3,10 +3,6 @@ kind: HTTPRoute
 metadata:
   name: argocd
   namespace: argocd
-  labels:
-    external-dns: "true"  # Enable ExternalDNS for this route
-  annotations:
-    external-dns.alpha.kubernetes.io/target: "37ab5ca6-9491-4bc3-9505-75be85d6e554.cfargotunnel.com"
 spec:
   parentRefs:
     - name: traefik-gateway
@@ -25,3 +21,15 @@ spec:
           name: argocd-server
           port: 80
           weight: 1
+--- #External DNS specific for exposing argo to CF tunnel
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: argocd-tunnel
+  namespace: argocd
+spec:
+  endpoints:
+    - dnsName: argocd.mcmn.me
+      recordType: CNAME
+      targets:
+        - 37ab5ca6-9491-4bc3-9505-75be85d6e554.cfargotunnel.com
