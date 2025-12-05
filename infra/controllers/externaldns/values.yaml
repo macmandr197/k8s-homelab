@@ -77,3 +77,7 @@ interval: 1m
 
 # Trigger loop on create - faster propagation for new records
 triggerLoopOnEvent: true
+
+#Creates DNS Enpoint CRD
+crd:
+  create: true
