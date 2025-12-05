@@ -13,6 +13,7 @@ cloudflare:
 # Source Configuration - Watch Gateway API HTTPRoutes
 sources:
   - gateway-httproute # Watch HTTPRoute resources
+  - crd
 
 # Domain filter - only manage mcmn.mee domain
 domainFilters:
@@ -81,3 +82,5 @@ triggerLoopOnEvent: true
 #Creates DNS Enpoint CRD
 crd:
   create: true
+  apiversion: "externaldns.k8s.io/v1alpha1"
+  kind: "DNSEndpoint"
