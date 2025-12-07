@@ -27,6 +27,8 @@ kind: DNSEndpoint
 metadata:
   name: argocd-tunnel
   namespace: argocd
+  labels:
+    external-dns: "true"
 spec:
   endpoints:
     - dnsName: argocd.mcmn.me

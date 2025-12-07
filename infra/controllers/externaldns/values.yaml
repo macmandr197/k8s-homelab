@@ -78,9 +78,3 @@ interval: 1m
 
 # Trigger loop on create - faster propagation for new records
 triggerLoopOnEvent: true
-
-#Creates DNS Enpoint CRD
-crd:
-  create: true
-  apiversion: "externaldns.k8s.io/v1alpha1"
-  kind: "DNSEndpoint"
