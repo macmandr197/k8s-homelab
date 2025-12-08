@@ -49,7 +49,7 @@ ipam:
 # Enable Socket-level Load Balancing (critical for pod-to-service connectivity)
 socketLB:
   enabled: true
-  hostNamespaceOnly: true
+  hostNamespaceOnly: false
 
 # Enable Bandwidth Manager for better TCP performance
 bandwidthManager:

@@ -33,7 +33,7 @@ data "helm_template" "cilium_template" {
     },
     {
       name  = "gatewayAPI.enabled"
-      value = "true"
+      value = "false"
     },
     {
       name  = "gatewayAPI.enableAlpn"
