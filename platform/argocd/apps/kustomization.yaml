@@ -10,4 +10,6 @@ resources:
   - external-secrets.yaml        # Wave 0 - External Secrets CRDs (required by proxmox storage driver)
   - csi-driver-proxmox-app.yaml  # Wave 1 - Storage foundation
   # ApplicationSets
-  - infrastructure-appset.yaml   # wave 2
+  - infrastructure-appset.yaml   # Wave 2
+  #- monitoring-appset.yaml      # Wave 3
+  - my-apps-appset.yaml  # Wave 4
