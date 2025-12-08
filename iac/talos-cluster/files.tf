@@ -33,8 +33,8 @@ resource "proxmox_virtual_environment_download_file" "talos_nocloud_image" {
   datastore_id = "local"
   node_name    = "proxmox"
 
-  file_name = "talos-${local.talos.version}-nocloud-amd64.img"
-  url                      = "https://factory.talos.dev/image/${resource.talos_image_factory_schematic.this.id}/${local.talos.version}/nocloud-amd64.raw.gz"
+  file_name               = "talos-${local.talos.version}-nocloud-amd64.img"
+  url                     = "https://factory.talos.dev/image/${resource.talos_image_factory_schematic.this.id}/${local.talos.version}/nocloud-amd64.raw.gz"
   decompression_algorithm = "gz"
   overwrite               = false
 }

@@ -176,17 +176,12 @@ kubectl label nodes --all topology.kubernetes.io/region=homebound
 kubectl label nodes --all topology.kubernetes.io/zone=proxmox
 ```
 
-### CoreDNS
+### External DNS
 
-For now, until I can figure out why, you need to patch the cluster's CoreDNS config map before bootstrapping Argo.
+The DNSEndpoint resource is used, which requires the DNSEndpoint CRD to be installed. This must be installed before Argo's HTTPRoute/DNS Endpoint is created so as not to block the ArgoCD bootstrap process.
 
-Apply the following config:
-
-```bash
-kubectl -n kube-system get configmap coredns -o yaml | \             
-  sed 's/\/etc\/resolv.conf/1.1.1.1 8.8.8.8/g' | \
-  kubectl apply -f -
-```
+1. Install CRD (tag branch should match semVer of helm chart version. eg. chart version v1.19.0 -> v0.19.0)
+  `kubectl create -f https://raw.githubusercontent.com/kubernetes-sigs/external-dns/refs/tags/v0.19.0/config/crd/standard/dnsendpoints.externaldns.k8s.io.yaml`
 
 ### Final Bootstrapping
 

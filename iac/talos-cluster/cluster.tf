@@ -46,6 +46,7 @@ data "talos_machine_configuration" "machineconfig_cp" {
           extraKernelArgs = ["net.ifnames=0"]
         }
         network = {
+          nameservers = ["1.1.1.1", "8.8.8.8"]
           interfaces = [
             {
               interface = "eth0"
@@ -54,6 +55,12 @@ data "talos_machine_configuration" "machineconfig_cp" {
               }
             }
           ]
+        }
+        features = {
+          hostDNS = {
+            enabled              = true
+            forwardKubeDNSToHost = false # uses host upstream resolvers to avoid issue with passing link-local cache from node to pod
+          }
         }
       }
     })
@@ -74,6 +81,23 @@ data "talos_machine_configuration" "machineconfig_worker" {
   cluster_endpoint = "https://${local.cluster_endpoint}:6443"
   machine_type     = "worker"
   machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
+
+  config_patches = [
+    # [cite_start]Patch 2: Replaces machine.tftpl [cite: 130]
+    yamlencode({
+      machine = {
+        network = {
+          nameservers = ["1.1.1.1", "8.8.8.8"]
+        }
+        features = {
+          hostDNS = {
+            enabled              = true
+            forwardKubeDNSToHost = falsev # uses host upstream resolvers to avoid issue with passing link-local cache from node to pod
+          }
+        }
+      }
+    })
+  ]
 }
 
 resource "talos_machine_configuration_apply" "worker_config_apply" {
