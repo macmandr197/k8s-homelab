@@ -9,8 +9,6 @@ kind: Kustomization
 
 resources: 
  - bgp-clusterconfig.yaml
- - test-pod.yaml
- - test-svc.yaml
 
 
 helmCharts:
