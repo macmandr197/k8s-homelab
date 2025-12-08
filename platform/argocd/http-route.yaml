@@ -21,7 +21,7 @@ spec:
           name: argocd-server
           port: 80
           weight: 1
---- #External DNS specific for exposing argo to CF tunnel
+--- #External DNS specific for exposing argo to CF tunnel. external-dns does not support annotating gateway API + HTTP Route
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
