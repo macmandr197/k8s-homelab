@@ -2,7 +2,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: sonarr
-  namespace: media
+  namespace: sonarr
 spec:
   parentRefs:
       name: traefik-gateway
@@ -25,7 +25,7 @@ apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
   name: sonarr-tunnel
-  namespace: media
+  namespace: sonarr
   labels:
     external-dns: "true"
 spec:
