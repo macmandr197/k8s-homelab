@@ -8,12 +8,9 @@ spec:
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain # retain data if PVC is deleted
-  mountOptions:
-    - uid=1000
-    - gid=1000
   csi:
     driver: nfs.csi.k8s.io
-    volumeHandle: pv-pool0-media
+    volumeHandle: pv-pool0-media-sonarr
     volumeAttributes:
       server: 10.10.1.46
       share: /pool-0/media

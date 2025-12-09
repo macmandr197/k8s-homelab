@@ -4,11 +4,9 @@ commonLabels:
   app: sonarr
 
 resources:
+  - ns.yaml
+  - appdata-pvc.yaml
+  - shared-media-pvc.yaml
   - deployment.yaml
   - httproute.yaml
   - svc.yaml
-  # - svc.yaml
-  # - pvc.yaml
-  # - jellyfin-media-pvc.yaml
-  # - deployment.yaml
-  # - httproute.yaml
