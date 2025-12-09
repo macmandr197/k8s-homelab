@@ -1,0 +1,139 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
+  ],
+  prHourlyLimit: 3,
+  enabledManagers: [
+    'helm-values',
+    'kubernetes',
+    'kustomize',
+    'argocd',
+    'terraform',
+    'dockerfile',
+    'custom.regex',
+  ],
+  argocd: {
+    managerFilePatterns: [
+      '/^infra/.+\\.yaml$/',
+      '/^infrastructure/.+\\.yaml$/',
+      '/^apps/.+\\.yaml$/',
+      '/^my-apps/.+\\.yaml$/',
+      '/^monitoring/.+\\.yaml$/',
+    ],
+  },
+  kubernetes: {
+    managerFilePatterns: [
+      '/^infra/.+\\.yaml$/',
+      '/^infrastructure/.+\\.yaml$/',
+      '/^apps/.+\\.yaml$/',
+      '/^my-apps/.+\\.yaml$/',
+      '/^monitoring/.+\\.yaml$/',
+      '/^iac/.+\\.yaml$/',
+    ],
+  },
+  'helm-values': {
+    managerFilePatterns: [
+      '/^infra/.+/values\\.yaml$/',
+      '/^apps/.+/values\\.yaml$/',
+      '/^monitoring/.+/values\\.yaml$/',
+      '/^my-apps/.+/values\\.yaml$/',
+    ],
+  },
+  kustomize: {
+    managerFilePatterns: [
+      '(^|/)kustomization\\.ya?ml$',
+    ],
+  },
+  terraform: {
+    managerFilePatterns: [
+      '//^iac/terraform/.+\\.tf$//',
+    ],
+  },
+  dockerfile: {
+    managerFilePatterns: [
+      '//^docker/.+/Dockerfile$//',
+    ],
+  },
+  packageRules: [
+    {
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+      ],
+      matchManagers: [
+        'helm-values',
+        'kubernetes',
+        'kustomize',
+        'argocd',
+      ],
+      automerge: true,
+      automergeType: 'branch',
+    },
+    {
+      matchUpdateTypes: [
+        'major',
+      ],
+      matchManagers: [
+        'helm-values',
+        'kubernetes',
+        'kustomize',
+        'argocd',
+      ],
+      automerge: false,
+      prCreation: 'immediate',
+    },
+    {
+      description: 'Enable container digest updates',
+      matchDatasources: [
+        'docker',
+      ],
+      matchUpdateTypes: [
+        'digest',
+      ],
+      enabled: true,
+    },
+  ],
+  ignorePaths: [
+    '**/charts/**',
+  ],
+  customManagers: [
+    {
+      customType: 'regex',
+      description: 'Update Talos version in Terraform locals',
+      fileMatch: [
+        '^iac/.+\\.tf$',
+      ],
+      matchStrings: [
+        'talos\\s*=\s*\\{\\s*[\\s\\S]*?version\\s*=\s*"(?<currentValue>v[0-9.]+)"',
+      ],
+      datasourceTemplate: 'docker',
+      depNameTemplate: 'ghcr.io/siderolabs/installer',
+    },
+    {
+      customType: 'regex',
+      description: 'Update Kubernetes version in Terraform locals',
+      fileMatch: [
+        '^iac/.+\\.tf$',
+      ],
+      matchStrings: [
+        'kubeVersion\\s*=\s*"(?<currentValue>[0-9.]+)"',
+      ],
+      datasourceTemplate: 'docker',
+      depNameTemplate: 'ghcr.io/siderolabs/kubelet',
+    },
+    {
+      customType: 'regex',
+      description: 'Update Cilium Helm chart version in Terraform/HCL files',
+      fileMatch: [
+        '^iac/.+\\.(tf|yaml)$',
+      ],
+      matchStrings: [
+        'chart\\s*=\s*"cilium"[\\s\\S]*?version\\s*=\s*"(?<currentValue>[0-9.]+)"',
+      ],
+      datasourceTemplate: 'helm',
+      registryUrlTemplate: 'https://helm.cilium.io/',
+      depNameTemplate: 'cilium',
+    },
+  ],
+}
