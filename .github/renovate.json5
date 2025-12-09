@@ -104,8 +104,8 @@
     {
       customType: 'regex',
       description: 'Update Talos version in Terraform locals',
-      fileMatch: [
-        '^iac/.+\\.tf$',
+      managerFilePatterns: [
+        '/^iac/.+\\.tf$/',
       ],
       matchStrings: [
         'talos\\s*=\\s*\\{\\s*[\\s\\S]*?version\\s*=\\s*"(?<currentValue>v[0-9.]+)"',
@@ -116,8 +116,8 @@
     {
       customType: 'regex',
       description: 'Update Kubernetes version in Terraform locals',
-      fileMatch: [
-        '^iac/.+\\.tf$',
+      managerFilePatterns: [
+        '/^iac/.+\\.tf$/',
       ],
       matchStrings: [
         'kubeVersion\\s*=\\s*"(?<currentValue>[0-9.]+)"',
@@ -128,8 +128,8 @@
     {
       customType: 'regex',
       description: 'Update Cilium Helm chart version in Terraform/HCL files',
-      fileMatch: [
-        '^iac/.+\\.tf$',
+      managerFilePatterns: [
+        '/^iac/.+\\.tf$/',
       ],
       matchStrings: [
         'data\\s+"helm_template"\\s+"cilium_template"\\s+\\{[\\s\\S]*?version\\s*=\\s*"(?<currentValue>[0-9.]+)"',
