@@ -31,7 +31,7 @@
       '/^my-apps/.+\\.yaml$/',
       '/^monitoring/.+\\.yaml$/',
       '/^iac/.+\\.yaml$/',
-      '^platform/.\\.yaml$'
+      '^platform/.\\.yaml$',
     ],
   },
   'helm-values': {
@@ -40,7 +40,7 @@
       '/^apps/.+/values\\.yaml$/',
       '/^monitoring/.+/values\\.yaml$/',
       '/^my-apps/.+/values\\.yaml$/',
-      '^platform/.+/values\\.yaml$'
+      '^platform/.+/values\\.yaml$',
     ],
   },
   kustomize: {
@@ -104,11 +104,11 @@
     {
       customType: 'regex',
       description: 'Update Talos version in Terraform locals',
-      fileMatch: [
-        '^iac/.+\\.tf$',
+      managerFilePatterns: [
+        '/^iac/.+\\.tf$/',
       ],
       matchStrings: [
-        'talos\\s*=\s*\\{\\s*[\\s\\S]*?version\\s*=\s*"(?<currentValue>v[0-9.]+)"',
+        'talos\\s*=s*\\{\\s*[\\s\\S]*?version\\s*=s*"(?<currentValue>v[0-9.]+)"',
       ],
       datasourceTemplate: 'docker',
       depNameTemplate: 'ghcr.io/siderolabs/installer',
@@ -116,11 +116,11 @@
     {
       customType: 'regex',
       description: 'Update Kubernetes version in Terraform locals',
-      fileMatch: [
-        '^iac/.+\\.tf$',
+      managerFilePatterns: [
+        '/^iac/.+\\.tf$/',
       ],
       matchStrings: [
-        'kubeVersion\\s*=\s*"(?<currentValue>[0-9.]+)"',
+        'kubeVersion\\s*=s*"(?<currentValue>[0-9.]+)"',
       ],
       datasourceTemplate: 'docker',
       depNameTemplate: 'ghcr.io/siderolabs/kubelet',
@@ -128,11 +128,11 @@
     {
       customType: 'regex',
       description: 'Update Cilium Helm chart version in Terraform/HCL files',
-      fileMatch: [
-        '^iac/.+\\.tf$',
+      managerFilePatterns: [
+        '/^iac/.+\\.tf$/',
       ],
       matchStrings: [
-        'chart\\s*=\s*"cilium"[\\s\\S]*?version\\s*=\s*"(?<currentValue>[0-9.]+)"',
+        'chart\\s*=s*"cilium"[\\s\\S]*?version\\s*=s*"(?<currentValue>[0-9.]+)"',
       ],
       datasourceTemplate: 'helm',
       registryUrlTemplate: 'https://helm.cilium.io/',
