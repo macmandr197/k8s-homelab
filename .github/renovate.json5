@@ -108,7 +108,7 @@
         "/^iac/.+\\.tf$/",
       ],
       matchStrings: [
-        'talos\\s*=\\s*\\{\\s*[\\s\\S]*?version\\s*=\\s*"(?<currentValue>v[0-9.]+)"',
+        "talos\\s*=\\s*\\{\\s*[\\s\\S]*?version\\s*=\\s*\"(?<currentValue>v[0-9.]+)\"",
       ],
       datasourceTemplate: 'github-releases',
       depNameTemplate: 'siderolabs/talos',
@@ -117,10 +117,10 @@
       customType: 'regex',
       description: 'Update Kubernetes version in Terraform locals',
       managerFilePatterns: [
-        '/^iac/.+\\.tf$/',
+        "^iac/.+\\.tf$/",
       ],
       matchStrings: [
-        'kubeVersion\\s*=s*"(?<currentValue>[0-9.]+)"',
+        "kubeVersion\\s*=\\s*\"(?<currentValue>[0-9.]+)\"",
       ],
       datasourceTemplate: 'docker',
       depNameTemplate: 'ghcr.io/siderolabs/kubelet',
@@ -129,10 +129,10 @@
       customType: 'regex',
       description: 'Update Cilium Helm chart version in Terraform/HCL files',
       managerFilePatterns: [
-        '/^iac/.+\\.tf$/',
+        "^iac/.+\\.tf$",
       ],
       matchStrings: [
-        'chart\\s*=s*"cilium"[\\s\\S]*?version\\s*=s*"(?<currentValue>[0-9.]+)"',
+        "data\\s+\"helm_template\"\\s+\"cilium_template\"\\s+\\{[\\s\\S]*?version\\s*=\\s*\"(?<currentValue>[0-9.]+)\"",
       ],
       datasourceTemplate: 'helm',
       registryUrlTemplate: 'https://helm.cilium.io/',
