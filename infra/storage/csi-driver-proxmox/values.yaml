@@ -5,8 +5,6 @@ existingConfigSecret: proxmox-csi-cluster-config
 storageClass:
   - name: proxmox-data-xfs
     # Define the storage class as default
-    annotations:
-      storageclass.kubernetes.io/is-default-class: "true"
     storage: labber-data
     reclaimPolicy: Delete
     fstype: xfs

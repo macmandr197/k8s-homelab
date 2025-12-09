@@ -1,13 +1,17 @@
 storageClass:
   create: true
-  name: nfs-storageclass-media
+  annotations:
+      storageclass.kubernetes.io/is-default-class: "true"
+  name: nfs-dynamic
   provisioner: nfs.csi.k8s.io
   parameters:
     server: 10.10.1.46
-    share: /pool-0/media
-  reclaimPolicy: Retain
+    share: /pool-0/k8s-dynamic
+      subDir: "${pvc.metadata.name}" # Naming pattern for folders
+  reclaimPolicy: Delete #remove data if PVC is deleted
   volumeBindingMode: Immediate
   mountOptions:
-    - "nfsvers=4"
+    - "nfsvers=4.1"
     - "nolock"
     - "tcp"
+    - "noatime"
