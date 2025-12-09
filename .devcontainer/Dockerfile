@@ -1,4 +1,4 @@
-FROM golang:1.25.3-trixie
+FROM golang:1.25.5-trixie
 
 ARG GOLANGCI_LINT_VERSION=2.1.6 # renovate: depName=golangci/golangci-lint datasource=github-releases
 ARG TARGETARCH
