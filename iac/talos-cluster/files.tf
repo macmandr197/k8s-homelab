@@ -2,7 +2,7 @@ locals {
   talos = {
     version = "v1.11.5"
   }
-  kubeVersion = "1.34.1"
+  kubeVersion = "1.34.2"
 }
 
 data "talos_image_factory_extensions_versions" "this" {
