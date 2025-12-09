@@ -5,7 +5,7 @@ metadata:
   namespace: sonarr
 spec:
   parentRefs:
-      name: traefik-gateway
+    - name: traefik-gateway
       namespace: traefik
   hostnames:
     - "sonarr.mcmn.me"
