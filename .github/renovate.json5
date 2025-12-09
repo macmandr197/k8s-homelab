@@ -16,6 +16,7 @@
   argocd: {
     managerFilePatterns: [
       '/^infra/.+\\.yaml$/',
+      '^platform/argocd/apps/.+\\.yaml$',
       '/^infrastructure/.+\\.yaml$/',
       '/^apps/.+\\.yaml$/',
       '/^my-apps/.+\\.yaml$/',
@@ -30,6 +31,7 @@
       '/^my-apps/.+\\.yaml$/',
       '/^monitoring/.+\\.yaml$/',
       '/^iac/.+\\.yaml$/',
+      '^platform/.\\.yaml$'
     ],
   },
   'helm-values': {
@@ -38,6 +40,7 @@
       '/^apps/.+/values\\.yaml$/',
       '/^monitoring/.+/values\\.yaml$/',
       '/^my-apps/.+/values\\.yaml$/',
+      '^platform/.+/values\\.yaml$'
     ],
   },
   kustomize: {
@@ -47,7 +50,7 @@
   },
   terraform: {
     managerFilePatterns: [
-      '//^iac/terraform/.+\\.tf$//',
+      '^iac/.+\\.tf$',
     ],
   },
   dockerfile: {
@@ -126,7 +129,7 @@
       customType: 'regex',
       description: 'Update Cilium Helm chart version in Terraform/HCL files',
       fileMatch: [
-        '^iac/.+\\.(tf|yaml)$',
+        '^iac/.+\\.tf$',
       ],
       matchStrings: [
         'chart\\s*=\s*"cilium"[\\s\\S]*?version\\s*=\s*"(?<currentValue>[0-9.]+)"',
