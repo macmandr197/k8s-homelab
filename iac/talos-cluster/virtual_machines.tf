@@ -74,7 +74,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker" {
 
   disk {
     datastore_id = each.value.config.disk.datastore_id
-    file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
+    file_id      = each.value.gpu_enabled ? proxmox_virtual_environment_download_file.talos_nocloud_gpu_enabled.id : proxmox_virtual_environment_download_file.talos_nocloud_standard.id
     file_format  = each.value.config.disk.file_format
     interface    = each.value.config.disk.interface
     size         = each.value.config.disk.size
@@ -82,6 +82,18 @@ resource "proxmox_virtual_environment_vm" "talos_worker" {
 
   operating_system {
     type = local.operating_system
+  }
+
+  # uses mapped GPU named "nvidia-gpu".
+  dynamic "hostpci" {
+    for_each = each.value.gpu_enabled ? [1] : []
+    content {
+      device  = "hostpci0"
+      mapping = "nvidia-gpu" 
+      pcie    = true
+      rombar  = true
+      xvga    = false 
+    }
   }
 
   initialization {

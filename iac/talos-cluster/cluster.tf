@@ -82,8 +82,9 @@ data "talos_machine_configuration" "machineconfig_worker" {
   machine_type     = "worker"
   machine_secrets  = talos_machine_secrets.machine_secrets.machine_secrets
 
-  config_patches = [
-    # [cite_start]Patch 2: Replaces machine.tftpl [cite: 130]
+  config_patches = concat(
+    # Apply standard machine config to all nodes
+    [
     yamlencode({
       machine = {
         network = {
@@ -92,12 +93,28 @@ data "talos_machine_configuration" "machineconfig_worker" {
         features = {
           hostDNS = {
             enabled              = true
-            forwardKubeDNSToHost = falsev # uses host upstream resolvers to avoid issue with passing link-local cache from node to pod
+            forwardKubeDNSToHost = false # uses host upstream resolvers to avoid issue with passing link-local cache from node to pod
           }
         }
       }
     })
-  ]
+  ],
+  # Only GPU-enabled nodes
+  each.value.gpu_enabled ? [
+    yamlencode({
+      machine = {
+        kernel = {
+          modules = [
+            { name = "nvidia" },
+            { name = "nvidia_uvm" },
+            { name = "nvidia_drm" },
+            { name = "nvidia_modeset" }
+          ]
+        }
+      }
+    })
+  ] : [] #apply nothing if the machine is not gpu_enabled
+  )
 }
 
 resource "talos_machine_configuration_apply" "worker_config_apply" {

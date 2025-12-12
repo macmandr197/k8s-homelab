@@ -60,7 +60,10 @@ locals {
   worker_node_data = {
     "talos-wk-01" = { ip_address = "172.16.8.14" }
     "talos-wk-02" = { ip_address = "172.16.8.15" }
-    "talos-wk-03" = { ip_address = "172.16.8.16" }
+    "talos-wk-03" = { 
+      ip_address  = "172.16.8.16"
+      gpu_enabled = true
+      }
   }
 
   # --- 6. Final Maps for for_each ---
@@ -83,6 +86,7 @@ locals {
       hostname   = hostname
       ip_address = node_data.ip_address
       config     = local.worker_node_shared_config
+      gpu        = try(node_data.gpu_enabled, false)
     }
   }
 }
