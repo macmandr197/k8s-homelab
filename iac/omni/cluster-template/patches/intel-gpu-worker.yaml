@@ -1,0 +1,10 @@
+machine:
+  install:
+    extraKernelArgs:
+      # 1. Prevent the legacy driver from claiming the A380 (PCI ID 56a5)
+      - i915.force_probe=!56a5
+      # 2. Force the modern Xe driver to claim the A380
+      - xe.force_probe=56a5
+  kernel:
+    modules:
+      - name: xe

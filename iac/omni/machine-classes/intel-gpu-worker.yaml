@@ -1,0 +1,28 @@
+---
+# omnictl apply -f gpu-worker.yaml
+metadata:
+  namespace: default
+  type: MachineClasses.omni.sidero.dev
+  id: proxmox-intel-gpu-worker
+spec:
+  matchlabels: []
+  autoprovision:
+    providerid: proxmox
+    kernelargs: []
+    metavalues: []
+    providerdata: |
+      cores: 4
+      sockets: 1
+      memory: 16000
+      disk_size: 300
+      network_bridge: vmbr0
+      storage_selector: name == "pool-1"
+      grpctunnel: 0
+
+# Note: GPU passthrough must be configured manually in Proxmox after VM creation
+# The provider creates the VM, then you need to:
+# 1. Shut down the VM
+# 2. Add GPU via Proxmox UI: Hardware → Add → PCI Device
+# 3. Select your INTEL GPU
+# 4. Start the VM
+# 5. Apply Talos GPU extensions (see talos-configs/intel-gpu-worker-patch.yaml)
