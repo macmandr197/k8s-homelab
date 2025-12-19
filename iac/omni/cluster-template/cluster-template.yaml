@@ -61,7 +61,7 @@ kind: Workers
 name: gpu-workers
 machineClass:
   name: proxmox-intel-gpu-worker
-  size: 1
+  size: 0
 systemExtensions:
   - siderolabs/iscsi-tools
   - siderolabs/nfsd

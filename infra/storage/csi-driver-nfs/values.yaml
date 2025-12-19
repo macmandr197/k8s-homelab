@@ -1,7 +1,5 @@
 storageClass:
   create: true
-  annotations:
-      storageclass.kubernetes.io/is-default-class: "true"
   name: nfs-dynamic
   provisioner: nfs.csi.k8s.io
   parameters:
