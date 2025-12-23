@@ -7,3 +7,11 @@ machine:
       - name: nvidia_modeset
   sysctls:
     net.core.bpf_jit_harden: 1
+  network:
+    nameservers:
+      - 172.16.8.1
+      - 8.8.8.8
+  features:
+    hostDNS:
+      enabled: true
+      forwardKubeDNSToHost: false

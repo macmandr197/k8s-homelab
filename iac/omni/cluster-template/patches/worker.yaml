@@ -1,0 +1,9 @@
+machine:
+  network:
+    nameservers:
+      - 172.16.8.1
+      - 8.8.8.8
+  features:
+    hostDNS:
+      enabled: true
+      forwardKubeDNSToHost: false

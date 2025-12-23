@@ -27,6 +27,8 @@ systemExtensions:
   - siderolabs/nfsd
   - siderolabs/qemu-guest-agent
   - siderolabs/util-linux-tools
+patches:
+  - file: patches/control-plane.yaml
 ---
 kind: Workers
 name: workers
@@ -44,6 +46,7 @@ patches:
       machine:
         nodeLabels:
           node-role.kubernetes.io/worker: ""
+  - file: patches/worker.yaml
   - name: longhorn-storage
     inline:
       machine:
