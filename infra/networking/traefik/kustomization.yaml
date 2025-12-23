@@ -9,7 +9,7 @@ resources:
 helmCharts:
 - name: traefik
   repo: https://traefik.github.io/charts
-  version: 38.0.0
+  version: 38.0.1
   releaseName: traefik
   includeCRDs: true
   namespace: traefik
