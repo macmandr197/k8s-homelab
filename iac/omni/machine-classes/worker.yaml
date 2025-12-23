@@ -15,6 +15,6 @@ spec:
       sockets: 1
       memory: 23000
       disk_size: 300
-      network_bridge: vmbr0
+      network_bridge: infra
       storage_selector: name == "pool-1"
       grpctunnel: 0
