@@ -6,7 +6,7 @@ A complete, production-ready starter kit for deploying self-hosted Sidero Omni w
 
 - **Self-hosted Omni deployment** - Run your own Omni instance on-premises
 - **Proxmox integration** - Automatically provision Talos VMs in your Proxmox cluster
-- **GPU support** (optional) - Configure NVIDIA GPU passthrough for AI/ML workloads
+- **GPU support** (optional) - Configure NVIDIA or Intel GPU passthrough for GPU workloads
 - **Complete examples** - Working configurations you can customize
 - **Setup automation** - Scripts to streamline SSL and encryption setup
 
@@ -14,7 +14,7 @@ A complete, production-ready starter kit for deploying self-hosted Sidero Omni w
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    Your Infrastructure                  │
+│                    Infrastructure                       │
 │                                                         │
 │  ┌──────────────┐         ┌─────────────────────────┐   │
 │  │ Omni Server  │◄────────┤ Proxmox Infrastructure  │   │
