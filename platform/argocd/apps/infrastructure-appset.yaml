@@ -27,6 +27,8 @@ spec:
         exclude: true
       - path: infra/storage/csi-driver-proxmox
         exclude: true
+      - path: infra/storage/longhorn
+        exclude: true
   template:
     metadata:
       name: '{{path.basename}}'

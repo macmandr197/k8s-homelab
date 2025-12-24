@@ -9,7 +9,7 @@ spec:
       namespace: traefik
 
   hostnames:
-    - "longhorn.mcmn.me" # You can change this hostname
+    - "longhorn.mcmn.me"
   rules:
     - matches:
         - path:
