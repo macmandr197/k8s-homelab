@@ -77,6 +77,8 @@ RUN set -x; \
 # Install kubelogin OIDC plugin via Krew
 RUN kubectl krew install oidc-login
 
+RUN kubectl krew install get-all
+
 #install golangci-lint
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin v${GOLANGCI_LINT_VERSION}
 
