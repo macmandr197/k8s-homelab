@@ -20,17 +20,3 @@ spec:
           name: loki-gateway
           port: 80
           weight: 1
---- #External DNS specific for exposing argo to CF tunnel. external-dns does not support annotating gateway API + HTTP Route
-apiVersion: externaldns.k8s.io/v1alpha1
-kind: DNSEndpoint
-metadata:
-  name: loki-tunnel
-  namespace: loki-stack
-  labels:
-    external-dns: "true"
-spec:
-  endpoints:
-    - dnsName: loki.mcmn.me
-      recordType: CNAME
-      targets:
-        - 37ab5ca6-9491-4bc3-9505-75be85d6e554.cfargotunnel.com

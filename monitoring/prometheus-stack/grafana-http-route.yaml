@@ -5,7 +5,7 @@ metadata:
   namespace: prometheus-stack
 spec:
   parentRefs:
-      name: traefik-gateway
+    - name: traefik-gateway
       namespace: traefik
   hostnames:
     - grafana.mcmn.me
