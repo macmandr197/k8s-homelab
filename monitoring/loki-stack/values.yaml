@@ -47,7 +47,7 @@ deploymentMode: SimpleScalable
 backend:
   extraEnvFrom: 
     - secretRef:
-      name: "loki-objstore-secret"
+        name: "loki-objstore-secret"
   replicas: 2
   resources:
     requests:
@@ -59,7 +59,7 @@ backend:
 read:
   extraEnvFrom: 
     - secretRef:
-      name: "loki-objstore-secret"
+        name: "loki-objstore-secret"
   replicas: 2
   resources:
     requests:
@@ -71,7 +71,7 @@ read:
 write:
   extraEnvFrom: 
     - secretRef:
-      name: "loki-objstore-secret"
+        name: "loki-objstore-secret"
   replicas: 3
   resources:
     requests:
