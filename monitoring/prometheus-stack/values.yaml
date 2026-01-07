@@ -24,7 +24,7 @@ prometheus:
             ## Longhorn backup settings - Important tier for monitoring data
             #longhorn.io/recurring-job-source: enabled
             #longhorn.io/recurring-job-group: important
-            #volume.beta.kubernetes.io/storage-provisioner: driver.longhorn.io
+            volume.beta.kubernetes.io/storage-provisioner: driver.longhorn.io
         spec:
           storageClassName: longhorn
           accessModes:
@@ -91,7 +91,7 @@ alertmanager:
             ## Longhorn backup settings - Important tier for alerting data
             #longhorn.io/recurring-job-source: enabled
             #longhorn.io/recurring-job-group: important
-            #volume.beta.kubernetes.io/storage-provisioner: driver.longhorn.io
+            volume.beta.kubernetes.io/storage-provisioner: driver.longhorn.io
         spec:
           storageClassName: longhorn
           accessModes:
@@ -134,7 +134,7 @@ grafana:
       ## Longhorn backup settings - Important tier for dashboard data
       #longhorn.io/recurring-job-source: enabled
       #longhorn.io/recurring-job-group: important
-      #volume.beta.kubernetes.io/storage-provisioner: driver.longhorn.io
+      volume.beta.kubernetes.io/storage-provisioner: driver.longhorn.io
   # Resource allocation
   resources:
     requests:
@@ -167,10 +167,10 @@ grafana:
             matcherRegex: "(?:logger=rpc\\.server|report).*?(?:traceID|trace_id)=([a-f\\d]+)"
             name: TraceID
             url: "$${__value.raw}"
-    - name: Tempo
-      type: tempo
-      access: proxy
-      url: http://tempo.monitoring.svc:3100
+    #- name: Tempo
+    #  type: tempo
+    #  access: proxy
+    #  url: http://tempo.monitoring.svc:3100
   # Grafana configuration
   grafana.ini:
     server:
