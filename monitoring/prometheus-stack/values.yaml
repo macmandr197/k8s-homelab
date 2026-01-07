@@ -122,7 +122,7 @@ grafana:
   deploymentStrategy:
     type: Recreate
   # Admin credentials
-  adminPassword: "prom-operator"
+  adminPassword: "prom-operator-1"
   # Persistence
   persistence:
     enabled: true
