@@ -1,0 +1,110 @@
+loki:
+  extraArgs:
+    - '-config.expand-env=true'
+  commonConfig:
+    path_prefix: /var/loki
+    replication_factor: 3
+  storage:
+    type: "s3"
+    bucketNames:
+      chunks: labber-loki-chunks
+      ruler: labber-loki-ruler
+      admin: labber-loki-admin
+    s3:
+      # Backblaze S3 endpoint (e.g., https://s3.us-west-004.backblazeb2.com)
+      endpoint: https://s3.ca-east-006.backblazeb2.com
+      region: us-east-2 # dummy value, b2 does not use this
+      accessKeyId: "${AWS_ACCESS_KEY_ID}"
+      secretAccessKey: "${AWS_SECRET_ACCESS_KEY}"
+      s3ForcePathStyle: true # Backblaze often works best with path style
+      insecure: false
+  schemaConfig:
+    configs:
+      - from: "2024-04-01"
+        store: tsdb
+        object_store: s3
+        schema: v13
+        index:
+          prefix: loki_index_
+          period: 24h
+  ingester:
+    chunk_encoding: snappy
+  querier:
+    # Default is 4, if you have enough memory and CPU you can increase, reduce if OOMing
+    max_concurrent: 4
+  # Configure query scheduler for read pods
+  query_scheduler:
+    use_scheduler_ring: true
+  frontend_worker:
+    scheduler_address: loki-backend.loki-stack.svc.cluster.local:9095
+  pattern_ingester:
+    enabled: true
+  limits_config:
+    allow_structured_metadata: true
+    volume_enabled: true
+    retention_period: 7d
+deploymentMode: SimpleScalable
+backend:
+  extraEnvFrom: 
+    - secretRef:
+      name: "loki-objstore-secret"
+  replicas: 2
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+read:
+  extraEnvFrom: 
+    - secretRef:
+      name: "loki-objstore-secret"
+  replicas: 2
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+write:
+  extraEnvFrom: 
+    - secretRef:
+      name: "loki-objstore-secret"
+  replicas: 3
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+# Enable minio for storage
+minio:
+  enabled: false
+  #buckets:
+  #  - name: tempo-bucket
+  #    policy: none
+  #    purge: false
+  #persistence:
+  #  enabled: true
+  #  storageClass: longhorn
+  #  size: 50Gi
+  #resources:
+  #  requests:
+  #    cpu: 100m
+  #    memory: 256Mi
+  #  limits:
+  #    cpu: 500m
+  #    memory: 1Gi
+gateway:
+  service:
+    type: LoadBalancer
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
