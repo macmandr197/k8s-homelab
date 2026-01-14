@@ -89,14 +89,11 @@ spec:
             - name: DATABASE_URL
               value: "jdbc:mariadb://booklore-db:3306/booklore"
             - name: DATABASE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: booklore-db-connection
-                  key: username
+              value: "booklore"
             - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: booklore-db-connection
+                  name: booklore-app-user-password
                   key: password
           volumeMounts:
             - name: app-data
