@@ -1,0 +1,121 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: MariaDB
+metadata:
+  name: booklore-db
+  namespace: booklore
+spec:
+  # Root password from External Secret (synced from 1Password)
+  rootPasswordSecretKeyRef:
+    name: booklore-root-password
+    namespace: booklore
+    key: password
+  
+  # Application user credentials
+  username: booklore
+  passwordSecretKeyRef:
+    name: booklore-app-user-password
+    namespace: booklore
+    key: password
+  
+  database: booklore
+  
+  port: 3306
+  
+  storage:
+    size: 10Gi
+    storageClassName: longhorn
+  
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+  
+  metrics:
+    enabled: true
+
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Connection
+metadata:
+  name: booklore-db-connection
+  namespace: booklore
+spec:
+  mariaDbRef:
+    name: booklore-db
+  username: booklore
+  # Use the same password secret from External Secrets
+  passwordSecretKeyRef:
+    name: booklore-app-user-password
+    namespace: booklore
+    key: password
+  database: booklore
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booklore
+  namespace: booklore
+  labels:
+      app: booklore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: booklore
+  template:
+    metadata:
+      labels:
+        app: booklore
+    spec:
+      containers:
+        - name: booklore
+          image: ghcr.io/booklore-app/booklore:v1.17.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 6060
+              name: http
+          env:
+            - name: USER_ID
+              value: "1000"
+            - name: GROUP_ID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+            - name: BOOKLORE_PORT
+              value: "6060"
+            # Database configuration - using MariaDB service name directly
+            - name: DATABASE_URL
+              value: "jdbc:mariadb://booklore-db:3306/booklore"
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: booklore-db-connection
+                  key: username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: booklore-db-connection
+                  key: password
+          volumeMounts:
+            - name: app-data
+              mountPath: /app/data
+              subPath: appdata/booklore/data
+            - name: books-library
+              mountPath: /books
+              subPath: books/booklore-books
+            - name: bookdrop
+              mountPath: /bookdrop
+              subPath: books/bookdrop
+      volumes:
+        - name: app-data
+          persistentVolumeClaim:
+            claimName: pvc-booklore-appdata
+        - name: books-library
+          persistentVolumeClaim:
+            claimName: pvc-books-library
+        - name: bookdrop
+          persistentVolumeClaim:
+            claimName: pvc-books-library
