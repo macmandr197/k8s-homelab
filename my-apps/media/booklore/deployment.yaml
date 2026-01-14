@@ -101,7 +101,10 @@ spec:
               subPath: appdata/booklore/data
             - name: books-library
               mountPath: /books
-              subPath: books
+              subPath: books/booklore-books
+            - name: books-library
+              mountPath: /books
+              subPath: books/bookdrop
       volumes:
         - name: app-data
           persistentVolumeClaim:
@@ -109,3 +112,6 @@ spec:
         - name: books-library
           persistentVolumeClaim:
             claimName: pvc-books-library
+        - name: books-bookdrop
+          persistentVolumeClaim:
+            claimName: pvc-books-bookdrop

@@ -6,6 +6,7 @@ commonLabels:
 resources:
   - ns.yaml
   - book-library-pvc.yaml
+  - bookdrop-pvc.yaml
   - appdata-pvc.yaml
   - externalsecret.yaml
   - deployment.yaml

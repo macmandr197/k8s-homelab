@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-pool0-bookdrop
+spec:
+  capacity:
+    storage: 10Ti # Arbitrary limit for NFS, just needs to be large enough to satisfy the PVC
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain # retain data if PVC is deleted
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: pv-pool0-booklore-bookdrop
+    volumeAttributes:
+      server: 10.10.1.46
+      share: /pool-0/media
+  mountOptions:
+    - nfsvers=4.1
+    - tcp
+    - noatime
+    - nolock
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-books-bookdrop
+  namespace: booklore 
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  volumeName: pv-pool0-bookdrop
+  resources:
+    requests:
+      storage: 1Ti
