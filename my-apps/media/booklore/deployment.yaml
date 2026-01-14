@@ -6,12 +6,14 @@ metadata:
 spec:
   # Root password from External Secret (synced from 1Password)
   rootPasswordSecretKeyRef:
+    generate: false
     name: booklore-root-password
     key: password
   
   # Application user credentials
   username: booklore
   passwordSecretKeyRef:
+    generate: false
     name: booklore-app-user-password
     key: password
   
