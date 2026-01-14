@@ -4,7 +4,7 @@ namespace: mariadb-operator
 labels:
   app.kubernetes.io/name: mariadb-operator
   app.kubernetes.io/managed-by: argocd
-annotations:
+commonAnnotations:
   # Deploy operator after CRDs are healthy (CRDs are at -20, operator at -10)
   argocd.argoproj.io/sync-wave: "-10"
   # Namespace is created by mariadb-operator-crds (sync-wave -20)

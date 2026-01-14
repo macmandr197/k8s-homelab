@@ -4,7 +4,7 @@ namespace: mariadb-operator
 labels:
   app.kubernetes.io/name: mariadb-operator
   app.kubernetes.io/managed-by: argocd
-annotations:
+commonAnnotations:
   # Deploy CRDs first, before the operator
   argocd.argoproj.io/sync-wave: "-20"
 resources:
