@@ -103,7 +103,7 @@ spec:
               mountPath: /books
               subPath: books/booklore-books
             - name: books-library
-              mountPath: /books
+              mountPath: /bookdrop
               subPath: books/bookdrop
       volumes:
         - name: app-data
