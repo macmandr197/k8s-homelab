@@ -1,0 +1,61 @@
+# MariaDB Operator Configuration
+# This file configures the operator itself, not MariaDB instances
+# Root passwords and database configurations are set when creating MariaDB CRs
+
+# Image configuration
+image:
+  repository: ghcr.io/mariadb-operator/mariadb-operator
+  pullPolicy: IfNotPresent
+
+# Logging level (DEBUG, INFO, WARN, ERROR)
+logLevel: INFO
+
+# High Availability configuration
+ha:
+  enabled: false
+  replicas: 1
+
+# Metrics configuration for Prometheus monitoring
+metrics:
+  enabled: false
+  # Uncomment to enable Prometheus ServiceMonitor
+  # serviceMonitor:
+  #   enabled: true
+  #   interval: 30s
+  #   scrapeTimeout: 25s
+
+# Webhook certificate management
+# If cert-manager is available, enable this for automatic certificate provisioning
+webhook:
+  cert:
+    certManager:
+      enabled: false
+      # issuerRef:
+      #   name: selfsigned-issuer
+      #   kind: ClusterIssuer
+
+# Service Account configuration
+# The operator chart creates RBAC by default
+serviceAccount:
+  create: true
+  automount: true
+  # name: mariadb-operator  # Uncomment to specify a custom name
+
+# Resource limits and requests
+# Based on cluster specs: Control plane (2 cores, 16GB), Workers (4 cores, 23GB)
+# These limits are conservative for a homelab - the operator is lightweight
+# and primarily watches for CRD changes rather than processing heavy workloads
+resources:
+  limits:
+    cpu: 500m      # 0.5 cores max - sufficient for operator's watch/reconcile operations
+    memory: 512Mi  # 512MB max - operator is memory-efficient
+  requests:
+    cpu: 100m      # 0.1 cores guaranteed - minimal baseline for operator
+    memory: 128Mi  # 128MB guaranteed - low baseline memory footprint
+
+# Security context
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 65534
+  seccompProfile:
+    type: RuntimeDefault

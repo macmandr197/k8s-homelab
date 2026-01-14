@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: mariadb-operator
+commonLabels:
+  app.kubernetes.io/name: mariadb-operator
+  app.kubernetes.io/managed-by: argocd
+commonAnnotations:
+  # Deploy operator after CRDs are healthy (CRDs are at -20, operator at -10)
+  argocd.argoproj.io/sync-wave: "-10"
+resources:
+  - ns.yaml
+helmCharts:
+  - name: mariadb-operator
+    repo: https://helm.mariadb.com/mariadb-operator
+    version: 25.10.4
+    releaseName: mariadb-operator
+    namespace: mariadb-operator
+    # Don't include CRDs here since they're managed separately
+    includeCRDs: false
+    valuesFile: values.yaml
