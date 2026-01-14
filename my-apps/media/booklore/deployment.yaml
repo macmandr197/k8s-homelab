@@ -7,14 +7,12 @@ spec:
   # Root password from External Secret (synced from 1Password)
   rootPasswordSecretKeyRef:
     name: booklore-root-password
-    namespace: booklore
     key: password
   
   # Application user credentials
   username: booklore
   passwordSecretKeyRef:
     name: booklore-app-user-password
-    namespace: booklore
     key: password
   
   database: booklore
@@ -49,7 +47,6 @@ spec:
   # Use the same password secret from External Secrets
   passwordSecretKeyRef:
     name: booklore-app-user-password
-    namespace: booklore
     key: password
   database: booklore
 ---
