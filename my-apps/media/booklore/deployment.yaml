@@ -102,7 +102,7 @@ spec:
             - name: books-library
               mountPath: /books
               subPath: books/booklore-books
-            - name: books-library
+            - name: books-bookdrop
               mountPath: /bookdrop
               subPath: books/bookdrop
       volumes:
