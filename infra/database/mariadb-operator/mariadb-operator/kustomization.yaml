@@ -1,14 +1,13 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: mariadb-operator
-commonLabels:
+labels:
   app.kubernetes.io/name: mariadb-operator
   app.kubernetes.io/managed-by: argocd
-commonAnnotations:
+annotations:
   # Deploy operator after CRDs are healthy (CRDs are at -20, operator at -10)
   argocd.argoproj.io/sync-wave: "-10"
-resources:
-  - ns.yaml
+  # Namespace is created by mariadb-operator-crds (sync-wave -20)
 helmCharts:
   - name: mariadb-operator
     repo: https://helm.mariadb.com/mariadb-operator
