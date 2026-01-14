@@ -18,6 +18,7 @@ spec:
     - nfsvers=4.1
     - tcp
     - noatime
+    - nolock
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
