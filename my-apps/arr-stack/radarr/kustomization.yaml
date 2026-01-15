@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app: radarr
+
+resources:
+  - ns.yaml
+  - appdata-pvc.yaml
+  - shared-media-pvc.yaml
+  - downloads-pvc.yaml
+  - deployment.yaml
+  - httproute.yaml
+  - svc.yaml

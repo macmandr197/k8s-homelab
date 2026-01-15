@@ -1,0 +1,36 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: radarr
+  namespace: radarr
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+  hostnames:
+    - "radarr.mcmn.me"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: radarr
+          port: 7878
+          weight: 1
+--- #External DNS specific for exposing argo to CF tunnel. external-dns does not support annotating gateway API + HTTP Route
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: radarr-tunnel
+  namespace: radarr
+  labels:
+    external-dns: "true"
+spec:
+  endpoints:
+    - dnsName: radarr.mcmn.me
+      recordType: CNAME
+      targets:
+        - 37ab5ca6-9491-4bc3-9505-75be85d6e554.cfargotunnel.com
