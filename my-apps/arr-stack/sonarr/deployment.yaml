@@ -30,10 +30,13 @@ spec:
               value: "America/Toronto"
           volumeMounts:
             - name: media-root
-              mountPath: /data        # Mount the ENTIRE media root here
+              mountPath: /data
             - name: appdata
               mountPath: /config
               subPath: appdata/linuxserver-sonarr-2/config
+            - name: downloads
+              mountPath: /complete
+              subPath: downloads/complete
       volumes:
         - name: media-root
           persistentVolumeClaim:
@@ -41,3 +44,6 @@ spec:
         - name: appdata
           persistentVolumeClaim:
             claimName: pvc-appdata
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: pvc-sonarr-downloads
