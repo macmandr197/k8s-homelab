@@ -36,7 +36,7 @@ spec:
             - name: DISCORD__REQUESTED_MSG_STYLE
               value: "embed"
             - name: DISCORD__MAX_RESULTS
-              value: 25
+              value: "25"
             - name: OVERSEERR__API
               valueFrom:
                 secretKeyRef:
