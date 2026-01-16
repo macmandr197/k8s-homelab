@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: doplarr
+  namespace: doplarr
+  labels:
+      app: doplarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: doplarr
+  template:
+    metadata:
+      labels:
+        app: doplarr
+    spec:
+      containers:
+        - name: doplarr
+          image: lscr.io/linuxserver/doplarr:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8087
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+            - name: DISCORD__TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: doplarr-discord-token
+                  key: token
+            - name: DISCORD__REQUESTED_MSG_STYLE
+              value: "embed"
+            - name: DISCORD__MAX_RESULTS
+              value: 25
+            - name: OVERSEERR__API
+              valueFrom:
+                secretKeyRef:
+                  name: overseerr-api-token
+                  key: password
+            - name: OVERSEERR_URL
+              value: "overseer.overseer.svc.cluster.local"
+            - name: PARTIAL_SEASONS
+              value: "true"
+          volumeMounts:
+            - name: appdata
+              mountPath: /config
+              subPath: appdata/linuxserver-overseer-2/config

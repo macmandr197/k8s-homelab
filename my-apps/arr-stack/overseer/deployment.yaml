@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: overseer
-  namespace: overseer
+  name: overseerr
+  namespace: overseerr
   labels:
-      app: overseer
+      app: overseerr
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: overseer
+      app: overseerr
   template:
     metadata:
       labels:
-        app: overseer
+        app: overseerr
     spec:
       containers:
-        - name: overseer
-          image: lscr.io/linuxserver/overseer:latest
+        - name: overseerr
+          image: lscr.io/linuxserver/overseerr:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 7878
@@ -31,7 +31,7 @@ spec:
           volumeMounts:
             - name: appdata
               mountPath: /config
-              subPath: appdata/linuxserver-overseer-2/config
+              subPath: appdata/linuxserver-overseerr-2/config
       volumes:
         - name: appdata
           persistentVolumeClaim:

@@ -1,14 +1,14 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: overseer
-  namespace: overseer
+  name: overseerr
+  namespace: overseerr
 spec:
   parentRefs:
     - name: traefik-gateway
       namespace: traefik
   hostnames:
-    - "overseer.mcmn.me"
+    - "overseerr.mcmn.me"
   rules:
     - matches:
         - path:
@@ -17,20 +17,20 @@ spec:
       backendRefs:
         - group: ""
           kind: Service
-          name: overseer
+          name: overseerr
           port: 5055
           weight: 1
 --- #External DNS specific for exposing argo to CF tunnel. external-dns does not support annotating gateway API + HTTP Route
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
-  name: overseer-tunnel
-  namespace: overseer
+  name: overseerr-tunnel
+  namespace: overseerr
   labels:
     external-dns: "true"
 spec:
   endpoints:
-    - dnsName: overseer.mcmn.me
+    - dnsName: overseerr.mcmn.me
       recordType: CNAME
       targets:
         - 37ab5ca6-9491-4bc3-9505-75be85d6e554.cfargotunnel.com
