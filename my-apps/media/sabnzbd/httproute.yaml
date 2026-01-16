@@ -1,0 +1,36 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: sabnzbd
+  namespace: sabnzbd
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+  hostnames:
+    - "sabnzbd.mcmn.me"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: sabnzbd
+          port: 8082
+          weight: 1
+--- #External DNS specific for exposing argo to CF tunnel. external-dns does not support annotating gateway API + HTTP Route
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: sabnzbd-tunnel
+  namespace: sabnzbd
+  labels:
+    external-dns: "true"
+spec:
+  endpoints:
+    - dnsName: sabnzbd.mcmn.me
+      recordType: CNAME
+      targets:
+        - 37ab5ca6-9491-4bc3-9505-75be85d6e554.cfargotunnel.com

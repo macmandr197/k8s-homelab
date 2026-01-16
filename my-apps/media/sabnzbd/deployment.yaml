@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sabnzbd
+  namespace: sabnzbd
+  labels:
+      app: sabnzbd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sabnzbd
+  template:
+    metadata:
+      labels:
+        app: sabnzbd
+    spec:
+      containers:
+        - name: sabnzbd
+          image: lscr.io/linuxserver/sabnzbd:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Toronto"
+          volumeMounts:
+            - name: appdata
+              mountPath: /config
+              subPath: appdata/linuxserver-sabnzbd/config
+            - name: downloads
+              mountPath: /downloads
+              subPath: downloads
+      volumes:
+        - name: appdata
+          persistentVolumeClaim:
+            claimName: pvc-appdata
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: pvc-sabnzbd-downloads
