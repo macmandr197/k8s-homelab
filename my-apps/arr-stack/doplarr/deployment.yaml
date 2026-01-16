@@ -46,7 +46,3 @@ spec:
               value: "overseer.overseer.svc.cluster.local"
             - name: PARTIAL_SEASONS
               value: "true"
-          volumeMounts:
-            - name: appdata
-              mountPath: /config
-              subPath: appdata/linuxserver-overseer-2/config
