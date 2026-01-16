@@ -30,7 +30,8 @@ spec:
               value: "America/Toronto"
           volumeMounts:
             - name: media-root
-              mountPath: /data
+              mountPath: /tv
+              subPath: /tv
             - name: appdata
               mountPath: /config
               subPath: appdata/linuxserver-sonarr-2/config
