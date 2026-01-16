@@ -30,14 +30,13 @@ spec:
               value: "America/Toronto"
           volumeMounts:
             - name: media-root
-              mountPath: /movies
-              subPath: movies
+              mountPath: /media
             - name: appdata
               mountPath: /config
               subPath: appdata/linuxserver-radarr-2/config
-            - name: complete
-              mountPath: /complete
-              subPath: downloads/complete
+            #- name: complete
+            #  mountPath: /complete
+            #  subPath: downloads/complete
       volumes:
         - name: media-root
           persistentVolumeClaim:
@@ -45,6 +44,6 @@ spec:
         - name: appdata
           persistentVolumeClaim:
             claimName: pvc-appdata
-        - name: complete
-          persistentVolumeClaim:
-            claimName: pvc-radarr-downloads
+        #- name: complete
+        #  persistentVolumeClaim:
+        #    claimName: pvc-radarr-downloads
