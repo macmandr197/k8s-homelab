@@ -43,6 +43,6 @@ spec:
                   name: overseerr-api-token
                   key: password
             - name: OVERSEERR__URL
-              value: "http://overseer.overseer.svc.cluster.local"
+              value: "http://overseer.overseer.svc.cluster.local:5055"
             - name: PARTIAL_SEASONS
               value: "true"
