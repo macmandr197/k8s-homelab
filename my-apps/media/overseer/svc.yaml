@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: overseer
+  namespace: overseer
+spec:
+  type: ClusterIP
+  selector:
+    app: overseer
+  ports:
+    - name: http
+      port: 5055
+      targetPort: 5055
