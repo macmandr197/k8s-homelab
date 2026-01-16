@@ -34,7 +34,7 @@ spec:
                   name: doplarr-discord-token
                   key: token
             - name: DISCORD__REQUESTED_MSG_STYLE
-              value: "embed"
+              value: ":embed"
             - name: DISCORD__MAX_RESULTS
               value: "25"
             - name: OVERSEERR__API
