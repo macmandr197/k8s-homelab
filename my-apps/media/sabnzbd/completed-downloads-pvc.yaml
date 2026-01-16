@@ -23,7 +23,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-sabnzbd-compeleted-downloads
+  name: pvc-sabnzbd-completed-downloads
   namespace: sabnzbd 
 spec:
   accessModes:
