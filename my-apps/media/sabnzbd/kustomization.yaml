@@ -8,6 +8,7 @@ resources:
   - appdata-pvc.yaml
   - completed-downloads-pvc.yaml
   - incompleted-downloads-pvc.yaml
+  - shared-media-pvc.yaml
   - deployment.yaml
   - httproute.yaml
   - svc.yaml

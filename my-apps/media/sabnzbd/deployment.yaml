@@ -32,19 +32,25 @@ spec:
             - name: appdata
               mountPath: /config
               subPath: appdata/linuxserver-sabnzbd/config
-            - name: completed-downloads
-              mountPath: /complete
-              subPath: downloads/complete
-            - name: incompleted-downloads
-              mountPath: /incomplete
-              subPath: downloads/incomplete
+            - name: media-root
+              mountPath: /media
+            #- name: completed-downloads
+            #  mountPath: /complete
+            #  subPath: downloads/complete
+            #- name: incompleted-downloads
+            #  mountPath: /incomplete
+            #  subPath: downloads/incomplete
       volumes:
         - name: appdata
           persistentVolumeClaim:
             claimName: pvc-appdata
-        - name: completed-downloads
+       # - name: completed-downloads
+       #   persistentVolumeClaim:
+       #     claimName: pvc-sabnzbd-completed-downloads
+       # - name: incompleted-downloads
+       #   persistentVolumeClaim:
+       #     claimName: pvc-sabnzbd-incompleted-downloads
+        - name: media-root
           persistentVolumeClaim:
-            claimName: pvc-sabnzbd-completed-downloads
-        - name: incompleted-downloads
-          persistentVolumeClaim:
-            claimName: pvc-sabnzbd-incompleted-downloads
+            claimName: pvc-media-library
+            
