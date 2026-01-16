@@ -40,7 +40,7 @@ spec:
             - name: OVERSEERR__API
               valueFrom:
                 secretKeyRef:
-                  name: overseerr-api-token
+                  name: overseerrr-api-token
                   key: password
             - name: OVERSEERR__URL
               value: "http://overseer.overseer.svc.cluster.local"
