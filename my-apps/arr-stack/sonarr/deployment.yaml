@@ -31,7 +31,6 @@ spec:
           volumeMounts:
             - name: media-root
               mountPath: /media
-              subPath: media
             - name: appdata
               mountPath: /config
               subPath: appdata/linuxserver-sonarr-2/config
