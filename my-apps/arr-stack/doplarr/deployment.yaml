@@ -46,3 +46,5 @@ spec:
               value: "http://overseerr.overseerr.svc.cluster.local:5055"
             - name: PARTIAL_SEASONS
               value: "true"
+            - name: LOG_LEVEL
+              value: ":debug"
