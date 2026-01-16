@@ -36,8 +36,8 @@ spec:
               mountPath: /config
               subPath: appdata/linuxserver-radarr-2/config
             - name: downloads
-              mountPath: /complete
-              subPath: downloads/complete
+              mountPath: /downloads
+              subPath: downloads
       volumes:
         - name: media-root
           persistentVolumeClaim:
