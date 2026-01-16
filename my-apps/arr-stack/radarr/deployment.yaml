@@ -35,9 +35,9 @@ spec:
             - name: appdata
               mountPath: /config
               subPath: appdata/linuxserver-radarr-2/config
-            - name: downloads
-              mountPath: /downloads
-              subPath: downloads
+            - name: complete
+              mountPath: /complete
+              subPath: downloads/complete
       volumes:
         - name: media-root
           persistentVolumeClaim:
@@ -45,6 +45,6 @@ spec:
         - name: appdata
           persistentVolumeClaim:
             claimName: pvc-appdata
-        - name: downloads
+        - name: complete
           persistentVolumeClaim:
             claimName: pvc-radarr-downloads

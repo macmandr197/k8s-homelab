@@ -6,7 +6,8 @@ commonLabels:
 resources:
   - ns.yaml
   - appdata-pvc.yaml
-  - downloads-pvc.yaml
+  - completed-downloads-pvc.yaml
+  - incompleted-downloads-pvc.yaml
   - deployment.yaml
   - httproute.yaml
   - svc.yaml

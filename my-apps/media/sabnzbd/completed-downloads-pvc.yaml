@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-pool0-sabnzbd-downloads
+  name: pv-pool0-sabnzbd-completed-downloads
 spec:
   capacity:
     storage: 10Ti # Arbitrary limit for NFS, just needs to be large enough to satisfy the PVC
@@ -10,7 +10,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain # retain data if PVC is deleted
   csi:
     driver: nfs.csi.k8s.io
-    volumeHandle: pv-pool0-sabnzbd-downloads
+    volumeHandle: pv-pool0-sabnzbd-completed-downloads
     volumeAttributes:
       server: 10.10.1.46
       share: /pool-0/media
@@ -23,13 +23,13 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-sabnzbd-downloads
+  name: pvc-sabnzbd-compeleted-downloads
   namespace: sabnzbd 
 spec:
   accessModes:
     - ReadWriteMany
   storageClassName: ""
-  volumeName: pv-pool0-sabnzbd-downloads
+  volumeName: pv-pool0-sabnzbd-completed-downloads
   resources:
     requests:
       storage: 1Ti
