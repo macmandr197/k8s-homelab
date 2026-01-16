@@ -42,6 +42,11 @@ spec:
                 secretKeyRef:
                   name: overseerr-api-token
                   key: password
+            - name: OVERSEERR__DEFAULT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: overseerr-api-token
+                  key: id
             - name: OVERSEERR__URL
               value: "http://overseerr.overseerr.svc.cluster.local:5055"
             - name: PARTIAL_SEASONS
