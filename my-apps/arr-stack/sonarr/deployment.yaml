@@ -31,7 +31,7 @@ spec:
           volumeMounts:
             - name: media-root
               mountPath: /tv
-              subPath: tv
+              subPath: "tv shows"
             - name: appdata
               mountPath: /config
               subPath: appdata/linuxserver-sonarr-2/config
