@@ -1,13 +1,13 @@
 # omnictl cluster template sync -v -f cluster-template-working.yaml
 ---
 kind: Cluster
-name: talos-prod-cluster
+name: labber
 labels:
   cluster-id: "1"
 kubernetes:
-  version: v1.34.2
+  version: v1.35.0
 talos:
-  version: v1.11.5
+  version: v1.12.2
 patches:
   - name: disable-default-cni
     inline:
@@ -28,25 +28,20 @@ systemExtensions:
   - siderolabs/qemu-guest-agent
   - siderolabs/util-linux-tools
 patches:
-  - file: patches/control-plane.yaml
+  - file: iac/omni/cluster-template/patches/control-plane.yaml
 ---
 kind: Workers
 name: workers
 machineClass:
   name: proxmox-worker
-  size: 3
+  size: 2
 systemExtensions:
   - siderolabs/iscsi-tools
   - siderolabs/nfsd
   - siderolabs/qemu-guest-agent 
   - siderolabs/util-linux-tools
 patches:
-  - name: worker-labels
-    inline:
-      machine:
-        nodeLabels:
-          node-role.kubernetes.io/worker: ""
-  - file: patches/worker.yaml
+  - file: iac/omni/cluster-template/patches/worker.yaml
   - name: longhorn-storage
     inline:
       machine:
@@ -64,22 +59,23 @@ kind: Workers
 name: gpu-workers
 machineClass:
   name: proxmox-intel-gpu-worker
-  size: 0
+  size: 1
 systemExtensions:
   - siderolabs/iscsi-tools
   - siderolabs/nfsd
   - siderolabs/qemu-guest-agent
   - siderolabs/util-linux-tools
-  - siderolabs/i915
+  #- siderolabs/i915
   - siderolabs/intel-ucode
   - siderolabs/xe
 patches:
-  - name: worker-labels
+  - name: gpu-worker-labels
     inline:
       machine:
         nodeLabels:
-          node-role.kubernetes.io/worker: ""
-  - file: patches/intel-gpu-worker.yaml
+          gpu-worker: "true"
+          intel.com/gpu: "true"
+  - file: iac/omni/cluster-template/patches/intel-gpu-worker.yaml
   - name: longhorn-storage
     inline:
       machine:
@@ -107,12 +103,7 @@ patches:
 #  - siderolabs/nonfree-kmod-nvidia-production
 #  - siderolabs/nvidia-container-toolkit-production
 #patches:
-#  - name: worker-labels
-#    inline:
-#      machine:
-#        nodeLabels:
-#          node-role.kubernetes.io/worker: ""
-#  - file: patches/nvidia-gpu-worker.yaml
+#  - file: iac/omni/cluster-template/patches/nvidia-gpu-worker.yaml
 #  - name: longhorn-storage
 #    inline:
 #      machine:

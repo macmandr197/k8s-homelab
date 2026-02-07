@@ -1,13 +1,13 @@
 machine:
   install:
     extraKernelArgs:
-      # 1. Prevent the legacy driver from claiming the A380 (PCI ID 56a5)
-      - i915.force_probe=!56a5
-      # 2. Force the modern Xe driver to claim the A380
-      - xe.force_probe=56a5
+      # 1. Prevent the legacy driver from claiming the A310 (PCI ID 56a6)
+      - #i915.force_probe=56a6
+      # 2. Force the modern Xe driver to claim the A310
+      - xe.force_probe=56a6 # - only available in talos v1.12 and beyond
   kernel:
     modules:
-      - name: xe
+      - name: xe #use xe in talos 1.12 and beyond
   network:
     nameservers:
       - 172.16.8.1
