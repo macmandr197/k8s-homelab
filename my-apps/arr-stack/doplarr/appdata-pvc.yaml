@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-pool1-root-overseerr
+  name: pv-pool1-root-doplarr
 spec:
   capacity:
     storage: 10Ti
@@ -10,7 +10,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   csi:
     driver: nfs.csi.k8s.io
-    volumeHandle: pv-pool1-root-overseerr
+    volumeHandle: pv-pool1-root-doplarr
     volumeAttributes:
       server: 10.10.1.46
       share: /pool-faster # Mounting the root of pool-faster
@@ -23,12 +23,12 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pvc-appdata
-  namespace: overseerr
+  namespace: doplarr
 spec:
   accessModes:
     - ReadWriteMany
   storageClassName: "" 
-  volumeName: pv-pool1-root-overseerr
+  volumeName: pv-pool1-root-doplarr
   resources:
     requests:
       storage: 1Ti
