@@ -6,4 +6,4 @@ commonLabels:
 resources:
   - externalsecret.yaml
   - deployment.yaml
-  - svc.yaml
+  - ns.yaml
