@@ -13,7 +13,7 @@ spec:
     volumeHandle: pv-pool1-sabnzbd-appdata
     volumeAttributes:
       server: 10.10.1.46
-      share: /pool-1 # Mounting the root of pool-1
+      share: /pool-faster # Mounting the root of pool-faster
   mountOptions:
     - nfsvers=4.1
     - tcp
