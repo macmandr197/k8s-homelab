@@ -3,7 +3,7 @@ data "helm_template" "cilium_template" {
   repository   = "https://helm.cilium.io/"
   chart        = "cilium"
   namespace    = "kube-system"
-  version      = "1.18.6"
+  version      = "1.19.0"
   kube_version = local.kubeVersion
 
   set = [
