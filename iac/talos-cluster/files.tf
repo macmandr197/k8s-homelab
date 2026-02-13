@@ -1,6 +1,6 @@
 locals {
   talos = {
-    version = "v1.12.2"
+    version = "v1.12.4"
   }
   kubeVersion = "1.35.0"
 }
