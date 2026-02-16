@@ -1,0 +1,245 @@
+replicaCount: 2
+
+podDisruptionBudget:
+  minAvailable: 1
+
+resources: 
+  requests:
+    cpu: "500m"
+    memory: "128Mi"
+  limits:
+    cpu: "1000m"
+    memory: "512Mi"
+
+
+# Resource requests/limits to specify for the upgradeCRDs job pod. Need to be adjusted by user accordingly.
+upgradeJobResources:
+  requests:
+      cpu: 50m
+      memory: 128Mi
+  limits:
+    cpu: 100m
+    memory: 256Mi
+
+# Configure the dnsPolicy of the Velero deployment
+# See: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+dnsPolicy: ClusterFirst
+
+# Init containers to add to the Velero deployment's pod spec. At least one plugin provider image is required.
+# If the value is a string then it is evaluated as a template.
+initContainers:
+  - name: velero-plugin-for-aws
+    image: velero/velero-plugin-for-aws:v1.13.1
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+
+# Liveness probe of the pod
+livenessProbe:
+  httpGet:
+    path: /metrics
+    port: http-monitoring
+    scheme: HTTP
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+
+# Readiness probe of the pod
+readinessProbe:
+  httpGet:
+    path: /metrics
+    port: http-monitoring
+    scheme: HTTP
+  initialDelaySeconds: 10
+  periodSeconds: 30
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+
+# Settings for Velero's prometheus metrics. Enabled by default.
+metrics:
+  enabled: true
+  scrapeInterval: 30s
+  scrapeTimeout: 10s
+
+  # Pod annotations for Prometheus
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8085"
+    prometheus.io/path: "/metrics"
+
+  serviceMonitor:
+    autodetect: true
+    enabled: false
+    annotations: {}
+    additionalLabels:
+      release: prometheus
+
+    # metrics.serviceMonitor.metricRelabelings Specify Metric Relabelings to add to the scrape endpoint
+    # ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    # metricRelabelings: []
+    # metrics.serviceMonitor.relabelings [array] Prometheus relabeling rules
+    # relabelings: []
+    # ServiceMonitor namespace. Default to Velero namespace.
+    # namespace:
+    # ServiceMonitor connection scheme. Defaults to HTTP.
+    # scheme: ""
+    # ServiceMonitor connection tlsConfig. Defaults to {}.
+    # tlsConfig: {}
+  nodeAgentPodMonitor:
+    autodetect: true
+    enabled: false
+    annotations: {}
+    additionalLabels: {}
+    # metrics.nodeAgentPodMonitor.metricRelabelings Specify Metric Relabelings to add to the scrape endpoint
+    # ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    # metricRelabelings: []
+    # metrics.nodeAgentPodMonitor.relabelings [array] Prometheus relabeling rules
+    # relabelings: []
+    # PodMonitor namespace. Default to Velero namespace.
+    # namespace:
+    # PodMonitor connection scheme. Defaults to HTTP.
+    # scheme: ""
+    # PodMonitor connection tlsConfig. Defaults to {}.
+    # tlsConfig: {}
+
+  prometheusRule:
+    autodetect: true
+    enabled: false
+    # Additional labels to add to deployed PrometheusRule
+    additionalLabels: {}
+    # PrometheusRule namespace. Defaults to Velero namespace.
+    # namespace: ""
+    # Rules to be deployed
+    spec: []
+    # - alert: VeleroBackupFailed
+    #   annotations:
+    #     message: Velero backup {{ $labels.schedule }} has failed
+    #   expr: |-
+    #     velero_backup_last_status{schedule!=""} != 1
+    #   for: 15m
+    #   labels:
+    #     severity: warning
+    # - alert: VeleroBackupFailing
+    #   annotations:
+    #     message: Velero backup {{ $labels.schedule }} has been failing for the last 12h
+    #   expr: |-
+    #     velero_backup_last_status{schedule!=""} != 1
+    #   for: 12h
+    #   labels:
+    #     severity: critical
+    # - alert: VeleroNoNewBackup
+    #   annotations:
+    #     message: Velero backup {{ $labels.schedule }} has not run successfully in the last 25h
+    #   expr: |-
+    #     (
+    #     (time() - velero_backup_last_successful_timestamp{schedule!=""}) >bool (25 * 3600)
+    #     or
+    #     absent(velero_backup_last_successful_timestamp{schedule!=""})
+    #     ) == 1
+    #   for: 1h
+    #   labels:
+    #     severity: critical
+    # - alert: VeleroBackupPartialFailures
+    #   annotations:
+    #     message: Velero backup {{ $labels.schedule }} has {{ $value | humanizePercentage }} partialy failed backups
+    #   expr: |-
+    #     rate(velero_backup_partial_failure_total{schedule!=""}[25m])
+    #       / rate(velero_backup_attempt_total{schedule!=""}[25m]) > 0.5
+    #   for: 15m
+    #   labels:
+    #     severity: warning
+
+kubectl:
+  image:
+    repository: alpine/k8s
+    tag: "1.35.0"
+
+
+##
+## Parameters for the `default` BackupStorageLocation and VolumeSnapshotLocation,
+## and additional server settings.
+##
+configuration:
+  # Parameters for the BackupStorageLocation(s). Configure multiple by adding other element(s) to the backupStorageLocation slice.
+  # See https://velero.io/docs/v1.6/api-types/backupstoragelocation/
+  backupStorageLocation:
+    # name is the name of the backup storage location where backups should be stored. If a name is not provided,
+    # a backup storage location will be created with the name "default". Optional.
+  - name: b2-default
+    # provider is the name for the backup storage location provider.
+    provider: aws
+    # bucket is the name of the bucket to store backups in. Required.
+    bucket: nosey-snooper
+    # prefix is the directory under which all Velero data should be stored within the bucket. Optional.
+    prefix: velero
+    # default indicates this location is the default backup storage location. Optional.
+    default: true
+    # validationFrequency defines how frequently Velero should validate the object storage. Optional.
+    validationFrequency:
+    # accessMode determines if velero can write to this backup storage location. Optional.
+    # default to ReadWrite, ReadOnly is used during migrations and restores.
+    accessMode: ReadWrite
+    #credential:
+    #  # name of the secret used by this backupStorageLocation.
+    #  name:
+    #  # name of key that contains the secret data to be used.
+    #  key:
+    # Additional provider-specific configuration. See link above
+    # for details of required/optional fields for your provider.
+    config:
+      region: us-east-1 #dummy value
+      s3ForcePathStyle: "false"
+      s3Url: "https://s3.ca-east-006.backblazeb2.com"
+      checksumAlgorithm: ""
+
+  # Parameters for the VolumeSnapshotLocation(s). Configure multiple by adding other element(s) to the volumeSnapshotLocation slice.
+  # See https://velero.io/docs/v1.6/api-types/volumesnapshotlocation/
+  volumeSnapshotLocation:
+    # name is the name of the volume snapshot location where snapshots are being taken. If a name is not provided,
+    # a volume snapshot location will be created with the name "default". Optional.
+  - name: b2-default
+    # provider is the name for the volume snapshot provider.
+    provider: aws
+    #credential:
+    #  # name of the secret used by this volumeSnapshotLocation.
+    #  name:
+    #  # name of key that contains the secret data to be used.
+    #  key:
+    # Additional provider-specific configuration. See link above
+    # for details of required/optional fields for your provider.
+    config: {}
+      region: us-east-1 #dummy value
+
+
+  # Name of the default backup storage location. Default: default
+  defaultBackupStorageLocation: b2-default
+  # The default duration any single item operation can take before timing out, especially important for large volume schedules. Default 4h
+  defaultVolumeSnapshotLocations: aws:b2-default
+  features: EnableCSI
+  garbageCollectionFrequency: 1h
+  loglevel: Info
+  
+  deployNodeAgent: true
+nodeAgent:
+  podVolumePath: /var/lib/kubelet/pods
+  privileged: true
+  tolerations:
+    - operator: Exists
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+
+# Info about the secret to be used by the Velero deployment, which
+# should contain credentials for the cloud provider IAM account you've
+# set up for Velero.
+credentials:
+  useSecret: true
+  existingSecret: velero-storage-credentials
