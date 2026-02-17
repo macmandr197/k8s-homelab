@@ -1,0 +1,57 @@
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: daily-backup
+  namespace: velero
+spec:
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  template:
+    includedNamespaces:
+      - "*"
+    excludedNamespaces:
+      - kube-system
+      - velero
+    includeClusterResources: true
+    snapshotVolumes: false
+    storageLocation: b2-default
+    volumeSnapshotLocations:
+      - b2-default
+    ttl: 168h  # Keep for 7 days
+
+---
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: weekly-backup
+  namespace: velero
+spec:
+  schedule: "0 3 * * 0"  # Weekly on Sunday at 3 AM
+  template:
+    includedNamespaces:
+      - "*"
+    excludedNamespaces:
+      - kube-system
+      - velero
+    includeClusterResources: true
+    snapshotVolumes: true
+    storageLocation: b2-default
+    volumeSnapshotLocations:
+      - b2-default
+    ttl: 720h  # Keep for 30 days
+
+# to work on later
+#---
+#apiVersion: velero.io/v1
+#kind: Schedule
+#metadata:
+#  name: hourly-critical
+#  namespace: velero
+#spec:
+#  schedule: "0 * * * *"  # Every hour
+#  template:
+#    includedNamespaces:
+#      - authentik
+#    includeClusterResources: false
+#    snapshotVolumes: true
+#    storageLocation: pb2-defaulty
+#    ttl: 72h  # Keep for 3 days
