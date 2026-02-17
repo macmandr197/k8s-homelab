@@ -11,6 +11,7 @@ ARG CILIUM_CLI_VERSION=v0.18.9
 ARG OMNICTL_VERSION=v1.4.7
 ARG OP_CLI_VERSION=v2.32.0
 ARG GOLANGCI_LINT_VERSION=v1.61.0
+ARG VELERO_CLI_VERSION=v1.17.2
 
 # 2. Environment Configuration
 ENV PIPX_HOME=/usr/local/pipx \
@@ -92,6 +93,14 @@ RUN set -e; \
     curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_VER}/cilium-linux-${ARCH}.tar.gz && \
     tar xzvf cilium-linux-${ARCH}.tar.gz -C /usr/local/bin && \
     rm cilium-linux-${ARCH}.tar.gz; \
+
+    # VELERO CLI
+    echo "Installing Velero CLI..." && \
+    if [ "$VELERO_CLI_VERSION" = "latest" ]; then VELERO_VER=$(curl -fsSL "https://api.github.com/repos/vmware-tanzu/velero/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'); else VELERO_VER="v${VELERO_CLI_VERSION#v}"; fi && \
+    curl -fsSLO "https://github.com/vmware-tanzu/velero/releases/download/${VELERO_VER}/velero-${VELERO_VER}-linux-${ARCH}.tar.gz" && \
+    tar zxvf "velero-${VELERO_VER}-linux-${ARCH}.tar.gz" && \
+    mv "velero-${VELERO_VER}-linux-${ARCH}/velero" /usr/local/bin/velero && \
+    rm -rf "velero-${VELERO_VER}-linux-${ARCH}.tar.gz" ./"velero-${VELERO_VER}-linux-${ARCH}"; \
 
     # OMNICTL
     echo "Installing omnictl..." && \
