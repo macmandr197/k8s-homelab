@@ -9,10 +9,10 @@ repos:
       - id: check-symlinks
 
 
-  - repo: https://github.com/koalaman/shellcheck-precommit
-    rev: v0.11.0
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.6
     hooks:
-      - id: shellcheck
+      - id: codespell
 
   - repo: local
     hooks:

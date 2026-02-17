@@ -1,0 +1,6 @@
+[codespell]
+# Ignore these specific words (lowercase)
+ignore-words-list = "k8s,proxmox,zfs,crd,crds,etcd,cilium,argo,traefik,sidero,talos"
+
+# Skip these files/directories entirely
+skip = "*.sum,*.pem,*.crt,./.git,./bin"
