@@ -183,11 +183,11 @@ configuration:
         s3Url: "https://s3.ca-east-006.backblazeb2.com"
         checksumAlgorithm: ""
 
+  volumeSnapshotLocation: []
 
   # Name of the default backup storage location. Default: default
   defaultBackupStorageLocation: b2-default
   # The default duration any single item operation can take before timing out, especially important for large volume schedules. Default 4h
-  defaultVolumeSnapshotLocations: aws:b2-default
   features: EnableCSI
   garbageCollectionFrequency: 1h
   loglevel: Info

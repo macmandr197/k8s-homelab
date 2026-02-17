@@ -12,10 +12,8 @@ spec:
       - kube-system
       - velero
     includeClusterResources: true
-    snapshotVolumes: false
+    snapshotVolumes: true
     storageLocation: b2-default
-    volumeSnapshotLocations:
-      - b2-default
     ttl: 168h  # Keep for 7 days
 
 ---
@@ -35,8 +33,6 @@ spec:
     includeClusterResources: true
     snapshotVolumes: true
     storageLocation: b2-default
-    volumeSnapshotLocations:
-      - b2-default
     ttl: 720h  # Keep for 30 days
 
 #  to work on later
