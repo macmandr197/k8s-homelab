@@ -4,7 +4,11 @@ metadata:
   name: radarr
   namespace: radarr
   labels:
-      app: radarr
+    app: radarr
+  annotations:
+    backup.velero.io/backup-volumes-excludes: media-root,appdata
+    ignore-check.kube-linter.io/run-as-non-root: "Application requires root for PUID/PGID mapping at startup"
+    ignore-check.kube-linter.io/no-read-only-root-fs: "Legacy application requires writeable root for internal updates/logging"
 spec:
   replicas: 1
   selector:
@@ -17,8 +21,15 @@ spec:
     spec:
       containers:
         - name: radarr
-          image: lscr.io/linuxserver/radarr:latest
+          image: lscr.io/linuxserver/radarr:v6.0.4.10291-ls293
           imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
           ports:
             - containerPort: 7878
           env:
@@ -34,9 +45,6 @@ spec:
             - name: appdata
               mountPath: /config
               subPath: appdata/linuxserver-radarr-2/config
-            #- name: complete
-            #  mountPath: /complete
-            #  subPath: downloads/complete
       volumes:
         - name: media-root
           persistentVolumeClaim:
@@ -44,6 +52,3 @@ spec:
         - name: appdata
           persistentVolumeClaim:
             claimName: pvc-appdata
-        #- name: complete
-        #  persistentVolumeClaim:
-        #    claimName: pvc-radarr-downloads

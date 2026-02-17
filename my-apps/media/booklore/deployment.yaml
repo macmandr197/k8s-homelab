@@ -9,22 +9,22 @@ spec:
     generate: false
     name: booklore-root-password
     key: password
-  
+
   # Application user credentials
   username: booklore
   passwordSecretKeyRef:
     generate: false
     name: booklore-app-user-password
     key: password
-  
+
   database: booklore
-  
+
   port: 3306
-  
+
   storage:
     size: 10Gi
     storageClassName: longhorn
-  
+
   resources:
     requests:
       cpu: 500m
@@ -32,7 +32,7 @@ spec:
     limits:
       cpu: 2000m
       memory: 2Gi
-  
+
   metrics:
     enabled: true
 
@@ -58,7 +58,11 @@ metadata:
   name: booklore
   namespace: booklore
   labels:
-      app: booklore
+    app: booklore
+  annotations:
+    backup.velero.io/backup-volumes-excludes: books-library,books-bookdrop,app-data
+    ignore-check.kube-linter.io/run-as-non-root: "Application requires root for PUID/PGID mapping at startup"
+    ignore-check.kube-linter.io/no-read-only-root-fs: "Legacy application requires writeable root for internal updates/logging"
 spec:
   replicas: 1
   selector:
@@ -73,6 +77,13 @@ spec:
         - name: booklore
           image: booklore/booklore:v1.17.0
           imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: 2000m
+              memory: 2Gi
           ports:
             - containerPort: 6060
               name: http

@@ -4,7 +4,11 @@ metadata:
   name: sabnzbd
   namespace: sabnzbd
   labels:
-      app: sabnzbd
+    app: sabnzbd
+  annotations:
+    backup.velero.io/backup-volumes-excludes: media-root,appdata
+    ignore-check.kube-linter.io/run-as-non-root: "Application requires root for PUID/PGID mapping at startup"
+    ignore-check.kube-linter.io/no-read-only-root-fs: "Legacy application requires writeable root for internal updates/logging"
 spec:
   replicas: 1
   selector:
@@ -17,8 +21,15 @@ spec:
     spec:
       containers:
         - name: sabnzbd
-          image: lscr.io/linuxserver/sabnzbd:latest
+          image: lscr.io/linuxserver/sabnzbd:v4.5.5-ls244
           imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"  # Guarantee 0.5 cores
+            limits:
+              memory: "8Gi"  # Cap it before it eats the whole node
+              cpu: "4000m"  # Allow it to burst up to 4 cores, but no more
           ports:
             - containerPort: 8082
           env:
@@ -34,23 +45,10 @@ spec:
               subPath: appdata/linuxserver-sabnzbd/config
             - name: media-root
               mountPath: /media
-            #- name: completed-downloads
-            #  mountPath: /complete
-            #  subPath: downloads/complete
-            #- name: incompleted-downloads
-            #  mountPath: /incomplete
-            #  subPath: downloads/incomplete
       volumes:
         - name: appdata
           persistentVolumeClaim:
             claimName: pvc-appdata
-       # - name: completed-downloads
-       #   persistentVolumeClaim:
-       #     claimName: pvc-sabnzbd-completed-downloads
-       # - name: incompleted-downloads
-       #   persistentVolumeClaim:
-       #     claimName: pvc-sabnzbd-incompleted-downloads
         - name: media-root
           persistentVolumeClaim:
             claimName: pvc-media-library
-            

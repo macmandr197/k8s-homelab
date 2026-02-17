@@ -4,7 +4,11 @@ metadata:
   name: sonarr
   namespace: sonarr
   labels:
-      app: sonarr
+    app: sonarr
+  annotations:
+    backup.velero.io/backup-volumes-excludes: media-root,appdata
+    ignore-check.kube-linter.io/run-as-non-root: "Application requires root for PUID/PGID mapping at startup"
+    ignore-check.kube-linter.io/no-read-only-root-fs: "Legacy application requires writeable root for internal updates/logging"
 spec:
   replicas: 1
   selector:
@@ -17,8 +21,15 @@ spec:
     spec:
       containers:
         - name: sonarr
-          image: lscr.io/linuxserver/sonarr:4.0.16
+          image: lscr.io/linuxserver/sonarr:4.0.16.2944-ls303
           imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
           ports:
             - containerPort: 8989
           env:
@@ -34,9 +45,6 @@ spec:
             - name: appdata
               mountPath: /config
               subPath: appdata/linuxserver-sonarr-2/config
-            #- name: downloads
-            #  mountPath: /complete
-            #  subPath: downloads/complete
       volumes:
         - name: media-root
           persistentVolumeClaim:
@@ -44,6 +52,3 @@ spec:
         - name: appdata
           persistentVolumeClaim:
             claimName: pvc-appdata
-        #- name: downloads
-        #  persistentVolumeClaim:
-        #    claimName: pvc-sonarr-downloads

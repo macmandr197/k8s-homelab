@@ -4,7 +4,11 @@ metadata:
   name: overseerr
   namespace: overseerr
   labels:
-      app: overseerr
+    app: overseerr
+  annotations:
+    backup.velero.io/backup-volumes-excludes: appdata
+    ignore-check.kube-linter.io/run-as-non-root: "Application requires root for PUID/PGID mapping at startup"
+    ignore-check.kube-linter.io/no-read-only-root-fs: "Legacy application requires writeable root for internal updates/logging"
 spec:
   replicas: 1
   selector:
@@ -17,8 +21,15 @@ spec:
     spec:
       containers:
         - name: overseerr
-          image: lscr.io/linuxserver/overseerr:latest
+          image: lscr.io/linuxserver/overseerr:v1.35.0-ls159
           imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
           ports:
             - containerPort: 7878
           env:
