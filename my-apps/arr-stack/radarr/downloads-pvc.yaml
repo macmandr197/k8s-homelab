@@ -24,7 +24,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pvc-radarr-downloads
-  namespace: radarr 
+  namespace: radarr
+  labels:
+    velero.io/exclude-from-backup: "true"
 spec:
   accessModes:
     - ReadWriteMany

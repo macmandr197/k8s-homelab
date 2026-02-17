@@ -24,10 +24,12 @@ kind: PersistentVolumeClaim
 metadata:
   name: pvc-appdata
   namespace: radarr
+  labels:
+    velero.io/exclude-from-backup: "true"
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: "" 
+  storageClassName: ""
   volumeName: pv-pool1-root-radarr
   resources:
     requests:

@@ -2,6 +2,8 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: pv-pool0-media-sabnzbd
+  labels:
+    velero.io/exclude-from-backup: "true"
 spec:
   capacity:
     storage: 10Ti # Arbitrary limit for NFS, just needs to be large enough to satisfy the PVC
@@ -24,7 +26,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pvc-media-library
-  namespace: sabnzbd 
+  namespace: sabnzbd
+  labels:
+    velero.io/exclude-from-backup: "true"
 spec:
   accessModes:
     - ReadWriteMany

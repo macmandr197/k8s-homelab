@@ -24,7 +24,9 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pvc-sabnzbd-completed-downloads
-  namespace: sabnzbd 
+  namespace: sabnzbd
+  labels:
+    velero.io/exclude-from-backup: "true"
 spec:
   accessModes:
     - ReadWriteMany
