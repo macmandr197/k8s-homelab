@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: doplarr
-          image: lscr.io/linuxserver/doplarr:3.7.0-ls134
+          image: lscr.io/linuxserver/doplarr:v3.7.0-ls134
           imagePullPolicy: Always
           resources:
             requests:
