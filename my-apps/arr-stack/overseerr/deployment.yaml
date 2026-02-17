@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: overseerr
-          image: lscr.io/linuxserver/overseerr:v1.35.0-ls159
+          image: lscr.io/linuxserver/overseerr:1.35.0-ls159
           imagePullPolicy: Always
           resources:
             requests:
