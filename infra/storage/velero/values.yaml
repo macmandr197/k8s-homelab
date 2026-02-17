@@ -21,9 +21,6 @@ upgradeJobResources:
     cpu: 100m
     memory: 256Mi
 
-upgradeCRDsJob:
-  shellCmd: /tmp/sh
-
 # Configure the dnsPolicy of the Velero deployment
 # See: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
 dnsPolicy: ClusterFirst
@@ -147,9 +144,11 @@ metrics:
 
 kubectl:
   image:
-    repository: alpine/k8s
-    tag: "1.35.0"
+    repository: registry.suse.com/suse/kubectl
+    tag: "1.35"
 
+upgradeCRDsJob:
+  shellCmd: /tmp/sh
 
 ##
 ## Parameters for the `default` BackupStorageLocation and VolumeSnapshotLocation,
