@@ -22,7 +22,7 @@ upgradeJobResources:
     memory: 256Mi
 
 upgradeCRDsJob:
-  shellCmd: /bin/sh
+  shellCmd: /tmp/sh
 
 # Configure the dnsPolicy of the Velero deployment
 # See: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
