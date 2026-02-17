@@ -18,3 +18,8 @@ spec:
     automated:
       prune: true
       selfHeal: true
+  ignoreDifferences:  # to allow sub-apps to have their sync policy manually disabled, temporarily
+  - group: argoproj.io
+    kind: Application
+    jsonPointers:
+    - /spec/syncPolicy

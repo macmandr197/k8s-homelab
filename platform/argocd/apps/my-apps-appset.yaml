@@ -6,6 +6,9 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "4"
 spec:
+  ignoreApplicationDifferences:  # to allow sub-apps to have their sync policy manually disabled, temporarily
+  - jsonPointers:
+    - /spec/syncPolicy
   generators:
   - git:
       repoURL: https://github.com/macmandr197/k8s-homelab.git
