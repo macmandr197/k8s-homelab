@@ -6,7 +6,6 @@ metadata:
   labels:
     app: radarr
   annotations:
-    backup.velero.io/backup-volumes-excludes: media-root,appdata
     ignore-check.kube-linter.io/run-as-non-root: "Application requires root for PUID/PGID mapping at startup"
     ignore-check.kube-linter.io/no-read-only-root-fs: "Legacy application requires writeable root for internal updates/logging"
 spec:
@@ -18,6 +17,8 @@ spec:
     metadata:
       labels:
         app: radarr
+      annotations:
+        backup.velero.io/backup-volumes-excludes: media-root,appdata
     spec:
       containers:
         - name: radarr
