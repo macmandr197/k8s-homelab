@@ -43,7 +43,7 @@ RUN echo "Setting up architecture variables..." \
 # 6. Tool Installation
 RUN set -e; \
     ARCH=$(cat /tmp/arch); \
-    
+
     # GO
     echo "Installing Go..." && \
     if [ "$GO_VERSION" = "latest" ]; then GO_VER=$(curl -s https://go.dev/VERSION?m=text | head -n1 | sed 's/go//'); else GO_VER="${GO_VERSION#v}"; fi && \
