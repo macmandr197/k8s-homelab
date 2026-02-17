@@ -144,8 +144,8 @@ metrics:
 
 kubectl:
   image:
-    repository: registry.suse.com/suse/kubectl
-    tag: "1.35"
+    repository: alpine/k8s
+    tag: "1.35.0"
 
 upgradeCRDsJob:
   shellCmd: /tmp/sh
