@@ -2,11 +2,11 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
-    - id: trailing-whitespace
-    - id: end-of-file-fixer
-    - id: check-yaml
-    - id: check-symlinks
-      args: [--allow-multiple-documents]
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-symlinks
+        args: [--allow-multiple-documents]
 
 
   - repo: https://github.com/koalaman/shellcheck-precommit
@@ -14,10 +14,14 @@ repos:
     hooks:
       - id: shellcheck
 
-  - repo: https://github.com/stackrox/kube-linter
-    rev: v0.8.2
+  - repo: local
     hooks:
-      - id: kube-linter-docker
+      - id: kube-linter
+        name: kube-linter
+        entry: kube-linter lint
+        language: system
+        types: [yaml]
+        files: \.(yaml|yml)$
 
   # YAML Formatting (The SRE standard)
   - repo: https://github.com/adrienverge/yamllint
@@ -25,4 +29,3 @@ repos:
     hooks:
       - id: yamllint
         args: [-c, .yamllint.yaml]
-

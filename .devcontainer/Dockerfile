@@ -107,7 +107,12 @@ RUN set -e; \
     unzip -o op.zip -d /tmp/op_extracted && \
     mv /tmp/op_extracted/op /usr/local/bin/op && \
     chmod +x /usr/local/bin/op && \
-    rm -rf op.zip /tmp/op_extracted
+    rm -rf op.zip /tmp/op_extracted && \
+
+    # KUBE-LINTER
+    echo "Installing kube-linter..." && \
+    curl -L -o /usr/local/bin/kube-linter "https://github.com/stackrox/kube-linter/releases/latest/download/kube-linter-linux" && \
+    chmod +x /usr/local/bin/kube-linter
 
 # 7. Install Tools via Scripts
 RUN curl -sL https://talos.dev/install | sh && \

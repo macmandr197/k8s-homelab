@@ -5,4 +5,5 @@ rules:
   indentation:
     spaces: 2
     indent-sequences: consistent
-  truthiness: disable 
+  truthy: disable
+  document-start: disable  # for handling k8s manifests with multiple '---'
