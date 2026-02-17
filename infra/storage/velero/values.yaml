@@ -182,6 +182,7 @@ configuration:
         s3ForcePathStyle: "true"
         s3Url: "https://s3.ca-east-006.backblazeb2.com"
         checksumAlgorithm: ""
+        profile: "b2-default"
 
   volumeSnapshotLocation: []
 
