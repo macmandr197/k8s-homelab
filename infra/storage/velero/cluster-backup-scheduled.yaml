@@ -39,19 +39,19 @@ spec:
       - b2-default
     ttl: 720h  # Keep for 30 days
 
-# to work on later
-#---
-#apiVersion: velero.io/v1
-#kind: Schedule
-#metadata:
-#  name: hourly-critical
-#  namespace: velero
-#spec:
-#  schedule: "0 * * * *"  # Every hour
-#  template:
-#    includedNamespaces:
-#      - authentik
-#    includeClusterResources: false
-#    snapshotVolumes: true
-#    storageLocation: pb2-defaulty
-#    ttl: 72h  # Keep for 3 days
+#  to work on later
+# ---
+# apiVersion: velero.io/v1
+# kind: Schedule
+# metadata:
+#   name: hourly-critical
+#   namespace: velero
+# spec:
+#   schedule: "0 * * * *"  # Every hour
+#   template:
+#     includedNamespaces:
+#       - authentik
+#     includeClusterResources: false
+#     snapshotVolumes: true
+#     storageLocation: pb2-defaulty
+#     ttl: 72h  # Keep for 3 days
