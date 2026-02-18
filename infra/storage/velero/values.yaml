@@ -144,8 +144,8 @@ metrics:
 
 kubectl:
   image:
-    repository: alpine/k8s
-    tag: "1.35.0"
+    repository: public.ecr.aws/bitnami/kubectl
+    #tag: "1.35.0"
 
 upgradeCRDsJob:
   shellCmd: /tmp/sh
