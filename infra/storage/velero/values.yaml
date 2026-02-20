@@ -197,8 +197,6 @@ configuration:
 
 deployNodeAgent: true
 nodeAgent:
-  podLabels:
-    role: node-agent
   podVolumePath: /var/lib/kubelet/pods
   privileged: true
   tolerations:
