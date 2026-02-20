@@ -14,8 +14,8 @@ loki:
       # Backblaze S3 endpoint (e.g., https://s3.us-west-004.backblazeb2.com)
       endpoint: https://s3.ca-east-006.backblazeb2.com
       region: us-east-2 # dummy value, b2 does not use this
-      accessKeyId: "${AWS_ACCESS_KEY_ID}"
-      secretAccessKey: "${AWS_SECRET_ACCESS_KEY}"
+      accessKeyId: ${AWS_ACCESS_KEY_ID}
+      secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
       s3ForcePathStyle: true # Backblaze often works best with path style
       insecure: false
   schemaConfig:
@@ -47,7 +47,7 @@ deploymentMode: SimpleScalable
 backend:
   extraEnvFrom:
     - secretRef:
-        name: "loki-objstore-secret"
+        name: loki-objstore-secret
   replicas: 2
   persistence:
     labels:
@@ -62,7 +62,7 @@ backend:
 read:
   extraEnvFrom:
     - secretRef:
-        name: "loki-objstore-secret"
+        name: loki-objstore-secret
   replicas: 2
   persistence:
     labels:
@@ -77,7 +77,7 @@ read:
 write:
   extraEnvFrom:
     - secretRef:
-        name: "loki-objstore-secret"
+        name: loki-objstore-secret
   replicas: 2
   persistence:
     size: 12Gi
