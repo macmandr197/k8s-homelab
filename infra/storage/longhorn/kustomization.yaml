@@ -6,6 +6,7 @@ resources:
   - httproute.yaml
   #- externalsecret.yaml # used for backup configuration
   - node-failure-settings.yaml
+  - volumesnapshotclass.yaml
   #- recurring-jobs.yaml # used for backup configuration
   #- backup-settings.yaml # used for backup configuration
 helmCharts:
