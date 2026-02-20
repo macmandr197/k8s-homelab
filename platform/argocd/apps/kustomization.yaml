@@ -9,7 +9,8 @@ resources:
   - 1passwordconnect.yaml        # Wave 0 - Secret Backend (required by external secrets)
   - external-secrets.yaml        # Wave 0 - External Secrets CRDs (required by proxmox storage driver)
   - csi-driver-proxmox-app.yaml  # Wave 1 - Storage foundation
-  - longhorn-app.yaml
+  - longhorn-app.yaml            # Wave 1 - Storage foundation
+  - snapshot-controller-app.yaml # Wave 1 - VolumeSnapshot controller + CRDs
   # ApplicationSets
   - infrastructure-appset.yaml   # Wave 2
   - monitoring-appset.yaml       # Wave 3
