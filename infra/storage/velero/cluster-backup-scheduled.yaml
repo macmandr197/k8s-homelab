@@ -33,6 +33,7 @@ spec:
       - velero
     includeClusterResources: true
     snapshotVolumes: true
+    snapshotMoveData: true # ships backups to backup storage location
     storageLocation: b2-default
     ttl: 720h  # Keep for 30 days
 

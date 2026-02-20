@@ -20,6 +20,8 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         metadata:
+          labels:
+            velero.io/exclude-from-backup: "true"  # excludes the whole PVC from backup
           annotations:
             ## Longhorn backup settings - Important tier for monitoring data
             #longhorn.io/recurring-job-source: enabled
