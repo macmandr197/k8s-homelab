@@ -3,7 +3,7 @@ loki:
     - '-config.expand-env=true'
   commonConfig:
     path_prefix: /var/loki
-    replication_factor: 3
+    replication_factor: 2
   storage:
     type: "s3"
     bucketNames:
@@ -45,10 +45,13 @@ loki:
     retention_period: 7d
 deploymentMode: SimpleScalable
 backend:
-  extraEnvFrom: 
+  extraEnvFrom:
     - secretRef:
         name: "loki-objstore-secret"
   replicas: 2
+  persistence:
+    labels:
+      velero.io/exclude-from-backup: "true"  # excludes the whole PVC from backup
   resources:
     requests:
       cpu: 50m
@@ -57,10 +60,13 @@ backend:
       cpu: 500m
       memory: 1Gi
 read:
-  extraEnvFrom: 
+  extraEnvFrom:
     - secretRef:
         name: "loki-objstore-secret"
   replicas: 2
+  persistence:
+    labels:
+      velero.io/exclude-from-backup: "true"  # excludes the whole PVC from backup
   resources:
     requests:
       cpu: 50m
@@ -69,10 +75,14 @@ read:
       cpu: 1000m
       memory: 1Gi
 write:
-  extraEnvFrom: 
+  extraEnvFrom:
     - secretRef:
         name: "loki-objstore-secret"
-  replicas: 3
+  replicas: 2
+  persistence:
+    size: 12Gi
+    labels:
+      velero.io/exclude-from-backup: "true"  # excludes the whole PVC from backup
   resources:
     requests:
       cpu: 50m
