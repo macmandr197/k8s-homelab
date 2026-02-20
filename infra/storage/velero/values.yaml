@@ -195,7 +195,7 @@ configuration:
   garbageCollectionFrequency: 1h
   loglevel: Info
 
-  deployNodeAgent: true
+deployNodeAgent: true
 nodeAgent:
   podLabels:
     role: node-agent
