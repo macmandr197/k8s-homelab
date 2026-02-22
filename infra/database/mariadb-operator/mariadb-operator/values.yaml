@@ -29,7 +29,7 @@ webhook:
     certManager:
       enabled: true
       issuerRef:
-        name: internal-selfsigned-cluser-issuer
+        name: internal-selfsigned-cluster-issuer
         kind: ClusterIssuer
 
 # Service Account configuration
