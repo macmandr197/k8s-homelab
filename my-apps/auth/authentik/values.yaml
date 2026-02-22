@@ -1,0 +1,24 @@
+authentik:
+  secret_key: ""
+  existingSecret:
+    secretName: "authentik-configuration-secrets"
+  # This sends anonymous usage-data, stack traces on errors and
+  # performance data to authentik.error-reporting.a7k.io, and is fully opt-in
+  error_reporting:
+    enabled: false
+
+# need to configure/load secrets from envvars: https://docs.goauthentik.io/install-config/configuration/
+  postgresql:
+    password: "ThisIsNotASecurePassword"
+
+server:
+  ingress:
+    enabled: true
+    hosts:
+      - authentik.mcmn.me
+
+# using CNPG operator, no need for Bitnami chart
+postgresql:
+  enabled: false
+  auth:
+    password: "ThisIsNotASecurePassword"

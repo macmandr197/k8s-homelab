@@ -1,0 +1,3 @@
+# - need to create PG DB manifest
+# - need to specify sync waves to ensure that the DB is up and available before Authentik is deployed
+# - need to review helm chart values for other annotations, etc. that I need to focus on. https://github.com/goauthentik/helm/blob/main/charts/authentik/values.yaml
