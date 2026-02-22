@@ -12,7 +12,7 @@ spec:
   compression: gzip
   storage:
     s3:
-      bucket: narduwar
+      bucket: nardwuar
       prefix: mariadb
       endpoint: s3.ca-east-006.backblazeb2.com
       region: us-east-2
