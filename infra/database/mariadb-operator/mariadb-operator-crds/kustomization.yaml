@@ -3,9 +3,8 @@ kind: Kustomization
 namespace: mariadb-operator
 labels:
   - pairs:
-      app.kubernetes.io/name: mariadb-operator
+      app.kubernetes.io/instance: mariadb-operator
       app.kubernetes.io/managed-by: argocd
-    includeTemplates: true
 commonAnnotations:
   # Deploy CRDs first, before the operator
   argocd.argoproj.io/sync-wave: "-20"
