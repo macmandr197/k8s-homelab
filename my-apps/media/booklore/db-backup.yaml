@@ -14,7 +14,7 @@ spec:
     s3:
       bucket: narduwar
       prefix: mariadb
-      endpoint: https://s3.ca-east-006.backblazeb2.com
+      endpoint: s3.ca-east-006.backblazeb2.com
       region: us-east-2
       accessKeyIdSecretKeyRef:
         name: mariadb-backup-credentials
