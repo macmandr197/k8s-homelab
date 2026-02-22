@@ -30,6 +30,8 @@ spec:
         exclude: true
       - path: infra/storage/csi-driver-proxmox
         exclude: true
+      - path: infra/storage/snapshot-controller
+        exclude: true
       - path: infra/storage/longhorn
         exclude: true
   template:
