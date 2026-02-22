@@ -3,6 +3,8 @@ kind: MariaDB
 metadata:
   name: booklore-db
   namespace: booklore
+  labels:
+    velero.io/exclude-from-backup: "true"  # DB backup is handled by mariadb backup CR
 spec:
   # Root password from External Secret (synced from 1Password)
   rootPasswordSecretKeyRef:

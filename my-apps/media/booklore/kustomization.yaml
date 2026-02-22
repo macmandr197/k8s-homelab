@@ -10,5 +10,6 @@ resources:
   - appdata-pvc.yaml
   - externalsecret.yaml
   - deployment.yaml
+  - db-backup.yaml
   - httproute.yaml
   - svc.yaml

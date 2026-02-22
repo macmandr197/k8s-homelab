@@ -1,0 +1,26 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Backup
+metadata:
+  name: booklore-backup
+spec:
+  mariaDbRef:
+    name: booklore-db
+  schedule:
+    cron: "5 2 * * *"  # Daily at 2:05 AM
+    suspend: false
+  maxRetention: 168h  # Keep for 7 days, the same as the Velero backup schedule
+  compression: gzip
+  storage:
+    s3:
+      bucket: narduwar
+      prefix: mariadb
+      endpoint: https://s3.ca-east-006.backblazeb2.com
+      region: us-east-2
+      accessKeyIdSecretKeyRef:
+        name: mariadb-backup-credentials
+        key: username
+      secretAccessKeySecretKeyRef:
+        name: mariadb-backup-credentials
+        key: password
+      tls:
+        enabled: true
