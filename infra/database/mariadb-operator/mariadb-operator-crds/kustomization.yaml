@@ -5,7 +5,6 @@ labels:
   - pairs:
       app.kubernetes.io/name: mariadb-operator
       app.kubernetes.io/managed-by: argocd
-    includeSelectors: true
     includeTemplates: true
 commonAnnotations:
   # Deploy CRDs first, before the operator
