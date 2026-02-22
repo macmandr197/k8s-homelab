@@ -1,0 +1,10 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: internal-selfsigned-cluster-issuer #used for internal resources like webhooks, etc.
+  annotations:
+    argocd.argoproj.io/sync-wave: "3" # Deploy after cert-manager deployments are ready
+    argocd.argoproj.io/sync-options: Validate=true
+    argocd.argoproj.io/compare-options: ServerSideDiff=true
+spec:
+  selfSigned: {}
