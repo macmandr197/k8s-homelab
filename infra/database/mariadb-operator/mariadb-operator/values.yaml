@@ -27,10 +27,10 @@ metrics:
 webhook:
   cert:
     certManager:
-      enabled: false
-      # issuerRef:
-      #   name: selfsigned-issuer
-      #   kind: ClusterIssuer
+      enabled: true
+      issuerRef:
+        name: internal-selfsigned-cluser-issuer
+        kind: ClusterIssuer
 
 # Service Account configuration
 # The operator chart creates RBAC by default
