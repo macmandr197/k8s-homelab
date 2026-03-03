@@ -1,6 +1,6 @@
 global:
   revisionHistoryLimit: 3
-authentik:
+
   env:
     # SERVER
     - name: AUTHENTIK_SECRET_KEY
@@ -52,6 +52,7 @@ authentik:
       value: "true"
     - name: AUTHENTIK_EMAIL__USE_SSL
       value: "false"
+authentik:
   # This sends anonymous usage-data, stack traces on errors and
   # performance data to authentik.error-reporting.a7k.io, and is fully opt-in
   error_reporting:
