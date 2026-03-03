@@ -74,6 +74,7 @@ configs:
       hs.status = "Progressing"
       hs.message = "Waiting for operator to process Backup"
       return hs
+    # Custom health check for CNPG
     resource.customizations.health.postgresql.cnpg.io_Cluster: |
       hs = {}
       if obj.status ~= nil then
