@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: authentik
 
 resources:
-  - ns.yaml
+  - httproute.yaml
   - external-secret.yaml
 
 helmCharts:
