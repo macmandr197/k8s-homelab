@@ -7,6 +7,9 @@ metadata:
     app: authentik
 spec:
   instances: 1
+  inheritedMetadata:
+    labels:
+      velero.io/exclude-from-backup: "true"  # excludes from Velero backup as backups are handled natively
   imageName: ghcr.io/cloudnative-pg/postgresql:16
   resources:
     requests:
@@ -54,10 +57,6 @@ spec:
   #       wal:
   #         compression: gzip
   storage:
-  pvcTemplate:  # excludes from Velero backup as backups are handled natively
-    metadata:
-      labels:
-        velero.io/exclude-from-backup: "true"
     size: 5Gi
     storageClass: longhorn
   walStorage:
