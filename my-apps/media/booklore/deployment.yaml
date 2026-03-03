@@ -78,7 +78,7 @@ spec:
     spec:
       containers:
         - name: booklore
-          image: booklore/booklore:v1.17.0
+          image: booklore/booklore:v1.18.5
           imagePullPolicy: Always
           resources:
             requests:
