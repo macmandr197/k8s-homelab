@@ -1,3 +1,5 @@
+global:
+  revisionHistoryLimit: 3
 authentik:
   secret_key: ""
   existingSecret:
@@ -7,18 +9,48 @@ authentik:
   error_reporting:
     enabled: false
 
-# need to configure/load secrets from envvars: https://docs.goauthentik.io/install-config/configuration/
   postgresql:
-    password: "ThisIsNotASecurePassword"
+    password: ""
 
+# using traefik with External-DNS, this does not need to be managed via the helm chart
 server:
   ingress:
-    enabled: true
-    hosts:
-      - authentik.mcmn.me
+    enabled: false
 
 # using CNPG operator, no need for Bitnami chart
 postgresql:
   enabled: false
-  auth:
-    password: "ThisIsNotASecurePassword"
+
+envValueFrom:
+  AUTHENTIK_POSTGRESQL__USER:
+    secretKeyRef:
+      name: authentik-app-secret
+      key: username
+  AUTHENTIK_POSTGRESQL__PASSWORD:
+    secretKeyRef:
+      name: authentik-app-secret
+      key: password
+  AUTHENTIK_EMAIL__HOST:
+    secretKeyRef:
+      name: authentik-app-secret
+      key: smtp-server
+  AUTHENTIK_EMAIL__FROM:
+    secretKeyRef:
+      name: authentik-app-secret
+      key: smtp-username
+  AUTHENTIK_EMAIL__USERNAME:
+    secretKeyRef:
+      name: authentik-app-secret
+      key: smtp-username
+  AUTHENTIK_EMAIL__PASSWORD:
+    secretKeyRef:
+      name: authentik-app-secret
+      key: smtp-password
+
+env:
+  AUTHENTIK_POSTGRESQL__HOST: "authentik-db-rw.authentik.svc.cluster.local"
+  AUTHENTIK_POSTGRESQL__PORT: "5432"
+  AUTHENTIK_POSTGRESQL__NAME: "authentik"
+  AUTHENTIK_EMAIL__PORT: "587"
+  AUTHENTIK_EMAIL__USE_TLS: "true"
+  AUTHENTIK_EMAIL__USE_SSL: "false"
