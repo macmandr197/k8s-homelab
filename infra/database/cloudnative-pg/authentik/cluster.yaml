@@ -54,10 +54,10 @@ spec:
   #       wal:
   #         compression: gzip
   storage:
-    pvcTemplate:  # excludes from Velero backup as backups are handled natively
-      metadata:
-        labels:
-          velero.io/exclude-from-backup: "true"
+  pvcTemplate:  # excludes from Velero backup as backups are handled natively
+    metadata:
+      labels:
+        velero.io/exclude-from-backup: "true"
     size: 5Gi
     storageClass: longhorn
   walStorage:
