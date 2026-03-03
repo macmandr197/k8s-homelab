@@ -12,6 +12,10 @@ authentik:
   postgresql:
     password: ""
   envValueFrom:
+  AUTHENTIK_SECRET_KEY:
+    secretKeyRef:
+      name: authentik-configuration-secrets
+      key: secret_key
   AUTHENTIK_POSTGRESQL__USER:
     secretKeyRef:
       name: authentik-app-secret
