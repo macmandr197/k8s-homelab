@@ -11,17 +11,7 @@ authentik:
 
   postgresql:
     password: ""
-
-# using traefik with External-DNS, this does not need to be managed via the helm chart
-server:
-  ingress:
-    enabled: false
-
-# using CNPG operator, no need for Bitnami chart
-postgresql:
-  enabled: false
-
-envValueFrom:
+  envValueFrom:
   AUTHENTIK_POSTGRESQL__USER:
     secretKeyRef:
       name: authentik-app-secret
@@ -32,25 +22,34 @@ envValueFrom:
       key: password
   AUTHENTIK_EMAIL__HOST:
     secretKeyRef:
-      name: authentik-app-secret
+      name: authentik-configuration-secrets
       key: smtp-server
   AUTHENTIK_EMAIL__FROM:
     secretKeyRef:
-      name: authentik-app-secret
+      name: authentik-configuration-secrets
       key: smtp-username
   AUTHENTIK_EMAIL__USERNAME:
     secretKeyRef:
-      name: authentik-app-secret
+      name: authentik-configuration-secrets
       key: smtp-username
   AUTHENTIK_EMAIL__PASSWORD:
     secretKeyRef:
-      name: authentik-app-secret
+      name: authentik-configuration-secrets
       key: smtp-password
 
-env:
-  AUTHENTIK_POSTGRESQL__HOST: "authentik-db-rw.authentik.svc.cluster.local"
-  AUTHENTIK_POSTGRESQL__PORT: "5432"
-  AUTHENTIK_POSTGRESQL__NAME: "authentik"
-  AUTHENTIK_EMAIL__PORT: "587"
-  AUTHENTIK_EMAIL__USE_TLS: "true"
-  AUTHENTIK_EMAIL__USE_SSL: "false"
+  env:
+    AUTHENTIK_POSTGRESQL__HOST: "authentik-db-rw.authentik.svc.cluster.local"
+    AUTHENTIK_POSTGRESQL__PORT: "5432"
+    AUTHENTIK_POSTGRESQL__NAME: "authentik"
+    AUTHENTIK_EMAIL__PORT: "587"
+    AUTHENTIK_EMAIL__USE_TLS: "true"
+    AUTHENTIK_EMAIL__USE_SSL: "false"
+
+# using traefik with External-DNS, this does not need to be managed via the helm chart
+server:
+  ingress:
+    enabled: false
+
+# using CNPG operator, no need for Bitnami chart
+postgresql:
+  enabled: false
