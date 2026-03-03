@@ -1,0 +1,81 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-db
+  namespace: authentik
+  labels:
+    app: authentik
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:16
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+    limits:
+      memory: 2Gi
+  postgresql:
+    parameters:
+      shared_buffers: "128MB"
+      max_wal_size: "512MB"
+      wal_compression: "on"
+  # === NORMAL OPERATION: initdb (comment out for DR recovery) ===
+  bootstrap:
+    initdb:
+      database: authentik
+      owner: authentik
+      secret:
+        name: authentik-app-secret
+  # === DISASTER RECOVERY ===
+  # 1. Comment out the initdb bootstrap above
+  # 2. Uncomment the recovery bootstrap + externalClusters below
+  # 3. Update serverName in externalClusters to match CURRENT backup.serverName (authentik-database)
+  # 4. Bump backup.serverName to next version (e.g. authentik-database-v2)
+  # 5. Apply directly with: kubectl kustomize ... | kubectl create -f -
+  #    (ArgoCD SSA + CNPG webhook = initdb always wins, must bypass ArgoCD)
+  # 6. After recovery completes, revert to initdb and push
+  #
+  # bootstrap:
+  #   recovery:
+  #     source: authentik-backup
+  # externalClusters:
+  #   - name: authentik-backup
+  #     barmanObjectStore:
+  #       serverName: authentik-db
+  #       destinationPath: s3://nardwuar/cnpg/authentik/
+  #      endpointURL: https://s3.ca-east-006.backblazeb2.com
+  #       s3Credentials:
+  #         accessKeyId:
+  #           name: cnpg-s3-credentials
+  #           key: AWS_ACCESS_KEY_ID
+  #         secretAccessKey:
+  #           name: cnpg-s3-credentials
+  #           key: AWS_SECRET_ACCESS_KEY
+  #       wal:
+  #         compression: gzip
+  storage:
+    size: 5Gi
+    storageClass: longhorn
+  walStorage:
+    size: 2Gi
+    storageClass: longhorn
+  enableSuperuserAccess: true
+  monitoring:
+    enablePodMonitor: true
+  backup:
+    barmanObjectStore:
+      serverName: authentik-db
+      destinationPath: s3://nardwuar/cnpg/authentik/
+      endpointURL: https://s3.ca-east-006.backblazeb2.com
+      s3Credentials:
+        accessKeyId:
+          name: cnpg-s3-credentials
+          key: AWS_ACCESS_KEY_ID
+        secretAccessKey:
+          name: cnpg-s3-credentials
+          key: AWS_SECRET_ACCESS_KEY
+      wal:
+        compression: gzip
+      data:
+        compression: gzip
+    retentionPolicy: "7d"

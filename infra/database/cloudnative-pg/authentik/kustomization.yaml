@@ -7,4 +7,6 @@ commonLabels:
 commonAnnotations:
   argocd.argoproj.io/sync-wave: "-5"
 resources:
-  - externalsecret.yaml
+  - cluster.yaml
+  - external-secret.yaml
+  - scheduled-backup.yaml
