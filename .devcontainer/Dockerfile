@@ -128,7 +128,7 @@ RUN curl -sL https://talos.dev/install | sh && \
     curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh | sh -s -- --install-method deb
 
 # 8. Install Krew Plugins
-RUN kubectl krew install oidc-login get-all
+RUN kubectl krew install oidc-login get-all cnpg
 
 # Cleanup
 RUN rm /tmp/arch /tmp/arch_uname
