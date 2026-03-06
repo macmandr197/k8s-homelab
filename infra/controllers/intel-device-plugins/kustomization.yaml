@@ -28,3 +28,8 @@ helmCharts:
       nodeFeatureRule: true
       nodeSelector:
         intel.feature.node.kubernetes.io/gpu: 'true'
+
+# TO Schedule, add the following limit:
+#      resources:
+#        limits:
+#          gpu.intel.com/xe: 1

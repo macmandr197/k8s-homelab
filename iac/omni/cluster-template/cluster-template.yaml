@@ -38,7 +38,7 @@ machineClass:
 systemExtensions:
   - siderolabs/iscsi-tools
   - siderolabs/nfsd
-  - siderolabs/qemu-guest-agent 
+  - siderolabs/qemu-guest-agent
   - siderolabs/util-linux-tools
 patches:
   - file: iac/omni/cluster-template/patches/worker.yaml
@@ -65,8 +65,8 @@ systemExtensions:
   - siderolabs/nfsd
   - siderolabs/qemu-guest-agent
   - siderolabs/util-linux-tools
-  #- siderolabs/i915
-  - siderolabs/intel-ucode
+  - siderolabs/i915
+  - siderolabs/amd-ucode
   - siderolabs/xe
 patches:
   - name: gpu-worker-labels

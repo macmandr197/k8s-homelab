@@ -8,7 +8,9 @@ spec:
   matchlabels: []
   autoprovision:
     providerid: proxmox
-    kernelargs: []
+    kernelargs:
+      - i915.force_probe=!56a6  # 1. Prevent the legacy driver from claiming the A310 (PCI ID 56a6)
+      - xe.force_probe=56a6  # 2. Force the modern Xe driver to claim the A310
     metavalues: []
     providerdata: |
       cores: 4
