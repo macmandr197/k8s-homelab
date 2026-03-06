@@ -86,7 +86,7 @@ TUNNEL_ID=$(cloudflared tunnel list | grep $TUNNEL_NAME | awk '{print $1}')
 cloudflared tunnel route dns $TUNNEL_ID "*.$DOMAIN"
 ```
 
-## Boostrapping the cluster, after it has been built by Terraform
+## Bootstrapping the cluster, after it has been built by Terraform
 
 There are several core components to 'set up' before the rest of the cluster can be built and managed by ArgoCD. Here is a brief list, in order of importance
 
@@ -146,7 +146,7 @@ This cluster uses [1Password Connect](https://developer.1password.com/docs/conne
     # Athenticate with 1Password
     eval $(op signin)
 
-    export OP_CREDENTIALS=$(op read op://k8s-secrets/1passwordconnect/1password-credentials.json | base64 | tr -d '\n')
+    export OP_CREDENTIALS=$(op read op://k8s-secrets/1passwordconnect/1password-credentials.json | tr -d '\n')
     export OP_CONNECT_TOKEN=$(op read 'op://k8s-secrets/1password-operator-token/password')
 
     kubectl create secret generic 1password-credentials \
