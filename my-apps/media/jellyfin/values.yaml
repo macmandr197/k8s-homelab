@@ -1,0 +1,203 @@
+# Default values for Jellyfin.
+# This is a YAML-formatted file.
+
+# -- Number of Jellyfin replicas to start. Should be left at 1.
+replicaCount: 1
+
+# -- Number of old ReplicaSets to retain for rollback history.
+# Set to 0 to disable revision history (not recommended).
+# If not specified, Kubernetes defaults to 10.
+# See: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit
+revisionHistoryLimit: 3
+
+# -- Annotations to add to the pod.
+podAnnotations: {}
+# -- Additional labels to add to the pod.
+podLabels: {}
+
+# -- Security context for the pod.
+podSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  supplementalGroups:
+    - 44  # 'video' group for Hardware acceleration
+    - 107  # 'render' group for hardware acceleration
+
+# -- Deployment strategy configuration. See `kubectl explain deployment.spec.strategy`.
+deploymentStrategy:
+  type: RollingUpdate
+
+resources:
+  limits:
+    gpu.intel.com/xe: 1
+
+# -- Additional volumes to mount in the Jellyfin pod.
+volumes:
+  - name: transcode-ramdisk
+    emptyDir:
+      medium: Memory
+      sizeLimit: 16Gi
+
+# -- Additional volume mounts for the Jellyfin container.
+volumeMounts:
+  - name: transcode-ramdisk
+    mountPath: "/transcode"
+
+jellyfin:
+  # -- Enable DLNA. Requires host network. See: https://jellyfin.org/docs/general/networking/dlna.html
+  enableDLNA: false
+  # -- Custom command to use as container entrypoint.
+  command: []
+  # -- Additional arguments for the entrypoint command.
+  args: []
+  # -- Load environment variables from ConfigMap or Secret.
+  # See: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables
+  # Example:
+  # envFrom:
+  #   - configMapRef:
+  #       name: jellyfin-config
+  #   - secretRef:
+  #       name: jellyfin-secrets
+  envFrom: []
+  # -- Additional environment variables for the container.
+  # Example: Workaround for inotify limits (see Troubleshooting section in README)
+  # Example:
+  # env:
+  #   - name: JELLYFIN_CACHE_DIR
+  #     value: /cache
+  env: []
+  # - name: DOTNET_USE_POLLING_FILE_WATCHER
+  #   value: "1"
+
+persistence:
+  config:
+    # -- set to false to use emptyDir
+    enabled: true
+    annotations: {}
+    type: pvc
+    existingClaim: "pvc-jellyfin-appdata"
+    subPath: "appdata/jellyfin/config"
+  media:
+    # -- set to false to use emptyDir
+    enabled: true
+    type: pvc
+    annotations: {}
+    existingClaim: "pvc-media-library-jellyfin"
+  cache:
+    # -- set to false to use emptyDir
+    enabled: true
+    # -- Type of volume for cache storage (pvc, hostPath, emptyDir). If 'enabled' is false, 'emptyDir' is used regardless of this setting.
+    type: pvc
+    annotations: {}
+    existingClaim: "pvc-jellyfin-appdata"
+    subPath: "appdata/jellyfin/cache"
+
+# -- Configuration for metrics collection and monitoring
+metrics:
+  # -- Enable or disable metrics collection
+  enabled: false
+  # -- Configuration for the Prometheus ServiceMonitor
+  serviceMonitor:
+    # -- Enable or disable the creation of a ServiceMonitor resource
+    enabled: false
+    # -- Namespace where the ServiceMonitor resource should be created. Defaults to Release.Namespace
+    namespace: ''
+    # -- Labels to add to the ServiceMonitor resource
+    labels: {}
+    # -- Interval at which metrics should be scraped
+    interval: 30s
+    # -- Timeout for scraping metrics
+    scrapeTimeout: 30s
+    # -- Path to scrape for metrics
+    path: /metrics
+    # -- Port to scrape for metrics
+    port: 8096
+    # -- Scheme to use for scraping metrics (http or https)
+    scheme: http
+    # -- TLS configuration for scraping metrics
+    tlsConfig: {}
+    # -- Relabeling rules for the scraped metrics
+    relabelings: []
+    # -- Relabeling rules for the metrics before ingestion
+    metricRelabelings: []
+    # -- Target labels to add to the scraped metrics
+    targetLabels: []
+
+# -- Network Policy configuration for network isolation and security.
+# Requires a CNI plugin that supports NetworkPolicy (Calico, Cilium, Weave, etc.).
+# WARNING: NetworkPolicy cannot be enabled when hostNetwork is used (DLNA mode).
+# The chart will fail with an error if both are enabled simultaneously.
+networkPolicy:
+  # -- Enable NetworkPolicy for the Jellyfin pod.
+  # By default, this is disabled to maintain backward compatibility.
+  # When enabled, you can control which pods can access Jellyfin (ingress)
+  # and what external connections Jellyfin can make (egress).
+  enabled: true
+
+  # -- Policy types to enforce. Both ingress and egress policies can be enabled.
+  # See: https://kubernetes.io/docs/concepts/services-networking/network-policies/#policy-types
+  policyTypes:
+    - Ingress
+    - Egress
+
+  # -- Ingress rules configuration - controls which pods/namespaces can access Jellyfin.
+  ingress:
+    allowExternal: false
+    customRules:
+      # Rule A: Allow Traefik
+      - from:
+          - namespaceSelector:
+              matchLabels:
+                kubernetes.io/metadata.name: traefik
+        ports:
+          - protocol: TCP
+            port: 8096
+
+      # Rule B: Allow Authentik (for SSO / Forward Auth)
+      - from:
+          - namespaceSelector:
+              matchLabels:
+                kubernetes.io/metadata.name: authentik
+        ports:
+          - protocol: TCP
+            port: 8096
+
+      # Rule C: Allow Media Automation Apps (Sonarr, Radarr, etc.)
+      - from:
+          - namespaceSelector:
+              matchLabels:
+                kubernetes.io/metadata.name: overseerr
+        # - namespaceSelector:
+        #     matchLabels:
+        #       kubernetes.io/metadata.name: sonarr
+        ports:
+          - protocol: TCP
+            port: 8096
+
+      # Rule D: Allow all traffic within the jellyfin namespace itself
+      - from:
+          - podSelector: {}
+
+  # -- Egress rules configuration - controls what external connections Jellyfin can make.
+  egress:
+    allowDNS: true
+    allowAllEgress: true
+
+
+  # -- Prometheus metrics scraping configuration.
+  # Automatically allows ingress from Prometheus when metrics.serviceMonitor.enabled is true.
+  # This ensures Prometheus can scrape metrics without additional configuration.
+  metrics:
+    # -- Namespace where Prometheus is running.
+    # Leave empty to use the same namespace as Jellyfin.
+    # Set to the monitoring namespace if Prometheus is in a different namespace.
+    # Example: "monitoring" or "prometheus"
+    namespace: ""
+
+    # -- Pod selector for Prometheus pods.
+    # These labels must match your Prometheus deployment.
+    # The chart will automatically add an ingress rule for pods matching these labels.
+    # Default selector works with prometheus-operator and kube-prometheus-stack.
+    # Adjust if your Prometheus uses different labels.
+    podSelector:
+      app.kubernetes.io/name: prometheus
