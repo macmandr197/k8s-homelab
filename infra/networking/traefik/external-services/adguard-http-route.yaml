@@ -1,0 +1,46 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: adguard
+  namespace: traefik
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+  hostnames:
+    - "adguard.mcmn.me"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: adguard-external
+          port: 3000
+          weight: 1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: adguard-external
+  namespace: traefik
+  annotations:
+    ignore-check.kube-linter.io/dangling-service: "Intentional headless service pointing to external IP via manual Endpoints"
+spec:
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: adguard-external
+  namespace: traefik
+subsets:
+  - addresses:
+      - ip: 10.10.1.45
+    ports:
+      - port: 3000
