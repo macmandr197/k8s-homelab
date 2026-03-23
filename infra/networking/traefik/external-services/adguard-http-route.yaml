@@ -34,13 +34,17 @@ spec:
       port: 3000
       targetPort: 3000
 ---
-apiVersion: v1
-kind: Endpoints
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
 metadata:
-  name: adguard-external
+  name: adguard-external-slice
   namespace: traefik
-subsets:
+  labels:
+    kubernetes.io/service-name: adguard-external  # links back to the created svc
+addressType: IPv4
+ports:
+  - port: 3000
+    protocol: TCP
+endpoints:
   - addresses:
-      - ip: 10.10.1.45
-    ports:
-      - port: 3000
+      - "10.10.1.45"
