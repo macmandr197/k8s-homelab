@@ -26,10 +26,29 @@ kind: Service
 metadata:
   name: adguard-external
   namespace: traefik
+  annotations:
+    ignore-check.kube-linter.io/dangling-service: "Intentional headless service pointing to external IP via manual Endpoints"
 spec:
-  type: ExternalName
-  externalName: rube.homelab.local  # defined on Unifi router
   ports:
-    - port: 3000
+    - protocol: TCP
+      port: 3000
       targetPort: 3000
-      name: http
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: adguard-external-slice
+  namespace: traefik
+  labels:
+    kubernetes.io/service-name: adguard-external
+    endpointslice.kubernetes.io/managed-by: manual  # indicates that the endpoint slice is manually managed
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false
+addressType: IPv4
+ports:
+  - port: 3000
+    protocol: TCP
+    name: http
+endpoints:
+  - addresses:
+      - "10.10.1.45"
