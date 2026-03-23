@@ -40,7 +40,7 @@ metadata:
   name: adguard-external-slice
   namespace: traefik
   labels:
-    kubernetes.io/service-name: adguard-external
+    kubernetes.io/service-name: adguard-external  # links slice to service
     endpointslice.kubernetes.io/managed-by: manual  # indicates that the endpoint slice is manually managed
   annotations:
     argocd.argoproj.io/sync-options: Prune=false
