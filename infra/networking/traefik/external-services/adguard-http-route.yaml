@@ -52,4 +52,5 @@ ports:
 endpoints:
   - addresses:
       - "10.10.1.45"
-    conditions: {}
+    conditions:
+      ready: true
