@@ -30,9 +30,9 @@ metadata:
     ignore-check.kube-linter.io/dangling-service: "Intentional headless service pointing to external IP via manual Endpoints"
 spec:
   ports:
-    - protocol: TCP
-      port: 3000
+    - port: 3000
       targetPort: 3000
+      name: http
 ---
 apiVersion: discovery.k8s.io/v1
 kind: EndpointSlice
@@ -47,7 +47,6 @@ metadata:
 addressType: IPv4
 ports:
   - port: 3000
-    targetPort: 3000
     protocol: TCP
     name: http
 endpoints:
