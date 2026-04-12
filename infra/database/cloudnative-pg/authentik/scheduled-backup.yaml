@@ -4,7 +4,8 @@ metadata:
   name: authentik-daily-backup
   namespace: authentik
 spec:
-  schedule: "5 2 * * *"
+  # Sec Min Hour Day Month DayOfWeek
+  schedule: "0 0 2,14 * * *"
   backupOwnerReference: self
   cluster:
     name: authentik-db
