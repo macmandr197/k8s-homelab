@@ -1,3 +1,12 @@
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: portainer-transport
+  namespace: traefik
+spec:
+  serverName: portainer
+  insecureSkipVerify: true # Required since Portainer uses a self-signed cert out of the box
+---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -7,6 +16,7 @@ spec:
   parentRefs:
     - name: traefik-gateway
       namespace: traefik
+      sectionName: websecure
   hostnames:
     - "portainer.mcmn.me"
   rules:
@@ -21,6 +31,25 @@ spec:
           port: 9443
           weight: 1
 ---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: portainer-redirect
+  namespace: traefik
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+      sectionName: web # Bind ONLY to your HTTP listener (often named web or http)
+  hostnames:
+    - "portainer.mcmn.me"
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -28,11 +57,15 @@ metadata:
   namespace: traefik
   annotations:
     ignore-check.kube-linter.io/dangling-service: "Intentional headless service pointing to external IP via manual Endpoints"
+    # Tells Traefik to use the transport defined above
+    traefik.ingress.kubernetes.io/service.serverstransport: traefik-portainer-transport@crd
+    # Explicitly tells Traefik to use HTTPS to communicate with this service
+    traefik.ingress.kubernetes.io/service.serversscheme: https
 spec:
   ports:
     - port: 9443
       targetPort: 9443
-      name: http
+      name: https
 ---
 apiVersion: discovery.k8s.io/v1
 kind: EndpointSlice
@@ -48,7 +81,7 @@ addressType: IPv4
 ports:
   - port: 9443
     protocol: TCP
-    name: http
+    name: https
 endpoints:
   - addresses:
       - "10.10.1.45"
