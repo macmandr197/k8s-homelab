@@ -40,7 +40,7 @@ spec:
   parentRefs:
     - name: traefik-gateway
       namespace: traefik
-      sectionName: web # Bind ONLY to your HTTP listener (often named web or http)
+      sectionName: web
   hostnames:
     - "portainer.mcmn.me"
   rules:
@@ -62,7 +62,7 @@ metadata:
   annotations:
     ignore-check.kube-linter.io/dangling-service: "Intentional headless service pointing to external IP via manual Endpoints"
     # Tells Traefik to use the transport defined above
-    traefik.ingress.kubernetes.io/service.serverstransport: traefik-portainer-transport@crd
+    traefik.ingress.kubernetes.io/service.serverstransport: traefik-portainer-transport@kubernetescrd
     # Explicitly tells Traefik to use HTTPS to communicate with this service
     traefik.ingress.kubernetes.io/service.serversscheme: https
 spec:
