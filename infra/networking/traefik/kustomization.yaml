@@ -5,6 +5,9 @@ resources:
   - ns.yaml
   - external-secret.yaml
   - external-services/adguard-http-route.yaml
+  - external-services/haas-http-route.yaml
+  - external-services/portainer-http-route.yaml
+  - external-services/stirling-http-route.yaml
 
 
 helmCharts:
