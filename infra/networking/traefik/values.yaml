@@ -93,7 +93,7 @@ gateway:
 
     plex:         # HTTPS listener that matches entryPoint `plex`
       port: 32400
-      hostname: "plex.mcmn.me"
+      hostname: "*.mcmn.me"
       protocol: HTTPS  # TLS terminates inside Traefik
       namespacePolicy:
         from: All
