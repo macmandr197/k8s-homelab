@@ -11,9 +11,17 @@ ports:
     port: 443
     nodePort: 30001
     forwardedHeaders:
-      trustedIPs: 
-        - "10.244.0.0/16" 
-#for when traffic is routed through CF tunnel. web->tunnel->gateway->pod. source IP may appear as though it is coming from a pod's IP instead of a web IP.
+      trustedIPs:
+        - "10.244.0.0/16"
+
+  plex:
+    port: 32400
+    nodePort: 32400
+    expose: true
+    forwardedHeaders:
+      trustedIPs:
+        - "10.244.0.0/16"
+# for when traffic is routed through CF tunnel. web->tunnel->gateway->pod. source IP may appear as though it is coming from a pod's IP instead of a web IP.
 
 # Enables the dashboard in Secure Mode
 api:
@@ -54,9 +62,9 @@ service:
 # Providers tell Traefik where to find routing configuration.
 providers:
   kubernetesIngress:
-     enabled: false
+    enabled: false
   kubernetesGateway:
-     enabled: true
+    enabled: true
 
 ## Gateway Listeners
 gateway:
@@ -77,10 +85,22 @@ gateway:
       namespacePolicy:
         from: All
       mode: Terminate
-      certificateRefs:    
+      certificateRefs:
         - kind: Secret
           name: cert-mcmn-me
-          group: "" #necessary
+          group: ""  # necessary
+
+    plex:         # HTTPS listener that matches entryPoint `plex`
+      port: 32400
+      hostname: "plex.mcmn.me"
+      protocol: HTTPS  # TLS terminates inside Traefik
+      namespacePolicy:
+        from: All
+      mode: Terminate
+      certificateRefs:
+        - kind: Secret
+          name: cert-mcmn-me
+          group: ""  # necessary
 
 # Enable Observability
 logs:
