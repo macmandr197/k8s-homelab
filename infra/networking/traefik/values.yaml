@@ -17,7 +17,8 @@ ports:
   plex:
     port: 32400
     nodePort: 32400
-    expose: true
+    expose:
+      default: true
     forwardedHeaders:
       trustedIPs:
         - "10.244.0.0/16"
