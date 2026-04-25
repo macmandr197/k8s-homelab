@@ -44,15 +44,15 @@ spec:
   hostnames:
     - "portainer.mcmn.me"
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
     - filters:
         - type: RequestRedirect
           requestRedirect:
             scheme: https
             statusCode: 301
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
 ---
 apiVersion: v1
 kind: Service
