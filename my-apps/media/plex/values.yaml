@@ -1,0 +1,64 @@
+image:
+  repository: lscr.io/linuxserver/plex
+  tag: 1.43.1
+  pullPolicy: IfNotPresent
+hostNetwork: false
+
+resources:
+  limits:
+    gpu.intel.com/xe: 1
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+
+securityContext:
+  fsGroupChangePolicy: "OnRootMismatch"
+  supplementalGroups:
+    - 44  # 'video' group for Hardware acceleration
+    - 107  # 'render' group for hardware acceleration
+
+livenessProbe:
+  httpGet:
+    path: /identity
+    port: 32400
+  initialDelaySeconds: 60
+  periodSeconds: 60
+  timeoutSeconds: 1
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /identity
+    port: 32400
+  initialDelaySeconds: 60
+  periodSeconds: 60
+  timeoutSeconds: 1
+  failureThreshold: 3
+
+persistence:
+  config:
+    enabled: true
+    existingClaim: pvc-plex-appdata
+    mountPath: /config
+
+  data:
+    enabled: true
+    existingClaim: pvc-media-library-plex
+    mountPath: /data
+
+  transcode:
+    enabled: true
+    emptyDir:
+      medium: Memory
+      sizeLimit: 12Gi
+    mountPath: /transcode
+
+extraEnv:
+  PLEX_CLAIM:
+  valueFrom:
+    secretKeyRef:
+      name: plex-configuration-secrets
+      key: claim-code
+  TZ: America/Toronto
+  PUID: "1000"
+  PGID: "1000"

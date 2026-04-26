@@ -1,0 +1,37 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: plex
+  namespace: plex
+spec:
+  parentRefs:
+    - name: traefik-gateway
+      namespace: traefik
+      sectionName: plex
+  hostnames:
+    - "plex.mcmn.me"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - group: ""
+          kind: Service
+          name: plex-plex-media-server # Verify exact service name via `kubectl get svc` after deployment
+          port: 32400
+          weight: 1
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: plex-tunnel
+  namespace: plex
+  labels:
+    external-dns: "true"
+spec:
+  endpoints:
+    - dnsName: plex.mcmn.me
+      recordType: CNAME
+      targets:
+        - macserv.duckdns.org

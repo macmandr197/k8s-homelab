@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ns.yaml
+  - appdata-pvc.yaml
+  - shared-media-pvc.yaml
+  - http-route.yaml
+  - external-secret.yaml
+helmCharts:
+  - name: plex-media-server
+    namespace: plex
+    repo: https://plexinc.github.io/pms-docker
+    version: 0.2.1
+    releaseName: plex
+    includeCRDs: true
+    valuesFile: values.yaml
