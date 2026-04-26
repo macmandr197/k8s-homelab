@@ -53,12 +53,12 @@ persistence:
       sizeLimit: 12Gi
     mountPath: /transcode
 
+pms:
+  claimSecret:
+    name: "plex-configuration-secrets"
+    key: "claim-code"
+
 extraEnv:
-  PLEX_CLAIM:
-  valueFrom:
-    secretKeyRef:
-      name: plex-configuration-secrets
-      key: claim-code
   TZ: America/Toronto
   PUID: "1000"
   PGID: "1000"
