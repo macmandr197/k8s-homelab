@@ -14,3 +14,23 @@ helmCharts:
     releaseName: plex
     includeCRDs: true
     valuesFile: values.yaml
+
+patches:
+  - target:
+      kind: StatefulSet
+      name: plex-plex-media-server
+      namespace: plex
+    patch: |-
+      apiVersion: apps/v1
+      kind: StatefulSet
+      metadata:
+        name: plex-plex-media-server
+      spec:
+        template:
+          spec:
+            containers:
+              - name: plex-plex-media-server-pms
+                volumeMounts:
+                  - name: pms-config
+                    mountPath: /config
+                    subPath: appdata/linuxserver-plex/config
