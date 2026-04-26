@@ -19,8 +19,8 @@ pms:
     limits:
       gpu.intel.com/xe: 1
     requests:
-      cpu: 1000m
-      memory: 2Gi
+      cpu: 100m
+      memory: 500Mi
 
   securityContext:
     fsGroupChangePolicy: "OnRootMismatch"
