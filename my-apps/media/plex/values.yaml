@@ -51,9 +51,16 @@ extraVolumes:
     persistentVolumeClaim:
       claimName: pvc-media-library-plex
 
+  - name: ram-transcode
+    emptyDir:
+      medium: Memory
+      sizeLimit: 12Gi
+
 extraVolumeMounts:
   - name: data
     mountPath: /data
+  - name: ram-transcode
+    mountPath: /ram-transcode
 
 extraEnv:
   TZ: America/Toronto
