@@ -1,5 +1,5 @@
 image:
-  repository: lscr.io/linuxserver/plex
+  repository: linuxserver/plex
   tag: 1.43.1
   pullPolicy: IfNotPresent
 hostNetwork: false
