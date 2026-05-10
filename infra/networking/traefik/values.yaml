@@ -35,7 +35,7 @@ ports:
     expose:
       default: true
 
-  websecure-external:
+  websecure-ext:
     port: 8444        # internal port; nodePort maps to 443 externally via LB
     nodePort: 30003
     expose:
@@ -68,7 +68,7 @@ extraObjects:
   # Second LoadBalancer Service for the external-facing gateway (172.16.18.30).
   # Kept as a separate Service so that the external IP is an explicit, auditable
   # boundary — only ports 80 and 443 are exposed, mapped to the web-external and
-  # websecure-external entrypoints.  The internal service (172.16.18.2) is
+  # websecure-ext entrypoints.  The internal service (172.16.18.2) is
   # unchanged and continues to serve all internal/CF-tunnel traffic.
   - apiVersion: v1
     kind: Service
@@ -88,9 +88,9 @@ extraObjects:
           port: 80
           targetPort: web-external
           protocol: TCP
-        - name: websecure-external
+        - name: websecure-ext
           port: 443
-          targetPort: websecure-external
+          targetPort: websecure-ext
           protocol: TCP
 
 # We will route with Gateway API instead.
@@ -148,7 +148,7 @@ gateway:
           name: cert-mcmn-me
           group: ""  # necessary
 
-    # External-facing listeners bound to the web-external / websecure-external
+    # External-facing listeners bound to the web-external / websecure-ext
     # entrypoints.  Routes that should be reachable from the internet (without
     # the CF tunnel) attach to the `traefik-gateway-external` Gateway resource
     # defined in gateway-external.yaml, NOT to these listeners.  These listeners
@@ -161,7 +161,7 @@ gateway:
       namespacePolicy:
         from: All
 
-    websecure-external:
+    websecure-ext:
       port: 8444
       hostname: "*.mcmn.me"
       protocol: HTTPS

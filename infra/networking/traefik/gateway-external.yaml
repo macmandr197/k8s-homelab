@@ -9,7 +9,7 @@
 #       namespace: traefik
 #
 # Traffic arrives at 172.16.18.30 (the `traefik-external` LoadBalancer Service)
-# on ports 80/443, which map to the `web-external` and `websecure-external`
+# on ports 80/443, which map to the `web-external` and `websecure-ext`
 # Traefik entrypoints.
 #
 # cert-manager will provision `cert-mcmn-me-external` automatically via the
@@ -36,7 +36,7 @@ spec:
         namespaces:
           from: All
 
-    - name: websecure-external
+    - name: websecure-ext
       port: 8444
       hostname: "*.mcmn.me"
       protocol: HTTPS
