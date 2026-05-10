@@ -24,6 +24,23 @@ ports:
         - "10.244.0.0/16"
 # for when traffic is routed through CF tunnel. web->tunnel->gateway->pod. source IP may appear as though it is coming from a pod's IP instead of a web IP.
 
+  # External-facing entrypoints bound to the external LB IP (172.16.18.30).
+  # Traffic arrives directly from the internet (port-forwarded from firewall).
+  # These are kept separate from the internal entrypoints so that routes
+  # attached to the external gateway cannot accidentally bleed onto the
+  # internal gateway and vice-versa.
+  web-external:
+    port: 8080        # internal port; nodePort maps to 80 externally via LB
+    nodePort: 30002
+    expose:
+      default: true
+
+  websecure-external:
+    port: 8443        # internal port; nodePort maps to 443 externally via LB
+    nodePort: 30003
+    expose:
+      default: true
+
 # Enables the dashboard in Secure Mode
 api:
   dashboard: true
@@ -47,6 +64,34 @@ extraObjects:
     spec:
       basicAuth:
         secret: traefik-portal-credentials
+
+  # Second LoadBalancer Service for the external-facing gateway (172.16.18.30).
+  # Kept as a separate Service so that the external IP is an explicit, auditable
+  # boundary — only ports 80 and 443 are exposed, mapped to the web-external and
+  # websecure-external entrypoints.  The internal service (172.16.18.2) is
+  # unchanged and continues to serve all internal/CF-tunnel traffic.
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: traefik-external
+      namespace: traefik
+      annotations:
+        io.cilium/lb-ipam-ips: "172.16.18.30"
+    spec:
+      type: LoadBalancer
+      externalTrafficPolicy: Local
+      selector:
+        app.kubernetes.io/name: traefik
+        app.kubernetes.io/instance: traefik-traefik
+      ports:
+        - name: web-external
+          port: 80
+          targetPort: web-external
+          protocol: TCP
+        - name: websecure-external
+          port: 443
+          targetPort: websecure-external
+          protocol: TCP
 
 # We will route with Gateway API instead.
 ingressClass:
@@ -102,6 +147,31 @@ gateway:
         - kind: Secret
           name: cert-mcmn-me
           group: ""  # necessary
+
+    # External-facing listeners bound to the web-external / websecure-external
+    # entrypoints.  Routes that should be reachable from the internet (without
+    # the CF tunnel) attach to the `traefik-gateway-external` Gateway resource
+    # defined in gateway-external.yaml, NOT to these listeners.  These listeners
+    # exist only to advertise the entrypoints to the GatewayAPI controller so
+    # that the separate Gateway resource can reference them.
+    web-external:
+      port: 8080
+      hostname: "*.mcmn.me"
+      protocol: HTTP
+      namespacePolicy:
+        from: All
+
+    websecure-external:
+      port: 8443
+      hostname: "*.mcmn.me"
+      protocol: HTTPS
+      namespacePolicy:
+        from: All
+      mode: Terminate
+      certificateRefs:
+        - kind: Secret
+          name: cert-mcmn-me-external
+          group: ""
 
 # Enable Observability
 logs:

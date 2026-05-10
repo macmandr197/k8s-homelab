@@ -1,0 +1,51 @@
+# External-facing Gateway resource.
+#
+# This Gateway is intentionally separate from the `traefik-gateway` managed by
+# the Helm chart.  HTTPRoutes for services that should be reachable directly
+# from the internet (without the Cloudflare tunnel) attach here by referencing:
+#
+#   parentRefs:
+#     - name: traefik-gateway-external
+#       namespace: traefik
+#
+# Traffic arrives at 172.16.18.30 (the `traefik-external` LoadBalancer Service)
+# on ports 80/443, which map to the `web-external` and `websecure-external`
+# Traefik entrypoints.
+#
+# cert-manager will provision `cert-mcmn-me-external` automatically via the
+# annotation below — a second wildcard cert independent of the internal one.
+# Both are issued by the same ClusterIssuer (Let's Encrypt DNS-01 via
+# Cloudflare) so rotation is fully automatic.
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: traefik-gateway-external
+  namespace: traefik
+  annotations:
+    # cert-manager issues a dedicated wildcard cert for this gateway.
+    # The secret name must match the certificateRefs below.
+    cert-manager.io/cluster-issuer: mcmn-me-cloudflare-cluster-issuer
+spec:
+  gatewayClassName: traefik
+  listeners:
+    - name: web-external
+      port: 8080
+      hostname: "*.mcmn.me"
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All
+
+    - name: websecure-external
+      port: 8443
+      hostname: "*.mcmn.me"
+      protocol: HTTPS
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: cert-mcmn-me-external
+            group: ""
