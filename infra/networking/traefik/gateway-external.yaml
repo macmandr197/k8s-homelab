@@ -29,7 +29,7 @@ spec:
   gatewayClassName: traefik
   listeners:
     - name: web-external
-      port: 8080
+      port: 8880
       hostname: "*.mcmn.me"
       protocol: HTTP
       allowedRoutes:
@@ -37,7 +37,7 @@ spec:
           from: All
 
     - name: websecure-external
-      port: 8443
+      port: 8444
       hostname: "*.mcmn.me"
       protocol: HTTPS
       allowedRoutes:

@@ -5,8 +5,9 @@ metadata:
   namespace: jellyfin
 spec:
   parentRefs:
-    - name: traefik-gateway
+    - name: traefik-gateway-external
       namespace: traefik
+      sectionName: websecure-external
   hostnames:
     - "stream.mcmn.me"
   rules:
