@@ -7,7 +7,7 @@ spec:
   parentRefs:
     - name: traefik-gateway-external
       namespace: traefik
-      sectionName: websecure-external
+      sectionName: websecure-ext
   hostnames:
     - "stream.mcmn.me"
   rules:
