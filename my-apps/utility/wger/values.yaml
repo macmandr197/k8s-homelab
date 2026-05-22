@@ -1,6 +1,13 @@
 app:
   timezone: "America/Toronto"
 
+  # Override env vars that the chart only sets when ingress.enabled=true
+  environment:
+    - name: SITE_URL
+      value: "https://fitness.mcmn.me"
+    - name: CSRF_TRUSTED_ORIGINS
+      value: "https://fitness.mcmn.me"
+
   global:
     replicas: 1
 
