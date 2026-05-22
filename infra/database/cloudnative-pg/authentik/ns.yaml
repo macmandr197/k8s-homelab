@@ -4,4 +4,4 @@ metadata:
   name: authentik
   labels:
     pod-security.kubernetes.io/enforce: privileged
-    homelab/cnpg-s3-backup: "true"
+    #homelab/cnpg-s3-backup: "true"
