@@ -8,7 +8,7 @@ app:
     # Use existing secret for Django secret key
     secret:
       name: wger-configuration-secrets
-      key: secret_key
+      key: secret-key
 
     # Use external CNPG cluster; disable bundled postgres
     existingDatabase:
