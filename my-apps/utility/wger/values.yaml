@@ -17,6 +17,12 @@ app:
       name: wger-configuration-secrets
       key: secret-key
 
+  # JWT signing key for API auth
+  jwt:
+    secret:
+      name: wger-configuration-secrets
+      key: signing-key
+
     # Use external CNPG cluster; disable bundled postgres
     existingDatabase:
       enabled: true
