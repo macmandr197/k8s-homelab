@@ -14,3 +14,24 @@ helmCharts:
   repo: https://wger-project.github.io/helm-charts
   valuesFile: values.yaml
   version: 0.3.0
+
+# Delete chart-generated secrets so ExternalSecrets can own them
+patches:
+  - target:
+      kind: Secret
+      name: wger-django-secret
+    patch: |
+      $patch: delete
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: wger-django-secret
+  - target:
+      kind: Secret
+      name: wger-jwt-secret
+    patch: |
+      $patch: delete
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: wger-jwt-secret

@@ -12,16 +12,14 @@ app:
     replicas: 1
 
   django:
-    # Use existing secret for Django secret key
+    # Let chart generate secret named "wger-django-secret"
     secret:
-      name: wger-configuration-secrets
-      key: secret-key
+      name: wger-django-secret
 
-  # JWT signing key for API auth
+  # JWT signing key — chart auto-generates into "wger-jwt-secret"
   jwt:
     secret:
-      name: wger-configuration-secrets
-      key: signing-key
+      name: wger-jwt-secret
 
     # Use external CNPG cluster; disable bundled postgres
     existingDatabase:
@@ -43,7 +41,7 @@ app:
     user: wger@mg.mcmn.io
     from_email: wger@mg.mcmn.io
     secret:
-      name: wger-configuration-secrets
+      name: wger-mail-secret
       key: mail-password
 
   # Traefik handles ingress via Gateway API; no nginx sidecar needed
