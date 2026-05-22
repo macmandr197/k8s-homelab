@@ -1,29 +1,31 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: cloudnative-pg
-commonLabels:
-  app.kubernetes.io/name: cloudnative-pg
-  app.kubernetes.io/managed-by: argocd
 commonAnnotations:
   argocd.argoproj.io/sync-wave: "-10"
 resources:
-  - ns.yaml
-  - clusterrole-full-rbac.yaml
-  - clusterrolebinding-full-rbac.yaml
-helmCharts:
-  - name: cloudnative-pg
-    repo: https://cloudnative-pg.github.io/charts
-    version: 0.27.0
-    releaseName: cloudnative-pg-operator
-    namespace: cloudnative-pg
-    includeCRDs: true
-    valuesInline:
-      config:
+- ns.yaml
+- clusterrole-full-rbac.yaml
+- clusterrolebinding-full-rbac.yaml
         # Enable job cleanup and set retention policies
-        data:
-          ENABLE_AZURE_PVC_UPDATES: "false"
-          INHERITED_ANNOTATIONS: "argocd.argoproj.io/sync-wave"
-          INHERITED_LABELS: "app.kubernetes.io/managed-by"
           # Configure job TTL and cleanup
-          JOB_TTL_SECONDS_AFTER_FINISHED: "3600" # Clean up completed jobs after 1 hour
-          FAILED_JOB_TTL_SECONDS_AFTER_FINISHED: "7200" # Clean up failed jobs after 2 hours 
+helmCharts:
+- includeCRDs: true
+  name: cloudnative-pg
+  namespace: cloudnative-pg
+  releaseName: cloudnative-pg-operator
+  repo: https://cloudnative-pg.github.io/charts
+  valuesInline:
+    config:
+      data:
+        ENABLE_AZURE_PVC_UPDATES: "false"
+        FAILED_JOB_TTL_SECONDS_AFTER_FINISHED: "7200"
+        INHERITED_ANNOTATIONS: argocd.argoproj.io/sync-wave
+        INHERITED_LABELS: app.kubernetes.io/managed-by
+        JOB_TTL_SECONDS_AFTER_FINISHED: "3600"
+  version: 0.27.0
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/managed-by: argocd
+    app.kubernetes.io/name: cloudnative-pg
