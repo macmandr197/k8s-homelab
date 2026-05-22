@@ -16,11 +16,6 @@ app:
     secret:
       name: wger-django-secret
 
-  # JWT signing key — chart auto-generates into "wger-jwt-secret"
-  jwt:
-    secret:
-      name: wger-jwt-secret
-
     # Use external CNPG cluster; disable bundled postgres
     existingDatabase:
       enabled: true
@@ -32,6 +27,11 @@ app:
         name: wger-app-secret
         dbuserKey: username
         dbpwKey: password
+
+  # JWT signing key — chart auto-generates into "wger-jwt-secret"
+  jwt:
+    secret:
+      name: wger-jwt-secret
 
   # Mail via Mailgun
   mail:
