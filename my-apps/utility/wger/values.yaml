@@ -7,6 +7,8 @@ app:
       value: "https://fitness.mcmn.me"
     - name: CSRF_TRUSTED_ORIGINS
       value: "https://fitness.mcmn.me"
+    - name: ALLOW_REGISTRATION
+      value: "True"
 
   global:
     replicas: 1
