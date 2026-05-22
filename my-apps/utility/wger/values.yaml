@@ -1,0 +1,52 @@
+app:
+  timezone: "America/Toronto"
+
+global:
+  replicas: 1
+
+django:
+  # Use existing secret for Django secret key
+  secret:
+    name: wger-configuration-secrets
+    key: secret_key
+
+  # Use external CNPG cluster; disable bundled postgres
+  existingDatabase:
+    enabled: true
+    engine: django.db.backends.postgresql
+    host: wger-db-rw.wger.svc.cluster.local
+    port: 5432
+    dbname: wger
+    existingSecret:
+      name: wger-app-secret
+      dbuserKey: username
+      dbpwKey: password
+
+# Ingress managed via HTTPRoute (Traefik/Gateway API), disable helm-managed ingress
+ingress:
+  enabled: false
+
+# Using CNPG operator; disable bundled postgres
+postgres:
+  enabled: false
+
+# Redis is required for Celery/caching; enable with no auth for internal cluster use
+redis:
+  enabled: true
+  auth:
+    enabled: false
+
+# Celery workers for async tasks (exercise sync, etc.)
+celery:
+  enabled: false
+
+nginx:
+  enabled: true
+
+persistence:
+  storageClass: longhorn
+  accessModes:
+    - ReadWriteMany
+  sizeMedia: 8Gi
+  sizeStatic: 1Gi
+  sizeCeleryBeat: 1Gi

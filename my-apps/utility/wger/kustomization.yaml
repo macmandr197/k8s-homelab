@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: wger
+
+resources:
+- httproute.yaml
+- external-secret.yaml
+
+helmCharts:
+- name: wger
+  namespace: wger
+  releaseName: wger
+  repo: https://wger-project.github.io/helm-charts
+  valuesFile: values.yaml
+  version: 0.3.0
