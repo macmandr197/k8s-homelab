@@ -2,30 +2,30 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: external-secrets
 resources:
-  - external-secret.yaml
-  - cluster-secret-store.yaml
-  - ns.yaml
+- external-secret.yaml
+- cluster-secret-store.yaml
+- ns.yaml
 helmCharts:
-  - name: external-secrets
-    repo: https://charts.external-secrets.io
-    version: 2.0.0
-    releaseName: external-secrets
-    valuesFile: values.yaml
-    includeCRDs: true
+- includeCRDs: true
+  name: external-secrets
+  releaseName: external-secrets
+  repo: https://charts.external-secrets.io
+  valuesFile: values.yaml
+  version: 2.0.0
 patches:
-  - patch: |
-      apiVersion: apiextensions.k8s.io/v1
-      kind: CustomResourceDefinition
-      metadata:
-        name: externalsecrets.external-secrets.io
-        annotations:
-          "api-approved.kubernetes.io": "unapproved, request-not-required"
-          "external-secrets.io/conversion-strategy": "none"
-  - patch: |
-      apiVersion: apiextensions.k8s.io/v1
-      kind: CustomResourceDefinition
-      metadata:
-        name: clustersecretstores.external-secrets.io
-        annotations:
-          "api-approved.kubernetes.io": "unapproved, request-not-required"
-          "external-secrets.io/conversion-strategy": "none"
+- patch: |
+    apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    metadata:
+      name: externalsecrets.external-secrets.io
+      annotations:
+        "api-approved.kubernetes.io": "unapproved, request-not-required"
+        "external-secrets.io/conversion-strategy": "none"
+- patch: |-
+    apiVersion: apiextensions.k8s.io/v1
+    kind: CustomResourceDefinition
+    metadata:
+      name: clustersecretstores.external-secrets.io
+      annotations:
+        "api-approved.kubernetes.io": "unapproved, request-not-required"
+        "external-secrets.io/conversion-strategy": "none"

@@ -4,14 +4,14 @@ kind: Kustomization
 namespace: external-dns
 
 resources:
-  - ns.yaml
-  - external-secret.yaml
+- ns.yaml
+- external-secret.yaml
 
 helmCharts:
-  - name: external-dns
-    repo: https://kubernetes-sigs.github.io/external-dns
-    version: 1.20.0 # renovate: helm=kubernetes-sigs/external-dns
-    releaseName: external-dns
-    includeCRDs: true
-    namespace: external-dns
-    valuesFile: values.yaml
+- includeCRDs: true
+  name: external-dns
+  namespace: external-dns
+  releaseName: external-dns
+  repo: https://kubernetes-sigs.github.io/external-dns
+  valuesFile: values.yaml
+  version: 1.20.0

@@ -7,18 +7,18 @@ kind: Kustomization
 # NOTE: Apply ip-pool.yaml and l2-policy.yaml AFTER Cilium is running
 # These require Cilium CRDs to be installed first
 
-resources: 
- - bgp-clusterconfig.yaml
+resources:
+- bgp-clusterconfig.yaml
 
 
 helmCharts:
-- name: cilium
-  repo: https://helm.cilium.io
-  version: 1.19.0
-  releaseName: cilium
-  includeCRDs: true
+- includeCRDs: true
+  name: cilium
   namespace: kube-system
+  releaseName: cilium
+  repo: https://helm.cilium.io
   valuesFile: values.yaml
+  version: 1.19.0
 
 generatorOptions:
   disableNameSuffixHash: true

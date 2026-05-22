@@ -2,13 +2,13 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: csi-proxmox
 helmCharts:
-  - name: proxmox-csi-plugin
-    repo: oci://ghcr.io/sergelogvinov/charts
-    version: 0.5.4
-    releaseName: csi-proxmox
-    includeCRDs: true
-    namespace: csi-proxmox
-    valuesFile: values.yaml
+- includeCRDs: true
+  name: proxmox-csi-plugin
+  namespace: csi-proxmox
+  releaseName: csi-proxmox
+  repo: oci://ghcr.io/sergelogvinov/charts
+  valuesFile: values.yaml
+  version: 0.5.4
 resources:
-  - ns.yaml
-  - external-secret.yaml
+- ns.yaml
+- external-secret.yaml

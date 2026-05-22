@@ -1,36 +1,36 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ns.yaml
-  - appdata-pvc.yaml
-  - shared-media-pvc.yaml
-  - http-route.yaml
-  - external-secret.yaml
+- ns.yaml
+- appdata-pvc.yaml
+- shared-media-pvc.yaml
+- http-route.yaml
+- external-secret.yaml
 helmCharts:
-  - name: plex-media-server
-    namespace: plex
-    repo: https://plexinc.github.io/pms-docker
-    version: 0.2.1
-    releaseName: plex
-    includeCRDs: true
-    valuesFile: values.yaml
+- includeCRDs: true
+  name: plex-media-server
+  namespace: plex
+  releaseName: plex
+  repo: https://plexinc.github.io/pms-docker
+  valuesFile: values.yaml
+  version: 0.2.1
 
 patches:
-  - target:
-      kind: StatefulSet
+- patch: |-
+    apiVersion: apps/v1
+    kind: StatefulSet
+    metadata:
       name: plex-plex-media-server
-      namespace: plex
-    patch: |-
-      apiVersion: apps/v1
-      kind: StatefulSet
-      metadata:
-        name: plex-plex-media-server
-      spec:
-        template:
-          spec:
-            containers:
-              - name: plex-plex-media-server-pms
-                volumeMounts:
-                  - name: pms-config
-                    mountPath: /config
-                    subPath: appdata/linuxserver-plex/config
+    spec:
+      template:
+        spec:
+          containers:
+            - name: plex-plex-media-server-pms
+              volumeMounts:
+                - name: pms-config
+                  mountPath: /config
+                  subPath: appdata/linuxserver-plex/config
+  target:
+    kind: StatefulSet
+    name: plex-plex-media-server
+    namespace: plex

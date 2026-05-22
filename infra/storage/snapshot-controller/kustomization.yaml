@@ -3,13 +3,13 @@ kind: Kustomization
 namespace: snapshot-controller
 
 resources:
-  - ns.yaml
+- ns.yaml
 
 helmCharts:
-  - name: snapshot-controller
-    repo: https://piraeus.io/helm-charts/
-    version: 5.0.2
-    releaseName: snapshot-controller
-    namespace: snapshot-controller
-    valuesFile: values.yaml
-    includeCRDs: true
+- includeCRDs: true
+  name: snapshot-controller
+  namespace: snapshot-controller
+  releaseName: snapshot-controller
+  repo: https://piraeus.io/helm-charts/
+  valuesFile: values.yaml
+  version: 5.0.2

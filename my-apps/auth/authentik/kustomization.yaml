@@ -3,14 +3,14 @@ kind: Kustomization
 namespace: authentik
 
 resources:
-  - httproute.yaml
-  - external-secret.yaml
+- httproute.yaml
+- external-secret.yaml
 
 helmCharts:
-  - name: authentik
-    repo: https://charts.goauthentik.io/
-    version: 2026.2.1
-    releaseName: authentik
-    namespace: authentik
-    valuesFile: values.yaml
-    includeCRDs: true
+- includeCRDs: true
+  name: authentik
+  namespace: authentik
+  releaseName: authentik
+  repo: https://charts.goauthentik.io/
+  valuesFile: values.yaml
+  version: 2026.2.1

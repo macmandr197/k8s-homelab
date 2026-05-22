@@ -2,15 +2,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: cert-manager
 resources:
-  - ns.yaml
-  - cloudflare-external-secret.yaml
-  - mcmn-me-cloudflare-cluster-issuer.yaml
-  - internal-selfsigned-cluster-issuer.yaml
+- ns.yaml
+- cloudflare-external-secret.yaml
+- mcmn-me-cloudflare-cluster-issuer.yaml
+- internal-selfsigned-cluster-issuer.yaml
 helmCharts:
-  - name: cert-manager
-    repo: https://charts.jetstack.io
-    version: v1.19.4
-    releaseName: cert-manager
-    namespace: cert-manager
-    valuesFile: values.yaml
-    includeCRDs: true
+- includeCRDs: true
+  name: cert-manager
+  namespace: cert-manager
+  releaseName: cert-manager
+  repo: https://charts.jetstack.io
+  valuesFile: values.yaml
+  version: v1.19.4

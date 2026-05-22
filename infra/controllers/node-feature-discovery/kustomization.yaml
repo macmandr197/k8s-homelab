@@ -3,34 +3,38 @@ kind: Kustomization
 commonAnnotations:
   argocd.argoproj.io/sync-wave: "5"
 resources:
-  - ns.yaml
+- ns.yaml
   # The Intel-specific rules are not needed for NVIDIA GPU discovery
   # and have been removed. NFD's default PCI source handles NVIDIA.
 # https://kubernetes-sigs.github.io/node-feature-discovery/v0.16/deployment/helm.html
-helmCharts:
-  - name: node-feature-discovery
-    repo: https://kubernetes-sigs.github.io/node-feature-discovery/charts
-    version: 0.18.3
-    releaseName: nfd
-    includeCRDs: true
-    namespace: node-feature-discovery
-    valuesInline:
-      worker:
-        config:
-          core:
             # Run NFD periodically to catch any changes
-            sleepInterval: 60s
             # Explicitly enable sources for clarity
-            sources: ["pci", "system", "usb", "cpu"]
-          sources:
-            pci:
               # By default, NFD discovers devices with class '03' (Display
               # controller), which includes NVIDIA GPUs. We are making
               # it explicit here for clarity.
-              deviceClassWhitelist:
-                - "03"
               # This config creates the label that your workloads expect:
               # e.g. feature.node.kubernetes.io/pci-0300_10de.present
-              deviceLabelFields:
-                - "class"
-                - "vendor"
+helmCharts:
+- includeCRDs: true
+  name: node-feature-discovery
+  namespace: node-feature-discovery
+  releaseName: nfd
+  repo: https://kubernetes-sigs.github.io/node-feature-discovery/charts
+  valuesInline:
+    worker:
+      config:
+        core:
+          sleepInterval: 60s
+          sources:
+          - pci
+          - system
+          - usb
+          - cpu
+        sources:
+          pci:
+            deviceClassWhitelist:
+            - "03"
+            deviceLabelFields:
+            - class
+            - vendor
+  version: 0.18.3

@@ -1,5 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+  # Critical applications with specific sync waves to prevent race conditions
+  # Wave 0: Foundation components (networking + secrets infrastructure)
+  # ApplicationSets
 resources:
   - projects.yaml
   # Critical applications with specific sync waves to prevent race conditions
