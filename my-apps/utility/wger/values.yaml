@@ -1,41 +1,53 @@
 app:
   timezone: "America/Toronto"
 
-global:
-  replicas: 1
+  global:
+    replicas: 1
 
-django:
-  # Use existing secret for Django secret key
-  secret:
-    name: wger-configuration-secrets
-    key: secret_key
+  django:
+    # Use existing secret for Django secret key
+    secret:
+      name: wger-configuration-secrets
+      key: secret_key
 
-  # Use external CNPG cluster; disable bundled postgres
-  existingDatabase:
+    # Use external CNPG cluster; disable bundled postgres
+    existingDatabase:
+      enabled: true
+      engine: django.db.backends.postgresql
+      host: wger-db-rw.wger.svc.cluster.local
+      port: 5432
+      dbname: wger
+      existingSecret:
+        name: wger-app-secret
+        dbuserKey: username
+        dbpwKey: password
+
+  # Mail via Mailgun
+  mail:
     enabled: true
-    engine: django.db.backends.postgresql
-    host: wger-db-rw.wger.svc.cluster.local
-    port: 5432
-    dbname: wger
-    existingSecret:
-      name: wger-app-secret
-      dbuserKey: username
-      dbpwKey: password
+    server: smtp.mailgun.org
+    port: 587
+    user: wger@mg.mcmn.io
+    from_email: wger@mg.mcmn.io
+    secret:
+      name: wger-configuration-secrets
+      key: mail-password
+
+  # Traefik handles ingress via Gateway API; no nginx sidecar needed
+  nginx:
+    enabled: false
+
+  persistence:
+    enabled: true
+    existingClaim:
+      enabled: true
+      media: pvc-wger-media
+      static: pvc-wger-static
+      celeryBeat: pvc-wger-celerybeat
 
 # Ingress managed via HTTPRoute (Traefik/Gateway API), disable helm-managed ingress
 ingress:
   enabled: false
-
-# Mail via Mailgun
-mail:
-  enabled: true
-  server: smtp.mailgun.org
-  port: 587
-  user: wger@mg.mcmn.io
-  from_email: wger@mg.mcmn.io
-  secret:
-    name: wger-configuration-secrets
-    key: mail-password
 
 # Using CNPG operator; disable bundled postgres
 postgres:
@@ -47,17 +59,10 @@ redis:
   auth:
     enabled: false
 
-# Celery workers for async tasks (exercise sync, etc.)
+# Celery workers for async tasks (exercise sync, ingredient sync, etc.)
 celery:
-  enabled: false
-
-nginx:
   enabled: true
-
-persistence:
-  storageClass: longhorn
-  accessModes:
-    - ReadWriteMany
-  sizeMedia: 8Gi
-  sizeStatic: 1Gi
-  sizeCeleryBeat: 1Gi
+  syncExercises: true
+  syncImages: true
+  syncVideos: true
+  ingredientsFrom: WGER

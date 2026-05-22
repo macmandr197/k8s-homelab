@@ -3,8 +3,9 @@ kind: Kustomization
 namespace: wger
 
 resources:
-- httproute.yaml
-- external-secret.yaml
+  - httproute.yaml
+  - external-secret.yaml
+  - appdata-pvc.yaml
 
 helmCharts:
 - name: wger
