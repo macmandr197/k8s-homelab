@@ -26,6 +26,17 @@ django:
 ingress:
   enabled: false
 
+# Mail via Mailgun
+mail:
+  enabled: true
+  server: smtp.mailgun.org
+  port: 587
+  user: wger@mg.mcmn.io
+  from_email: wger@mg.mcmn.io
+  secret:
+    name: wger-configuration-secrets
+    key: mail-password
+
 # Using CNPG operator; disable bundled postgres
 postgres:
   enabled: false
