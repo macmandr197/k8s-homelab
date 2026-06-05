@@ -12,4 +12,4 @@ helmCharts:
   releaseName: snapshot-controller
   repo: https://piraeus.io/helm-charts/
   valuesFile: values.yaml
-  version: 5.0.2
+  version: 5.0.4
