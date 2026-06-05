@@ -18,7 +18,7 @@ helmCharts:
   releaseName: traefik
   repo: https://traefik.github.io/charts
   valuesFile: values.yaml
-  version: 39.0.0
+  version: 39.0.9
 
 generatorOptions:
   disableNameSuffixHash: true
