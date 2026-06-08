@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sparky-fitness
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    homelab/cnpg-s3-backup: "true"
