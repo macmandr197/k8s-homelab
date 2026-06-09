@@ -31,9 +31,9 @@ controllers:
     strategy: RollingUpdate
     containers:
       main:
-      resources:
-        limits:
-          gpu.intel.com/xe: 1
+        resources:
+          limits:
+            gpu.intel.com/xe: 1
 
 jellyfin:
   # -- Enable DLNA. Requires host network. See: https://jellyfin.org/docs/general/networking/dlna.html
