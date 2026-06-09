@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: jellyfin
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow Traefik
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: traefik
+      ports:
+        - protocol: TCP
+          port: 8096
+    # Allow Authentik (SSO / Forward Auth)
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: authentik
+      ports:
+        - protocol: TCP
+          port: 8096
+    # Allow Overseerr
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: overseerr
+      ports:
+        - protocol: TCP
+          port: 8096
+    # Allow all traffic within the jellyfin namespace
+    - from:
+        - podSelector: {}
+  egress:
+    # Allow DNS
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    # Allow all egress
+    - {}

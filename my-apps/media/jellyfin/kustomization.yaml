@@ -5,11 +5,6 @@ resources:
 - http-route.yaml
 - appdata-pvc.yaml
 - shared-media-pvc.yaml
-helmCharts:
-- includeCRDs: true
-  name: jellyfin
-  namespace: jellyfin
-  releaseName: jellyfin
-  repo: https://jellyfin.github.io/jellyfin-helm
-  valuesFile: values.yaml
-  version: 3.2.0
+- deployment.yaml
+- service.yaml
+- networkpolicy.yaml
