@@ -17,4 +17,4 @@ helmCharts:
   namespace: mariadb-operator
   releaseName: mariadb-operator-crds
   repo: https://helm.mariadb.com/mariadb-operator
-  version: 25.10.4
+  version: 26.6.0
