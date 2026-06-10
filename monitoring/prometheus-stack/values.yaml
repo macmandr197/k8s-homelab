@@ -8,6 +8,8 @@ global:
 # CRD Configuration - Essential for proper functioning
 crds:
   enabled: true
+  upgradeJob:
+    enabled: true
 # Prometheus Configuration
 prometheus:
   enabled: true
@@ -188,8 +190,6 @@ grafana:
       external_enabled: false
     explore:
       enabled: true
-    feature_toggles:
-      enable: correlations
 # Node Exporter Configuration
 # Enable for comprehensive node-level metrics
 nodeExporter:
