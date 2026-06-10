@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: booklore
-  namespace: booklore
+  name: grimmory
+  namespace: grimmory
 spec:
   type: ClusterIP
   selector:
-    app: booklore
+    app: grimmory
   ports:
     - name: http
       port: 6060

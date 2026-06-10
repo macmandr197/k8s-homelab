@@ -1,8 +1,8 @@
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: MariaDB
 metadata:
-  name: booklore-db
-  namespace: booklore
+  name: grimmory-db
+  namespace: grimmory
   labels:
     velero.io/exclude-from-backup: "true"  # DB backup is handled by mariadb backup CR
 spec:
@@ -42,11 +42,11 @@ spec:
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: Connection
 metadata:
-  name: booklore-db-connection
-  namespace: booklore
+  name: grimmory-db-connection
+  namespace: grimmory
 spec:
   mariaDbRef:
-    name: booklore-db
+    name: grimmory-db
   username: booklore
   # Use the same password secret from External Secrets
   passwordSecretKeyRef:
@@ -57,10 +57,10 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: booklore
-  namespace: booklore
+  name: grimmory
+  namespace: grimmory
   labels:
-    app: booklore
+    app: grimmory
   annotations:
     ignore-check.kube-linter.io/run-as-non-root: "Application requires root for PUID/PGID mapping at startup"
     ignore-check.kube-linter.io/no-read-only-root-fs: "Legacy application requires writeable root for internal updates/logging"
@@ -68,17 +68,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: booklore
+      app: grimmory
   template:
     metadata:
       labels:
-        app: booklore
+        app: grimmory
       annotations:
         backup.velero.io/backup-volumes-excludes: books-library,books-bookdrop,app-data
     spec:
       containers:
-        - name: booklore
-          image: booklore/booklore:v1.18.5
+        - name: grimmory
+          image: ghcr.io/grimmory-tools/grimmory:v3.2.0
           imagePullPolicy: Always
           resources:
             requests:
@@ -97,11 +97,9 @@ spec:
               value: "1000"
             - name: TZ
               value: "America/Toronto"
-            - name: BOOKLORE_PORT
-              value: "6060"
             # Database configuration - using MariaDB service name directly
             - name: DATABASE_URL
-              value: "jdbc:mariadb://booklore-db:3306/booklore"
+              value: "jdbc:mariadb://grimmory-db:3306/booklore"
             - name: DATABASE_USERNAME
               value: "booklore"
             - name: DATABASE_PASSWORD
@@ -122,7 +120,7 @@ spec:
       volumes:
         - name: app-data
           persistentVolumeClaim:
-            claimName: pvc-booklore-appdata
+            claimName: pvc-grimmory-appdata
         - name: books-library
           persistentVolumeClaim:
             claimName: pvc-books-library

@@ -1,10 +1,10 @@
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: Backup
 metadata:
-  name: booklore-backup
+  name: grimmory-backup
 spec:
   mariaDbRef:
-    name: booklore-db
+    name: grimmory-db
   schedule:
     cron: "5 2 * * *"  # Daily at 2:05 AM
     suspend: false

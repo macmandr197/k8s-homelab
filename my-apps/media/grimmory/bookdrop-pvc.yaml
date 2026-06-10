@@ -1,19 +1,19 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-pool1-root-booklore
+  name: pv-pool0-bookdrop
 spec:
   capacity:
-    storage: 10Ti
+    storage: 10Ti # Arbitrary limit for NFS, just needs to be large enough to satisfy the PVC
   accessModes:
     - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Retain # retain data if PVC is deleted
   csi:
     driver: nfs.csi.k8s.io
-    volumeHandle: pv-pool1-root-booklore
+    volumeHandle: pv-pool0-booklore-bookdrop
     volumeAttributes:
       server: 10.10.1.46
-      share: /pool-faster # Mounting the root of pool-faster
+      share: /pool-0/media
   mountOptions:
     - nfsvers=4.1
     - tcp
@@ -23,15 +23,15 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-booklore-appdata
-  namespace: booklore
+  name: pvc-books-bookdrop
+  namespace: grimmory
   labels:
     velero.io/exclude-from-backup: "true"
 spec:
   accessModes:
     - ReadWriteMany
   storageClassName: ""
-  volumeName: pv-pool1-root-booklore
+  volumeName: pv-pool0-bookdrop
   resources:
     requests:
-      storage: 10Gi
+      storage: 1Ti
