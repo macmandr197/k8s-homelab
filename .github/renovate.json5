@@ -96,6 +96,12 @@
       ],
       enabled: true,
     },
+    {
+      description: 'Use loose versioning for LinuxServer images',
+      matchDatasources: ['docker'],
+      matchPackagePatterns: ['^lscr\\.io/linuxserver/'],
+      versioning: 'loose',
+    },
   ],
   ignorePaths: [
     '**/charts/**',
