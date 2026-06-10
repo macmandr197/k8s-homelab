@@ -142,14 +142,6 @@ metrics:
     #   labels:
     #     severity: warning
 
-kubectl:
-  image:
-    repository: public.ecr.aws/bitnami/kubectl
-    #tag: "1.35.0"
-
-upgradeCRDsJob:
-  shellCmd: /tmp/sh
-
 ##
 ## Parameters for the `default` BackupStorageLocation and VolumeSnapshotLocation,
 ## and additional server settings.
