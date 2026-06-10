@@ -16,4 +16,4 @@ helmCharts:
   releaseName: mariadb-operator
   repo: https://helm.mariadb.com/mariadb-operator
   valuesFile: values.yaml
-  version: 25.10.4
+  version: 26.6.0
