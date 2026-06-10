@@ -99,9 +99,10 @@ ingressClass:
 
 service:
   enabled: true
-  type: LoadBalancer
   annotations:
     io.cilium/lb-ipam-ips: "172.16.18.2"
+  spec:
+    type: LoadBalancer
     externalTrafficPolicy: Local
 
 # Enable Gateway API Provider & Disables the KubernetesIngress provider
