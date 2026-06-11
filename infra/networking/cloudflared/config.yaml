@@ -6,6 +6,15 @@ no-autoupdate: true
 loglevel: info
 transport-loglevel: info
 ingress:
+  - hostname: "kubectl.mcmn.me"
+    service: https://omni.mcmn.io:8100
+    originRequest:
+      noTLSVerify: false
+      originServerName: omni.mcmn.io
+      connectTimeout: 30s
+      tcpKeepAlive: 30s
+      keepAliveConnections: 10
+      keepAliveTimeout: 90s
   - hostname: "*.mcmn.me"
     service: https://traefik.traefik.svc.cluster.local:443
     originRequest:
