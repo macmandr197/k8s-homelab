@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: wger
-  labels:
-    pod-security.kubernetes.io/enforce: privileged
-    homelab/cnpg-s3-backup: "true"
