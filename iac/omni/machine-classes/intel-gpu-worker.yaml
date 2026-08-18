@@ -13,6 +13,7 @@ spec:
       - xe.force_probe=56a6  # 2. Force the modern Xe driver to claim the A310
     metavalues: []
     providerdata: |
+      node: proxmox
       cores: 4
       sockets: 1
       memory: 32000

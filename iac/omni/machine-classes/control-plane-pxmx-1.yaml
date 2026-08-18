@@ -7,10 +7,11 @@ metadata:
 spec:
   matchlabels: []
   autoprovision:
-    providerid: proxmox-1
+    providerid: proxmox
     kernelargs: []
     metavalues: []
     providerdata: |
+      node: proxmox-1
       cores: 4
       sockets: 1
       memory: 8000
