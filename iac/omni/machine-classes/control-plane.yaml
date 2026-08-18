@@ -11,13 +11,15 @@ spec:
     kernelargs: []
     metavalues: []
     providerdata: |
-      node: proxmox
+      placement_strategy: spread
       cores: 2
       sockets: 1
       memory: 8000
       disk_size: 50
       network_bridge: infra
-      storage_selector: name == "pool-faster"
+      storage_selector: |
+        (node == "proxmox" && name == "pool-faster") ||
+        (node == "proxmox" && name == "pxmx-1-storage")
       disk_ssd: true
       disk_discard: true
       disk_iothread: true

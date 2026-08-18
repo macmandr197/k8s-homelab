@@ -21,19 +21,7 @@ patches:
 kind: ControlPlane
 machineClass:
   name: proxmox-control-plane
-  size: 2
-systemExtensions:
-  - siderolabs/iscsi-tools
-  - siderolabs/nfsd
-  - siderolabs/qemu-guest-agent
-  - siderolabs/util-linux-tools
-patches:
-  - file: ./patches/control-plane.yaml
----
-kind: ControlPlane
-machineClass:
-  name: proxmox-control-plane-pxmx-1
-  size: 1
+  size: 3
 systemExtensions:
   - siderolabs/iscsi-tools
   - siderolabs/nfsd
