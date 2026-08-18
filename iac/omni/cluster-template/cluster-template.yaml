@@ -28,7 +28,7 @@ systemExtensions:
   - siderolabs/qemu-guest-agent
   - siderolabs/util-linux-tools
 patches:
-  - file: iac/omni/cluster-template/patches/control-plane.yaml
+  - file: ./patches/control-plane.yaml
 ---
 kind: ControlPlane
 machineClass:
@@ -40,7 +40,7 @@ systemExtensions:
   - siderolabs/qemu-guest-agent
   - siderolabs/util-linux-tools
 patches:
-  - file: iac/omni/cluster-template/patches/control-plane.yaml
+  - file: ./patches/control-plane.yaml
 ---
 kind: Workers
 name: workers
@@ -53,7 +53,7 @@ systemExtensions:
   - siderolabs/qemu-guest-agent
   - siderolabs/util-linux-tools
 patches:
-  - file: iac/omni/cluster-template/patches/worker.yaml
+  - file: ./patches/worker.yaml
   - name: longhorn-storage
     inline:
       machine:
@@ -87,7 +87,7 @@ patches:
         nodeLabels:
           gpu-worker: "true"
           intel.com/gpu: "true"
-  - file: iac/omni/cluster-template/patches/intel-gpu-worker.yaml
+  - file: ./patches/intel-gpu-worker.yaml
   - name: longhorn-storage
     inline:
       machine:
@@ -115,7 +115,7 @@ patches:
 #  - siderolabs/nonfree-kmod-nvidia-production
 #  - siderolabs/nvidia-container-toolkit-production
 #patches:
-#  - file: iac/omni/cluster-template/patches/nvidia-gpu-worker.yaml
+#  - file: ./patches/nvidia-gpu-worker.yaml
 #  - name: longhorn-storage
 #    inline:
 #      machine:
