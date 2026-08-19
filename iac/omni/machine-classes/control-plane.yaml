@@ -19,7 +19,7 @@ spec:
       network_bridge: infra
       storage_selector: |
         (node == "proxmox" && name == "pool-faster") ||
-        (node == "proxmox" && name == "pxmx-1-storage")
+        (node == "proxmox-1" && name == "pxmx-1-storage")
       disk_ssd: true
       disk_discard: true
       disk_iothread: true

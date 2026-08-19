@@ -1,6 +1,6 @@
 services:
   omni-infra-provider-proxmox:
-    image: ghcr.io/siderolabs/omni-infra-provider-proxmox:latest
+    image: ghcr.io/siderolabs/omni-infra-provider-proxmox:v0.2.0
     container_name: omni-infra-provider-proxmox
     env_file:
       - .env
@@ -10,5 +10,6 @@ services:
       --config-file /config.yaml
       --omni-api-endpoint ${OMNI_API_ENDPOINT}
       --omni-service-account-key ${OMNI_INFRA_PROVIDER_KEY}
+      --id proxmox
     restart: unless-stopped
     network_mode: host
