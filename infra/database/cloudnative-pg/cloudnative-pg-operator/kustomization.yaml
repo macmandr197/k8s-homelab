@@ -23,7 +23,7 @@ helmCharts:
         INHERITED_ANNOTATIONS: argocd.argoproj.io/sync-wave
         INHERITED_LABELS: app.kubernetes.io/managed-by
         JOB_TTL_SECONDS_AFTER_FINISHED: "3600"
-  version: 0.28.2
+  version: 0.29.0
 labels:
 - includeSelectors: true
   pairs:
