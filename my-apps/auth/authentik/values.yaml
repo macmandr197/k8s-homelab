@@ -62,6 +62,24 @@ authentik:
 server:
   ingress:
     enabled: false
+  # Chart default is `resources: {}` (unbounded). Give it a real baseline.
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "512Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1Gi"
+
+worker:
+  # Chart default is `resources: {}` (unbounded). Give it a real baseline.
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "512Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1Gi"
 
 # using CNPG operator, no need for Bitnami chart
 postgresql:

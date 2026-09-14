@@ -12,7 +12,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: jellyfin
   strategy:
-    type: RollingUpdate
+    type: Recreate
   template:
     metadata:
       labels:
@@ -43,7 +43,17 @@ spec:
               containerPort: 8096
               protocol: TCP
           resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
             limits:
+              # The /transcode emptyDir is medium: Memory (tmpfs), so its usage
+              # is charged against this container's memory cgroup. The limit
+              # must cover the 16Gi sizeLimit on that volume plus app overhead,
+              # or a full transcode buffer will get OOMKilled before it ever
+              # hits the emptyDir's own sizeLimit.
+              cpu: "4000m"
+              memory: "20Gi"
               gpu.intel.com/xe: 1
           volumeMounts:
             - name: config

@@ -10,6 +10,8 @@ metadata:
     ignore-check.kube-linter.io/no-read-only-root-fs: "Legacy application requires writeable root for internal updates/logging"
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: sabnzbd
@@ -29,7 +31,7 @@ spec:
               memory: "1Gi"
               cpu: "500m"  # Guarantee 0.5 cores
             limits:
-              memory: "8Gi"  # Cap it before it eats the whole node
+              memory: "3Gi"
               cpu: "4000m"  # Allow it to burst up to 4 cores, but no more
           ports:
             - containerPort: 8090
