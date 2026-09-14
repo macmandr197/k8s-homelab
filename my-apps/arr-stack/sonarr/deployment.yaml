@@ -12,6 +12,7 @@ spec:
   replicas: 1
   strategy:
     type: Recreate
+    rollingUpdate: null  # clears leftover maxSurge/maxUnavailable from prior RollingUpdate strategy
   selector:
     matchLabels:
       app: sonarr
