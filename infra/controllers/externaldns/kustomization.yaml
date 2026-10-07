@@ -14,4 +14,4 @@ helmCharts:
   releaseName: external-dns
   repo: https://kubernetes-sigs.github.io/external-dns
   valuesFile: values.yaml
-  version: 1.22.0
+  version: 1.23.0
