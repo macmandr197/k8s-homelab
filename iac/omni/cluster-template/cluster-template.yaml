@@ -1,4 +1,4 @@
-# omnictl cluster template sync -v -f cluster-template-working.yaml
+# omnictl cluster template sync -v -f cluster-template.yaml
 ---
 kind: Cluster
 name: labber
@@ -7,7 +7,7 @@ labels:
 kubernetes:
   version: v1.35.0
 talos:
-  version: v1.12.2
+  version: v1.12.12
 patches:
   - name: disable-default-cni
     inline:
@@ -59,6 +59,40 @@ kind: Workers
 name: gpu-workers
 machineClass:
   name: proxmox-intel-gpu-worker
+  size: 1
+systemExtensions:
+  - siderolabs/iscsi-tools
+  - siderolabs/nfsd
+  - siderolabs/qemu-guest-agent
+  - siderolabs/util-linux-tools
+  - siderolabs/i915
+  - siderolabs/amd-ucode
+  - siderolabs/xe
+patches:
+  - name: gpu-worker-labels
+    inline:
+      machine:
+        nodeLabels:
+          gpu-worker: "true"
+          intel.com/gpu: "true"
+  - file: ./patches/intel-gpu-worker.yaml
+  - name: longhorn-storage
+    inline:
+      machine:
+        kubelet:
+          extraMounts:
+            - destination: /var/lib/longhorn
+              type: bind
+              source: /var/local/longhorn
+              options:
+                - bind
+                - rshared
+                - rw
+---
+kind: Workers
+name: gpu-workers-dedicated
+machineClass:
+  name: proxmox-intel-gpu-worker-dedicated
   size: 1
 systemExtensions:
   - siderolabs/iscsi-tools
