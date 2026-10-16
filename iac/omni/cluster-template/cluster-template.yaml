@@ -7,7 +7,7 @@ labels:
 kubernetes:
   version: v1.35.0
 talos:
-  version: v1.13.11
+  version: v1.14.4
 patches:
   - name: disable-default-cni
     inline:
