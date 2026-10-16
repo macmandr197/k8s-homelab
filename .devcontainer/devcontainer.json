@@ -1,7 +1,11 @@
 {
 	"name": "Homelab Dev Environment",
 	"dockerFile": "Dockerfile",
-    
+
+    "mounts": [
+        "source=homelab-devcontainer-home,target=/home/vscode,type=volume"
+    ],
+
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		// All tools installed manually via Dockerfile to avoid common-utils dependency
@@ -30,7 +34,7 @@
             ]
         }
     }
-	
+
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	//"remoteUser": "root"
 }
