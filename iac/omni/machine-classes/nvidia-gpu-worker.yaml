@@ -1,5 +1,5 @@
 ---
-# omnictl apply -f gpu-worker.yaml
+# omnictl apply -f nvidia-gpu-worker.yaml
 metadata:
   namespace: default
   type: MachineClasses.omni.sidero.dev

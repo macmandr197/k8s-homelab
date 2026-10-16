@@ -1,0 +1,39 @@
+---
+# omnictl apply -f intel-gpu-worker-dedicated.yaml
+metadata:
+  namespace: default
+  type: MachineClasses.omni.sidero.dev
+  id: proxmox-intel-gpu-worker-dedicated
+spec:
+  matchlabels: []
+  autoprovision:
+    providerid: proxmox
+    kernelargs:
+      - i915.force_probe=!56a6  # 1. Prevent the legacy driver from claiming the A310 (PCI ID 56a6)
+      - xe.force_probe=56a6  # 2. Force the modern Xe driver to claim the A310
+    metavalues: []
+    providerdata: |
+      node: proxmox-3
+      cores: 8
+      sockets: 1
+      memory: 24000
+      disk_size: 250
+      network_bridge: infra
+      storage_selector: name == "pxmx-3-storage"
+      disk_ssd: true
+      disk_discard: true
+      disk_iothread: true
+      disk_cache: writeback
+      disk_aio: io_uring
+      grpctunnel: 0
+      cpu_type: host
+      machine_type: q35
+      numa: true
+
+# Note: GPU passthrough must be configured manually in Proxmox after VM creation
+# The provider creates the VM, then you need to:
+# 1. Shut down the VM
+# 2. Add GPU via Proxmox UI: Hardware → Add → PCI Device
+# 3. Select your INTEL GPU
+# 4. Start the VM
+# 5. Apply Talos GPU extensions (see talos-configs/intel-gpu-worker-patch.yaml)

@@ -12,7 +12,7 @@ spec:
     metavalues: []
     providerdata: |
       node: proxmox
-      cores: 4
+      cores: 5
       sockets: 1
       memory: 35000
       disk_size: 250
