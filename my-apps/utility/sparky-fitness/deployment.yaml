@@ -1,0 +1,233 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sparkyfitness-server
+  namespace: sparky-fitness
+  labels:
+    app.kubernetes.io/component: server
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: server
+    spec:
+      serviceAccountName: sparkyfitness-server
+      securityContext:
+        runAsNonRoot: true
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: wait-for-db
+          image: ghcr.io/cloudnative-pg/postgresql:18
+          command:
+            - sh
+            - -c
+            - until pg_isready -h sparkyfitness-db-rw.sparky-fitness.svc.cluster.local -p 5432; do echo "Waiting for database..."; sleep 2; done
+          resources:
+            requests: {memory: "16Mi", cpu: "10m"}
+            limits: {memory: "64Mi", cpu: "100m"}
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+      containers:
+        - name: server
+          image: ghcr.io/codewithcj/sparkyfitness-server:v1.9.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3010
+              protocol: TCP
+          # Server answers only after migrations finish; allow up to 5 minutes (60 x 5s)
+          startupProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 60
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 10
+          envFrom:
+            - configMapRef:
+                name: sparkyfitness-server-config
+          env:
+            # --- App secrets ---
+            - name: SPARKY_FITNESS_API_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sparkyfitness-secrets
+                  key: api_encryption_key
+            - name: BETTER_AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sparkyfitness-secrets
+                  key: better_auth_secret
+            # --- Runtime DB user (limited privilege, RLS enforced; created by app on first start) ---
+            - name: SPARKY_FITNESS_APP_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sparky-app-secret
+                  key: username
+            - name: SPARKY_FITNESS_APP_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sparky-app-secret
+                  key: password
+            # --- DB owner (migrations, schema management) ---
+            - name: SPARKY_FITNESS_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sparkyfitness-owner-secret
+                  key: username
+            - name: SPARKY_FITNESS_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sparkyfitness-owner-secret
+                  key: password
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests: {memory: "256Mi", cpu: "200m"}
+            limits: {memory: "1Gi", cpu: "1"}
+          volumeMounts:
+            - name: appdata
+              mountPath: /app/SparkyFitnessServer/uploads
+              subPath: appdata/sparky-fitness/uploads
+            # In-app backups are ephemeral: real backups are CNPG -> Backblaze B2
+            - name: backup
+              mountPath: /app/SparkyFitnessServer/backup
+            - name: temp-uploads
+              mountPath: /app/SparkyFitnessServer/temp_uploads
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: appdata
+          persistentVolumeClaim:
+            claimName: pvc-sparky-fitness-appdata
+        - name: backup
+          emptyDir: {}
+        - name: temp-uploads
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sparkyfitness-frontend
+  namespace: sparky-fitness
+  labels:
+    app.kubernetes.io/component: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: frontend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: frontend
+    spec:
+      serviceAccountName: sparkyfitness-frontend
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: frontend
+          image: ghcr.io/codewithcj/sparkyfitness-frontend:v1.9.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 10
+          env:
+            - name: SPARKY_FITNESS_FRONTEND_URL
+              value: "https://sparky.mcmn.me"
+            - name: SPARKY_FITNESS_SERVER_HOST
+              value: "sparkyfitness-server.sparky-fitness.svc.cluster.local"
+            - name: SPARKY_FITNESS_SERVER_PORT
+              value: "3010"
+            - name: NGINX_LISTEN_PORT
+              value: "80"
+            - name: NGINX_RATE_LIMIT
+              value: "5r/s"
+          securityContext:
+            runAsUser: 101
+            runAsGroup: 101
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+              # nginx binds :80; file capability is stripped under allowPrivilegeEscalation=false
+              add: ["NET_BIND_SERVICE"]
+          resources:
+            requests: {memory: "64Mi", cpu: "50m"}
+            limits: {memory: "256Mi", cpu: "500m"}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /run
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
+        - name: nginx-conf
+          emptyDir: {}
