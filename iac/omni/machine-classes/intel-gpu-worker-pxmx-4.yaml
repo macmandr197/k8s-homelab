@@ -1,9 +1,9 @@
 ---
-# omnictl apply -f intel-gpu-worker-dedicated.yaml
+# omnictl apply -f intel-gpu-worker-pxmx-4.yaml
 metadata:
   namespace: default
   type: MachineClasses.omni.sidero.dev
-  id: proxmox-intel-gpu-worker-dedicated
+  id: proxmox-intel-gpu-worker-pxmx-4
 spec:
   matchlabels: []
   autoprovision:
@@ -13,13 +13,13 @@ spec:
       - xe.force_probe=56a6  # 2. Force the modern Xe driver to claim the A310
     metavalues: []
     providerdata: |
-      node: proxmox-3
+      node: proxmox-4
       cores: 8
       sockets: 1
       memory: 24000
       disk_size: 250
       network_bridge: infra
-      storage_selector: name == "pxmx-3-storage"
+      storage_selector: name == "pxmx-4-storage"
       disk_ssd: true
       disk_discard: true
       disk_iothread: true

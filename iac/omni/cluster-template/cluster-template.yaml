@@ -56,9 +56,9 @@ patches:
                 - rw
 ---
 kind: Workers
-name: gpu-workers
+name: gpu-workers-pxmx-3
 machineClass:
-  name: proxmox-intel-gpu-worker
+  name: proxmox-intel-gpu-worker-pxmx-3
   size: 1
 systemExtensions:
   - siderolabs/iscsi-tools
@@ -66,7 +66,7 @@ systemExtensions:
   - siderolabs/qemu-guest-agent
   - siderolabs/util-linux-tools
   - siderolabs/i915
-  - siderolabs/amd-ucode
+  - siderolabs/intel-ucode
   - siderolabs/xe
 patches:
   - name: gpu-worker-labels
@@ -88,40 +88,40 @@ patches:
                 - bind
                 - rshared
                 - rw
----
-kind: Workers
-name: gpu-workers-dedicated
-machineClass:
-  name: proxmox-intel-gpu-worker-dedicated
-  size: 1
-systemExtensions:
-  - siderolabs/iscsi-tools
-  - siderolabs/nfsd
-  - siderolabs/qemu-guest-agent
-  - siderolabs/util-linux-tools
-  - siderolabs/i915
-  - siderolabs/amd-ucode
-  - siderolabs/xe
-patches:
-  - name: gpu-worker-labels
-    inline:
-      machine:
-        nodeLabels:
-          gpu-worker: "true"
-          intel.com/gpu: "true"
-  - file: ./patches/intel-gpu-worker.yaml
-  - name: longhorn-storage
-    inline:
-      machine:
-        kubelet:
-          extraMounts:
-            - destination: /var/lib/longhorn
-              type: bind
-              source: /var/local/longhorn
-              options:
-                - bind
-                - rshared
-                - rw
+#---
+#kind: Workers
+#name: gpu-workers-pxmx-4
+#machineClass:
+#  name: proxmox-intel-gpu-worker-pxmx-4
+#  size: 1
+#systemExtensions:
+#  - siderolabs/iscsi-tools
+#  - siderolabs/nfsd
+#  - siderolabs/qemu-guest-agent
+#  - siderolabs/util-linux-tools
+#  - siderolabs/i915
+#  - siderolabs/intel-ucode
+#  - siderolabs/xe
+#patches:
+#  - name: gpu-worker-labels
+#    inline:
+#      machine:
+#        nodeLabels:
+#          gpu-worker: "true"
+#          intel.com/gpu: "true"
+#  - file: ./patches/intel-gpu-worker.yaml
+#  - name: longhorn-storage
+#    inline:
+#      machine:
+#        kubelet:
+#          extraMounts:
+#            - destination: /var/lib/longhorn
+#              type: bind
+#              source: /var/local/longhorn
+#              options:
+#                - bind
+#                - rshared
+#                - rw
 ### NVIDIA GPU CONFIG ###
 #---
 #kind: Workers
