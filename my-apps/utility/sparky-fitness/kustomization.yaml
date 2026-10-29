@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: sparky-fitness
+
+resources:
+- externalsecret.yaml
+- configmap.yaml
+- serviceaccount.yaml
+- appdata-pvc.yaml
+- deployment.yaml
+- svc.yaml
+- httproute.yaml
+- networkpolicy.yaml
+labels:
+# includeSelectors off: it would inject app= into NetworkPolicy peer selectors (kube-dns, CNPG pods)
+- includeTemplates: true
+  pairs:
+    app: sparky-fitness

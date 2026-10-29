@@ -10,7 +10,7 @@ spec:
   inheritedMetadata:
     labels:
       velero.io/exclude-from-backup: "true"  # excludes from Velero backup as backups are handled natively
-  imageName: ghcr.io/cloudnative-pg/postgresql:16
+  imageName: ghcr.io/cloudnative-pg/postgresql:18
   resources:
     requests:
       memory: 256Mi
@@ -25,15 +25,18 @@ spec:
   # === NORMAL OPERATION: initdb (comment out for DR recovery) ===
   bootstrap:
     initdb:
-      database: sparkyfitness-db
-      owner: sparky
+      database: sparkyfitness_db
+      owner: sparky_admin
       secret:
-        name: sparky-app-secret
+        name: sparkyfitness-owner-secret
+      # App creates its limited-privilege runtime role (sparky) on first start; owner needs CREATEROLE for that
+      postInitApplicationSQL:
+        - ALTER USER sparky_admin CREATEROLE
   # === DISASTER RECOVERY ===
   # 1. Comment out the initdb bootstrap above
   # 2. Uncomment the recovery bootstrap + externalClusters below
-  # 3. Update serverName in externalClusters to match CURRENT backup.serverName (wger-db)
-  # 4. Bump backup.serverName to next version (e.g. wger-db-v2)
+  # 3. Update serverName in externalClusters to match CURRENT backup.serverName (sparkyfitness-db-v2)
+  # 4. Bump backup.serverName to next version (e.g. sparkyfitness-db-v3)
   # 5. Apply directly with: kubectl kustomize ... | kubectl create -f -
   #    (ArgoCD SSA + CNPG webhook = initdb always wins, must bypass ArgoCD)
   # 6. After recovery completes, revert to initdb and push
@@ -44,7 +47,7 @@ spec:
   # externalClusters:
   #   - name: sparkyfitness-backup
   #     barmanObjectStore:
-  #       serverName: sparkyfitness-db
+  #       serverName: sparkyfitness-db-v2
   #       destinationPath: s3://nardwuar/cnpg/sparkyfitness/
   #       endpointURL: https://s3.ca-east-006.backblazeb2.com
   #       s3Credentials:
@@ -62,12 +65,12 @@ spec:
   walStorage:
     size: 3Gi
     storageClass: longhorn
-  enableSuperuserAccess: true
+  enableSuperuserAccess: false
   monitoring:
     enablePodMonitor: true
   backup:
     barmanObjectStore:
-      serverName: sparkyfitness-db
+      serverName: sparkyfitness-db-v2
       destinationPath: s3://nardwuar/cnpg/sparkyfitness/
       endpointURL: https://s3.ca-east-006.backblazeb2.com
       s3Credentials:
