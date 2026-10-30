@@ -5,6 +5,8 @@ metadata:
   namespace: sparky-fitness
   labels:
     app.kubernetes.io/component: server
+  annotations:
+    ignore-check.kube-linter.io/non-existent-service-account: "ServiceAccount is defined in a separate manifest file"
 spec:
   replicas: 1
   strategy:
@@ -30,7 +32,7 @@ spec:
           command:
             - sh
             - -c
-            - until pg_isready -h sparkyfitness-db-rw.sparky-fitness.svc.cluster.local -p 5432; do echo "Waiting for database..."; sleep 2; done
+            - until pg_isready -h sparkyfitness-db-rw.sparky-fitness.svc.cluster.local -p 5432 -U postgres; do echo "Waiting for database..."; sleep 2; done
           resources:
             requests: {memory: "16Mi", cpu: "10m"}
             limits: {memory: "64Mi", cpu: "100m"}
@@ -148,6 +150,8 @@ metadata:
   namespace: sparky-fitness
   labels:
     app.kubernetes.io/component: frontend
+  annotations:
+    ignore-check.kube-linter.io/non-existent-service-account: "ServiceAccount is defined in a separate manifest file"
 spec:
   replicas: 1
   selector:
